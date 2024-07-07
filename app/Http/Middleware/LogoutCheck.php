@@ -17,14 +17,29 @@ class LogoutCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Sentinel::check()) :
-            return $next($request);
-        endif;
-        if(Sentinel::getUser()->user_type == 'merchant'):
-            return redirect()->route('merchant.dashboard');
-        elseif(Sentinel::getUser()->user_type == 'merchant_staff'):
-            return redirect()->route('merchant.staff.dashboard');
-        endif;
-        return redirect()->route('dashboard');
+        if (Sentinel::check()) {
+            $user = Sentinel::getUser();
+            \Log::info('User authenticated. User type: ' . $user->user_type);
+
+            switch ($user->user_type) {
+                case 'merchant':
+                    return redirect()->route('merchant.dashboard');
+                case 'merchant_staff':
+                    return redirect()->route('merchant.staff.dashboard');
+                case 'sas_admin':
+                case 'sas_admin_staff':
+                    return redirect()->route('sas.admin.dashboard');
+                case 'courier_admin':
+                case 'courier_admin_staff':
+                    return redirect()->route('courier.admin.dashboard');
+                default:
+                    \Log::warning('Unknown user type: ' . $user->user_type);
+                break;
+            }
+        }
+
+        return $next($request);
     }
+
+
 }

@@ -66,11 +66,12 @@ class MigrationCartalystSentinel extends Migration
             $table->timestamp('last_login')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->enum('user_type', ['super_admin', 'admin', 'staff', 'delivery', 'merchant', 'merchant_staff'])->default('staff')->comment('staff for all super admin and admin type all');
+            $table->enum('user_type', ['sas_admin', 'sas_admin_staff', 'courier_admin', 'courier_admin_staff', 'delivery', 'merchant', 'merchant_staff'])->default('merchant');
             $table->enum('status', [
                 StatusEnum::ACTIVE->value,
                 StatusEnum::INACTIVE->value,
             ])->default(StatusEnum::ACTIVE->value);
+            $table->unsignedBigInteger('client_id')->nullable();
             $table->integer('otp')->nullable()->comment('used for reset password request confirmation from app');
             $table->tinyInteger('is_primary')->default(0)->comment('May it will use for merchant');
             $table->unsignedBigInteger('merchant_id')->nullable();
@@ -162,13 +163,13 @@ class MigrationCartalystSentinel extends Migration
     public function roleSeeder()
     {
         Role::create([
-            'name' => 'Superadmin',
-            'slug' => 'superadmin',
+            'name' => 'sas_admin',
+            'slug' => 'sas-admin',
             'permissions' => $this->superAdminPermissions()
         ]);
         Role::create([
-            'name' => 'Admin',
-            'slug' =>  Str::slug('Admin'),
+            'name' => 'courier_admin',
+            'slug' =>  Str::slug('courier-admin'),
             'permissions' => $this->adminPermissions()
         ]);
         Role::create([
@@ -222,111 +223,10 @@ class MigrationCartalystSentinel extends Migration
             'permission_update',
             'permission_delete',
 
-            'merchant_create',
-            'merchant_read',
-            'use_all_merchant',
-            'read_all_merchant',
-            'merchant_update',
-            'merchant_delete',
-            'merchant_shop_read',
-            'merchant_shop_create',
-            'merchant_shop_delete',
-            'merchant_shop_update',
-            'merchant_payment_account_read',
-            'merchant_payment_account_update',
-            'merchant_account_activity_read',
-            'merchant_cod_charge_read',
-            'merchant_charge_read',
-            'merchant_payment_logs_read',
-            'merchant_api_credentials_read',
-            'merchant_api_credentials_update',
-            'merchant_staff_read',
-            'merchant_staff_create',
-            'merchant_staff_update',
-            'download_closing_report',
-
-            'deliveryman_create',
-            'deliveryman_read',
-            'read_all_delivery_man',
-            'use_all_delivery_man',
-            'deliveryman_update',
-            'deliveryman_delete',
-            'deliveryman_account_activity_read',
-            'deliveryman_payment_logs_read',
-
-            'parcel_create',
-            'parcel_read',
-            'parcel_update',
-            'parcel_delete',
-
-            'read_all_parcel',
-            'parcel_pickup_assigned',
-            'parcel_reschedule_pickup',
-            'parcel_received_by_pickup_man',
-            'parcel_received',
-            'parcel_transfer_to_branch',
-            'parcel_transfer_receive_to_branch',
-            'parcel_delivery_assigned',
-            'parcel_reschedule_delivery',
-            'parcel_returned_to_warehouse',
-            'parcel_return_assigned_to_merchant',
-            'parcel_delivered',
-            'parcel_backward',
-            'parcel_returned_to_merchant',
-            'parcel_cancel',
-            'parcel_delete',
-            'send_to_paperfly',
-
-            'income_create',
-            'income_read',
-            'read_all_income',
-            'income_update',
-            'income_delete',
-
-            'expense_create',
-            'expense_read',
-            'read_all_expense',
-            'expense_update',
-            'expense_delete',
-
-            'withdraw_read',
-            'read_all_withdraw',
-            'withdraw_create',
-            'withdraw_update',
-            'withdraw_process',
-            'withdraw_reject',
-            'add_to_bulk_withdraw',
-
             'sms_setting_read',
             'sms_setting_update',
             'sms_campaign_message_send',
             'custom_sms_send',
-
-            'report_read',
-            'transaction_history_read',
-            'parcels_summary_read',
-            'total_summary_read',
-            'income_expense_report_read',
-            'profit_summary_report_read',
-            'merchant_summary_report_read',
-            'dashboard_statistics_read',
-
-            'account_read',
-            'account_create',
-            'account_update',
-            'read_all_account',
-            'account_statement',
-
-            'fund_transfer_read',
-            'read_all_fund_transfer',
-            'fund_transfer_create',
-            'fund_transfer_update',
-            'fund_transfer_delete',
-
-            'branch_read',
-            'branch_create',
-            'branch_update',
-            'branch_delete',
 
             'email_template_read',
             'email_template_create',
@@ -334,20 +234,10 @@ class MigrationCartalystSentinel extends Migration
             'email_template_delete',
             'server_configuration_update',
 
-            'third_party_read',
-            'third_party_create',
-            'third_party_update',
-            'third_party_delete',
-
             'language_read',
             'language_create',
             'language_update',
             'language_delete',
-
-            'payment_method_read',
-            'payment_method_create',
-            'payment_method_update',
-            'payment_method_delete',
 
             'country_read',
             'country_create',
@@ -371,20 +261,9 @@ class MigrationCartalystSentinel extends Migration
 
             'settings_read',
             'sms_settings_update',
-            'charge_setting_update',
-            'pickup_and_delivery_time_setting_update',
             'preference_setting_update',
             'panel_setting',
-            'preference',
-            'payment_method',
             'general_setting',
-
-            'bulk_withdraw_read',
-            'read_all_bulk_withdraw',
-            'bulk_withdraw_create',
-            'bulk_withdraw_update',
-            'bulk_withdraw_process',
-            'download_payment_sheet',
 
             'news_and_event.index',
             'news_and_event.create',
@@ -454,12 +333,6 @@ class MigrationCartalystSentinel extends Migration
             'role_update',
             'role_delete',
 
-            'apikeys.index',
-            'apikeys.create',
-            'apikeys.edit',
-            'apikeys.revoke',
-            'apikeys.destroy',
-
             'permission_read',
             'permission_create',
             'permission_update',
@@ -540,11 +413,6 @@ class MigrationCartalystSentinel extends Migration
             'withdraw_reject',
             'add_to_bulk_withdraw',
 
-            'sms_setting_read',
-            'sms_setting_update',
-            'sms_campaign_message_send',
-            'custom_sms_send',
-
             'report_read',
             'transaction_history_read',
             'parcels_summary_read',
@@ -555,9 +423,9 @@ class MigrationCartalystSentinel extends Migration
             'dashboard_statistics_read',
 
             'account_read',
-            'read_all_account',
             'account_create',
             'account_update',
+            'read_all_account',
             'account_statement',
 
             'fund_transfer_read',
@@ -582,45 +450,22 @@ class MigrationCartalystSentinel extends Migration
             'third_party_update',
             'third_party_delete',
 
-            'language_read',
-            'language_create',
-            'language_update',
-            'language_delete',
-
             'payment_method_read',
             'payment_method_create',
             'payment_method_update',
             'payment_method_delete',
-
-            'country_read',
-            'country_create',
-            'country_update',
-            'country_delete',
-
-            "email_template_read",
-            "email_template_create",
-            "email_template_update",
-            "email_template_delete",
 
             'notice_read',
             'notice_create',
             'notice_update',
             'notice_delete',
 
-            'server_info',
-            'system_update',
-            'extension_library',
-            'filesystem',
-
             'settings_read',
             'sms_settings_update',
             'charge_setting_update',
             'pickup_and_delivery_time_setting_update',
             'preference_setting_update',
-            'panel_setting',
-            'preference',
             'payment_method',
-            'general_setting',
 
             'bulk_withdraw_read',
             'read_all_bulk_withdraw',
@@ -629,56 +474,6 @@ class MigrationCartalystSentinel extends Migration
             'bulk_withdraw_process',
             'download_payment_sheet',
 
-            'news_and_event.index',
-            'news_and_event.create',
-            'news_and_event.edit',
-            'news_and_event.destroy',
-            'about.index',
-            'about.create',
-            'about.edit',
-            'about.destroy',
-            'service.index',
-            'service.create',
-            'service.edit',
-            'service.destroy',
-            'feature.index',
-            'feature.create',
-            'feature.edit',
-            'feature.destroy',
-            'statistic.index',
-            'statistic.create',
-            'statistic.edit',
-            'statistic.destroy',
-
-            'price.section',
-            'contact.section',
-            'website.themes',
-            'website.menu',
-            'section.title',
-            'website.cta',
-            'footer.content',
-            'website_setting.seo',
-            'website_setting.custom_js',
-            'website_setting.custom_css',
-            'website_setting.google_setup',
-            'website_setting.fb_pixel',
-            'hero.section',
-            'partner_logo.index',
-            'partner_logo.create',
-            'partner_logo.edit',
-            'partner_logo.destroy',
-            'testimonial.index',
-            'testimonial.create',
-            'testimonial.edit',
-            'testimonial.destroy',
-            'faq.index',
-            'faq.create',
-            'faq.destroy',
-            'faq.edit',
-            'pages.index',
-            'pages.create',
-            'pages.edit',
-            'pages.destroy',
         ];
     }
 

@@ -4,11 +4,12 @@ namespace App\Enums;
 
 enum UserTypeEnum: string
 {
-    case SUPER_ADMIN    = 'super_admin';
-    case ADMIN          = 'admin';
-    case DELIVERY       = 'delivery';
-    case MERCHANT       = 'merchant';
-    case MERCHANT_STAFF = 'merchant_staff';
-    case STAFF          = 'staff';
+    case SAS_ADMIN              = 'sas_admin';
+    case SAS_ADMIN_STAFF        = 'sas_admin_staff';
+    case COURIER_ADMIN          = 'courier_admin';
+    case COURIER_ADMIN_STAFF    = 'courier_admin_staff';
+    case DELIVERY               = 'delivery';
+    case MERCHANT               = 'merchant';
+    case MERCHANT_STAFF         = 'merchant_staff';
 
 }

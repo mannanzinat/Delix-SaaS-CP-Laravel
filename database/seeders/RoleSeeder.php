@@ -18,13 +18,13 @@ class RoleSeeder extends Seeder
     public function run()
     {
         Role::create([
-            'name' => 'Superadmin',
-            'slug' => 'superadmin',
+            'name' => 'sas_admin',
+            'slug' => 'sas-admin',
             'permissions' => $this->superAdminPermissions()
         ]);
         Role::create([
-            'name' => 'Admin',
-            'slug' =>  Str::slug('Admin'),
+            'name' => 'courier_admin',
+            'slug' =>  Str::slug('courier-admin'),
             'permissions' => $this->adminPermissions()
         ]);
         Role::create([

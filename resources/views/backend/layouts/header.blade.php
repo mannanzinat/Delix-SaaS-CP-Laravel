@@ -13,7 +13,7 @@
             </span>
         </span>
         <a class="navbar-brand ms-auto d-none"
-            href="{{ Sentinel::getUser()->user_type == 'merchant' ? route('merchant.dashboard') : route('dashboard') }}">
+            href="{{ Sentinel::getUser()->user_type == 'merchant' ? route('merchant.dashboard') : route('courier.admin.dashboard') }}">
             <img src="{{ getFileLink('80X80',setting('admin_mini_logo')) }}" alt="Logo">
         </a>
 

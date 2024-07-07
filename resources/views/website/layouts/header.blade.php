@@ -50,7 +50,7 @@
                                 @if(\Sentinel::check())
                                     @if(\Sentinel::getUser()->user_type == 'staff')
                                         <div class="header__btn">
-                                            <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('dashboard') }}</a>
+                                            <a href="{{ route('courier.admin.dashboard') }}" class="btn btn-primary">{{ __('dashboard') }}</a>
                                         </div>
                                     @elseif(\Sentinel::getUser()->user_type == 'merchant')
                                         <div class="header__btn">
@@ -103,7 +103,7 @@
                             @if(\Sentinel::check())
                                 @if(\Sentinel::getUser()->user_type == 'staff')
                                     <div class="header__btn">
-                                        <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('dashboard') }}</a>
+                                        <a href="{{ route('courier.admin.dashboard') }}" class="btn btn-primary">{{ __('dashboard') }}</a>
                                     </div>
                                 @elseif(\Sentinel::getUser()->user_type == 'merchant')
                                     <div class="header__btn">

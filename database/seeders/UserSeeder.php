@@ -25,41 +25,40 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create('en_BD');
 
-        $superAdminRole = Role::find(1);
-        $adminRole      = Role::find(2);
+        $sasAdminRole           = Role::find(1);
+        $courierAdminRole       = Role::find(2);
 
         $roleSeeder = new RoleSeeder();
         // // Start superadmin
-        $admin = User::create([
-            'first_name'        => 'Admin',
-            'last_name'         => '',
-            'dashboard'         => 'admin',
-            'email'             => 'admin@admin.com',
-            'permissions'       => $roleSeeder->adminPermissions(),
-            'password'          => bcrypt(123456),
-            'user_type'         => UserTypeEnum::ADMIN,
-        ]);
-
-        $superAdmin = User::create([
-            'first_name'        => 'Super',
+        $sas_admin = User::create([
+            'first_name'        => 'SAS',
             'last_name'         => 'Admin',
-            'dashboard'         => 'admin',
-            'email'             => 'superadmin@admin.com',
+            'email'             => 'sas_admin@admin.com',
             'permissions'       => $roleSeeder->superAdminPermissions(),
             'password'          => bcrypt(123456),
-            'user_type'         => UserTypeEnum::SUPER_ADMIN,
+            'user_type'         => UserTypeEnum::SAS_ADMIN,
+        ]);
+
+        $courier_admin = User::create([
+            'first_name'        => 'Courier',
+            'last_name'         => 'Admin',
+            'dashboard'         => 'admin',
+            'email'             => 'courier_admin@admin.com',
+            'permissions'       => $roleSeeder->adminPermissions(),
+            'password'          => bcrypt(123456),
+            'user_type'         => UserTypeEnum::COURIER_ADMIN,
         ]);
 
 
-        $activation = Activation::create($admin);
-        Activation::complete($admin, $activation->code);
-        $adminRole->users()->attach($admin);
-        $pass_has =  bcrypt(123456);
+        $activation     = Activation::create($sas_admin);
+        Activation::complete($sas_admin, $activation->code);
+        $sasAdminRole->users()->attach($sas_admin);
+        $pass_has       =  bcrypt(123456);
 
-        $activation = Activation::create($superAdmin);
-        Activation::complete($superAdmin, $activation->code);
-        $superAdminRole->users()->attach($superAdmin);
-        $pass_has =  bcrypt(123456);
+        $activation     = Activation::create($courier_admin);
+        Activation::complete($courier_admin, $activation->code);
+        $courierAdminRole->users()->attach($courier_admin);
+        $pass_has       =  bcrypt(123456);
 
     }
 

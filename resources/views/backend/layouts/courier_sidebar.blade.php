@@ -4,7 +4,7 @@
             <i class="las la-times"></i>
         </span>
         <div class="dashboard-logo d-flex justify-content-center align-items-center py-20">
-            <a class="logo" href="{{ route('dashboard') }}">
+            <a class="logo" href="{{ route('courier.admin.dashboard') }}">
                 <img style="width: 100% !important;max-height: 38px;" src="{{ setting('admin_logo') && @is_file_exists(setting('admin_logo')['original_image']) ? get_media(setting('admin_logo')['original_image']) : get_media('images/default/logo/logo_light.png') }}"
                      alt="Logo">
             </a>
@@ -13,12 +13,12 @@
             <ul>
                 <li class="{{ menuActivation(['dashboard','dashboard/*'], 'active') }}">
                     <a
-                        href="{{ route('dashboard') }}">
+                        href="{{ route('courier.admin.dashboard') }}">
                         <i class="las la-tachometer-alt"></i>
                         <span>{{ __('dashboard') }}</span>
                     </a>
                 </li>
-                @if (\Sentinel::getUser()->user_type == 'staff' || \Sentinel::getUser()->user_type == 'admin')
+                @if (\Sentinel::getUser()->user_type == 'courier_admin' || \Sentinel::getUser()->user_type == 'courier_staff')
                     @if (hasPermission('parcel_read'))
                         <li class="{{ menuActivation(['admin/parcel', 'admin/parcel/*'], 'active') }}">
                             <a href="{{ route('parcel') }}">

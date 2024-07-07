@@ -22,7 +22,10 @@ use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\MerchantController;
 use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as CourierAdminDashboard;
+use App\Http\Controllers\SASAdmin\DashboardController as SASAdminDashboard;
+use App\Http\Controllers\SasAdmin\PlanController;
+use App\Http\Controllers\SasAdmin\ClientController;
 use App\Http\Controllers\Admin\LiveSearchController;
 use App\Http\Controllers\Admin\PreferenceController;
 use App\Http\Controllers\Admin\ThirdPartyController;
@@ -115,14 +118,30 @@ Route::group(['prefix' => localeRoutePrefix()], function(){
 	// after login
 	Route::middleware(['LoginCheck'])->group(function () {
 
-		Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-		Route::get('default', [DashboardController::class, 'report'])->name('admin.default.dashboard');
-		Route::get('custom-report', [DashboardController::class, 'customDateRange'])->name('admin.default.dashboard.custom');
+		Route::get('courier-dashboard', [CourierAdminDashboard::class, 'index'])->name('courier.admin.dashboard');
+        Route::get('sas-dashboard', [SASAdminDashboard::class, 'index'])->name('sas.admin.dashboard');
+
+		Route::get('default', [CourierAdminDashboard::class, 'report'])->name('admin.default.dashboard');
+		Route::get('custom-report', [CourierAdminDashboard::class, 'customDateRange'])->name('admin.default.dashboard.custom');
 
 		//parcel bulk import
         Route::get('download-sample', [ImportExportController::class, 'export'])->name('export');
 
-        Route::prefix('admin')->group(function() {
+        Route::prefix('sas')->group(function() {
+            Route::resource('staffs', StaffController::class);
+            Route::resource('clients', ClientController::class);
+            // Route::get('login-as/{id}', [AuthenticatedSessionController::class, 'login_as'])->name('login.as');
+            Route::group(['as' => 'staffs.'], function () {
+                Route::get('staffs/verified/{verify}', [StaffController::class, 'StaffVerified'])->name('verified');
+                Route::get('staffs/bann/{id}', [StaffController::class, 'StaffBanned'])->name('bannUser');
+                Route::delete('staffs/delete/{id}', [StaffController::class, 'staffDelete'])->name('delete');
+            });
+
+            // Route::resource('plans', PlanController::class)->except(['show']);
+
+        });
+
+        Route::prefix('corrier')->group(function() {
 			Route::resource('roles', RoleController::class);
 			Route::POST('role-status', [RoleController::class, 'statusChange'])->name('admin.role.update-status');
 			Route::get('users', [UserController::class, 'index'])->name('users')->middleware('PermissionCheck:user_read');

@@ -18,10 +18,13 @@ class LoginCheck
     public function handle(Request $request, Closure $next)
     {
         if (Sentinel::check()) :
-            if(Sentinel::getUser()->user_type == 'staff' || Sentinel::getUser()->user_type == 'admin' || Sentinel::getUser()->user_type == 'super_admin'):
+            if(Sentinel::getUser()->user_type == 'sas_admin' || Sentinel::getUser()->user_type == 'sas_admin_staff'){
                 return $next($request);
-            endif;
-            return redirect()->route('merchant.dashboard');
+                // return redirect()->route('sas.admin.dashboard');
+            }elseif(Sentinel::getUser()->user_type == 'courier_admin' || Sentinel::getUser()->user_type == 'courier_admin_staff'){
+                return $next($request);
+            }
+                return redirect()->route('merchant.dashboard');
 
         endif;
         return redirect()->route('login');

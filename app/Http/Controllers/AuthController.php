@@ -71,8 +71,10 @@ class AuthController extends Controller
         $remember_me = $request->has('remember_me') ? true : false;
         Sentinel::authenticate($user, $remember_me);
 
-        if($user->user_type == "staff" || $user->user_type == "admin" || $user->user_type == "super_admin") {
-            return redirect()->route('dashboard');
+        if($user->user_type == "sas_admin" || $user->user_type == "sas_admin_staff") {
+            return redirect()->route('sas.admin.dashboard');
+        }elseif($user->user_type == "courier_admin" || $user->user_type == "courier_admin_staff") {
+            return redirect()->route('courier.admin.dashboard');
         }elseif($user->user_type == "merchant"){
             return redirect()->route('merchant.dashboard');
         }elseif($user->user_type == "merchant_staff"){
