@@ -4,36 +4,43 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\WebsiteFeatureLanguage;
 
 class WebsiteFeature extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'icon',
         'title',
-        'status',
+        'image',
+        'description',
+        'type',
+        'icon',
     ];
 
     protected $casts    = [
-        'icon' => 'array',
+        'image'       => 'array',
+        'description' => 'array',
     ];
 
 
     public function languages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(WebSiteFeatureLanguage::class);
+        return $this->hasMany(WebsiteFeatureLanguage::class);
     }
 
     public function language(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(WebSiteFeatureLanguage::class, 'website_feature_id', 'id')->where('lang', app()->getLocale());
+        return $this->hasOne(WebsiteFeatureLanguage::class)->where('lang', app()->getLocale());
     }
 
 
     public function getLangTitleAttribute()
     {
         return $this->language ? $this->language->title : $this->title;
+    }
+
+    public function getLangDescriptionAttribute()
+    {
+        return $this->language ? $this->language->description : $this->description;
     }
 }

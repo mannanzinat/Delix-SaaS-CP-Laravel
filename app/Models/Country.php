@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Enums\StatusEnum;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name', 'iso3', 'iso2', 'phonecode', 'currency', 'currency_symbol', 'latitude', 'longitude', 'status'];
-    protected $casts = [
-        'status' => StatusEnum::class,
-    ];
+
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
 
     public function flag()
     {
@@ -27,6 +28,6 @@ class Country extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', StatusEnum::ACTIVE);
+        return $query->where('status', 1);
     }
 }

@@ -10,58 +10,33 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * This is used by Laravel authentication to redirect users after login.
-     *
-     * @var string
-     */
-    public const HOME = '/home';
+    public const HOME   = '/dashboard';
 
-    /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
-     */
-    // protected $namespace = 'App\\Http\\Controllers';
+    public const ADMIN  = '/admin/dashboard';
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
+    public const CLIENT = '/client/dashboard';
+
     public function boot()
     {
         $this->configureRateLimiting();
 
         $this->routes(function () {
+
             Route::middleware('web')
                 ->group(base_path('routes/install.php'));
 
             Route::middleware(['web', 'isInstalled'])
                 ->group(base_path('routes/web.php'));
 
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
+            Route::middleware(['web', 'isInstalled'])
+                ->group(base_path('routes/admin.php'));
+
+            Route::middleware(['web', 'auth', 'verified'])
+                ->name('client.')
+                ->group(base_path('routes/client.php'));
+            Route::middleware(['api'])
                 ->group(base_path('routes/api.php'));
 
-            Route::prefix('api')
-                ->middleware('merchant.apikey')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/merchant-api.php'));
-
-            Route::prefix('staff')
-                ->middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/merchant-staff.php'));
-
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
         });
     }
 
@@ -73,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

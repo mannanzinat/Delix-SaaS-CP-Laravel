@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Traits\UpdateTrait;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Gate;
 
 class UtilityController extends Controller
 {
@@ -13,28 +15,30 @@ class UtilityController extends Controller
 
     public function serverInfo(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.utility.server_info');
+        Gate::authorize('server.info');
+
+        return view('backend.admin.utility.server_info');
     }
 
     public function systemUpdate(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
+        Gate::authorize('system.update');
         try {
+            $url = 'https://license.spagreen.net/version-check';
             $fields   = [
-                'item_id'         => '123456',
-                'purchase_code'   => setting('purchase_code'),
-                'current_version' => setting('current_version'),
+                'item_id'               => '51330626',
+                'activation_code'       => setting('activation_code'),
+                'current_version'       => setting('current_version'),
             ];
+
             $response = false;
-            if (env('DEV_MODE') == 'on') {
+            if (config('app.beta_channel')):
                 $url = 'https://license.spagreen.net/version-check-including-beta';
-            } else {
-                $url = 'https://license.spagreen.net/version-check';
-            }
+            endif;
             $request  = curlRequest($url, $fields);
             if (property_exists($request, 'status') && $request->status) {
                 $response = $request->release_info;
             }
-
             if (is_bool($response)) {
                 $latest_version    = setting('current_version');
                 $is_old            = setting('current_version') < $latest_version;
@@ -54,11 +58,9 @@ class UtilityController extends Controller
                 'next_version'      => $next_version,
                 'next_version_code' => $next_version_code,
             ];
-
-            return view('admin.utility.system_update', $data);
+            return view('backend.admin.utility.system_update', $data);
         } catch (\Exception $e) {
-            Toastr::error($e->getMessage());
-
+            Toastr::error(preg_replace('/[^A-Za-z0-9 ]/', '', strip_tags($e->getMessage())));
             return back();
         }
     }
@@ -66,9 +68,9 @@ class UtilityController extends Controller
     public function downloadUpdate(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            if (config('app.demo_mode')) {
+            if (isDemoMode()) {
                 return response()->json([
-                    'message' => __('This function is disabled in demo server.'),
+                    'message' => __('this_function_is_disabled_in_demo_server'),
                     'type'    => __('Error').' !',
                     'class'   => 'danger',
                 ]);
@@ -77,6 +79,8 @@ class UtilityController extends Controller
             $update = $this->downloadUpdateFile($request->all());
 
             if (is_string($update)) {
+                Artisan::call('migrate', ['--force' => true]);
+                Artisan::call('all:clear');
                 return response()->json([
                     'message' => $update,
                     'type'    => __('Error').' !',

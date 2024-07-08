@@ -63,8 +63,6 @@ return [
             'create',
             'export',
             'print',
-            'reset',
-            'reload',
         ],
     ],
 
@@ -80,11 +78,11 @@ return [
         /*
          * Default buttons to generate when not set.
          */
-        'buttons' => 'create,export,print,reset,reload',
+        'buttons' => 'create,export,print',
 
         /*
          * Default DOM to generate when not set.
          */
-        'dom' => 'Bfrtip',
+        'dom'     => 'Bfrtip',
     ],
 ];

@@ -26,48 +26,46 @@ class FooterSettingController extends Controller
         return redirect()->route('footer.primary-content');
     }
 
-    public function primaryContentSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function primaryContentSetting(Request $request)
     {
         $lang = $request->site_lang ? $request->site_lang : App::getLocale();
 
-        return view('admin.website.footer_content.primary_content', compact('lang'));
+        return view('backend.admin.website.footer_content.primary_content', compact('lang'));
     }
 
 
-    public function appSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function paymentbannerSetting()
+    {
+        return view('backend.admin.website.footer_content.payment_banner');
+    }
+
+    public function usefulLinkSetting(Request $request)
     {
         $languages     = app('languages');
         $lang          = $request->site_lang ? $request->site_lang : App::getLocale();
-        $menu_language = headerFooterMenu('footer_useful_link_menu');
 
-        return view('admin.website.footer_content.app', compact('languages', 'lang', 'menu_language'));
+        $menu_language = headerFooterMenu('footer_useful_link_menu', $lang);
+
+        return view('backend.admin.website.footer_content.useful_link', compact('languages', 'lang', 'menu_language'));
     }
 
-    public function usefulLinkSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
-        $languages     = app('languages');
-        $lang          = $request->site_lang ? $request->site_lang : App::getLocale();
-        $menu_language = headerFooterMenu('footer_useful_link_menu');
-
-        return view('admin.website.footer_content.useful_link', compact('languages', 'lang', 'menu_language'));
-    }
-
-    public function quickLinkSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function quickLinkSetting(Request $request)
     {
         $languages     = app('languages');
         $lang          = $request->site_lang ? $request->site_lang : App::getLocale();
         $menu_language = headerFooterMenu('footer_quick_link_menu', $lang);
 
-        return view('admin.website.footer_content.quick_link', compact('languages', 'lang', 'menu_language'));
+        return view('backend.admin.website.footer_content.quick_link', compact('languages', 'lang', 'menu_language'));
     }
 
-    public function copyrightSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function copyrightSetting(Request $request)
     {
         $lang = $request->site_lang ? $request->site_lang : App::getLocale();
 
-        return view('admin.website.footer_content.copyright', compact('lang'));
+        return view('backend.admin.website.footer_content.copyright', compact('lang'));
     }
 
+   
     public function updateSetting(Request $request): \Illuminate\Http\JsonResponse
     {
         if (isDemoMode()) {
@@ -149,14 +147,14 @@ class FooterSettingController extends Controller
                 unset($request['mega_menu_position']);
 
                 if ($this->setting->update($request)) {
-                    Toastr::success(__('Menu Updated Successfully'));
+                    Toastr::success(__('updated_successfully'));
                     $data = [
-                        'success' => __('Menu Updated Successfully'),
+                        'success' => __('updated_successfully'),
                     ];
 
                     return response()->json($data);
                 } else {
-                    Toastr::error(__('Something went wrong, please try again.'));
+                    Toastr::error(__('something_went_wrong_please_try_again'));
                     $data = [
                         'error' => __('an_unexpected_error_occurred_please_try_again_later.'),
                     ];
@@ -172,7 +170,27 @@ class FooterSettingController extends Controller
                 return response()->json($data);
             }
         } catch (\Exception $e) {
-            Toastr::error(__('Something went wrong, please try again.'));
+            Toastr::error(__('something_went_wrong_please_try_again'));
         }
     }
+
+
+
+    public function socialLink(Request $request)
+    {
+        $lang = $request->site_lang ? $request->site_lang : App::getLocale();
+
+        return view('backend.admin.website.footer_content.social-link', compact('lang'));
+    }
+     
+
+    public function newsletterSetting(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $lang = $request->site_lang ? $request->site_lang : App::getLocale();
+
+        return view('backend.admin.website.footer_content.newsletter', compact('lang'));
+    }
+
+  
+
 }

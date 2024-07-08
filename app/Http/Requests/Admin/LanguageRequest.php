@@ -24,16 +24,11 @@ class LanguageRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        return [
             'name'           => 'required|max:100|unique:languages,name,'.Request()->id,
             'flag'           => 'required',
             'locale'         => 'required|min:1|max:10|unique:languages,locale,'.Request()->id,
             'text_direction' => 'nullable',
         ];
-        if (Request()->id) {
-            $rules['locale'] = '';
-        }
-
-        return $rules;
     }
 }

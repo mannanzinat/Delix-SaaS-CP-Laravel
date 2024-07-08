@@ -2,26 +2,17 @@
 
 namespace App\Models;
 
-use App\Enums\StatusEnum;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Language extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'locale', 'flag', 'text_direction', 'status'];
+    protected $fillable = ['name', 'locale', 'flag', 'is_default', 'text_direction', 'status'];
 
-    protected $casts = [
-        'status' => StatusEnum::class,
-    ];
-
-    public function languageConfig(): \Illuminate\Database\Eloquent\Relations\HasOne
-    {
-        return $this->hasOne(LanguageConfig::class);
-    }
-
-    public function flag()
+    public function flag(): HasOne
     {
         return $this->hasOne(FlagIcon::class, 'title', 'locale');
     }
@@ -31,10 +22,15 @@ class Language extends Model
         return $this->flag ? static_asset($this->flag->image) : static_asset('images/flags/ad.png');
     }
 
+       // Before saving, ensure only one row has is_default set to 1
+    //    protected static function boot()
+    //    {
+    //        parent::boot();
 
-    public function scopeActive($query)
-    {
-        return $query->where('status', StatusEnum::ACTIVE);
-    }
-
+    //        static::saving(function ($language) {
+    //            if ($language->is_default) {
+    //                static::query()->where('is_default', 1)->update(['is_default' => 0]); // Reset other defaults
+    //            }
+    //        });
+    //    }
 }

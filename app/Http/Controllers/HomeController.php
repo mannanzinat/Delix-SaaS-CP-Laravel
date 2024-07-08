@@ -3,107 +3,113 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Charge;
-use App\Repositories\Admin\WebsitePartnerLogoRepository;
-use App\Repositories\Admin\WebsiteNewsAndEventRepository;
-use App\Repositories\Admin\WebsiteServiceRepository;
-use App\Repositories\Admin\WebsiteAboutRepository;
-use App\Repositories\Admin\WebsiteFeatureRepository;
-use App\Repositories\Admin\WebsiteTestimonialRepository;
+use Illuminate\Support\Facades\App;
+use App\Repositories\PageRepository;
+use App\Repositories\PlanRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\App;
+use App\Repositories\WebsiteFaqRepository;
+use App\Repositories\WebsiteStoryRepository;
+use App\Repositories\WebsiteFeatureRepository;
+use App\Repositories\WebsiteAdvantageRepository;
+use App\Repositories\WebsitePartnerLogoRepository;
+use App\Repositories\WebsiteTestimonialRepository;
+use App\Repositories\WebsiteUniqueFeatureRepository;
 
 class HomeController extends Controller
 {
-    protected $partner;
-    protected $news_and_event;
-    protected $about;
-    protected $service;
-    protected $feature;
-    protected $testimonial;
+    protected $planRepository;
 
+    protected $partnerLogoRepository;
 
-    public function __construct(WebsitePartnerLogoRepository $partner, WebsiteNewsAndEventRepository $news_and_event, WebsiteAboutRepository $about, WebsiteServiceRepository $service, WebsiteFeatureRepository $feature, WebsiteTestimonialRepository $testimonial)
+    protected $storyRepository;
+
+    protected $uniqueFeatureRepository;
+
+    protected $featureRepository;
+
+    protected $advantageRepository;
+
+    protected $faqRepository;
+
+    protected $testimonialRepository;
+
+    public function __construct(
+        PlanRepository $planRepository,
+        WebsitePartnerLogoRepository $partnerLogoRepository,
+        WebsiteStoryRepository $storyRepository,
+        WebsiteUniqueFeatureRepository $uniqueFeatureRepository,
+        WebsiteFeatureRepository $featureRepository,
+        WebsiteAdvantageRepository $advantageRepository,
+        WebsiteFaqRepository $faqRepository,
+        WebsiteTestimonialRepository $testimonialRepository)
     {
-        $this->partner                  = $partner;
-        $this->news_and_event           = $news_and_event;
-        $this->about                    = $about;
-        $this->service                  = $service;
-        $this->feature                  = $feature;
-        $this->testimonial              = $testimonial;
-
+        $this->planRepository          = $planRepository;
+        $this->partnerLogoRepository   = $partnerLogoRepository;
+        $this->storyRepository         = $storyRepository;
+        $this->uniqueFeatureRepository = $uniqueFeatureRepository;
+        $this->featureRepository       = $featureRepository;
+        $this->advantageRepository     = $advantageRepository;
+        $this->faqRepository           = $faqRepository;
+        $this->testimonialRepository   = $testimonialRepository;
 
     }
-    public function index(Request $request)
+
+    public function index(Request $request, PlanRepository $planRepository)
     {
+
         $languages        = app('languages');
         $lang             = $request->site_lang ? $request->site_lang : App::getLocale();
         $menu_quick_link  = headerFooterMenu('footer_quick_link_menu', $lang);
         $menu_useful_link = headerFooterMenu('footer_useful_link_menu');
 
         $data             = [
-
+            'plans'             => $this->planRepository->all(),
+            'plans2'            => [
+                'daily'       => $this->planRepository->activePlans([], 'daily'),
+                'weekly'      => $this->planRepository->activePlans([], 'weekly'),
+                'monthly'     => $this->planRepository->activePlans([], 'monthly'),
+                'quarterly'   => $this->planRepository->activePlans([], 'quarterly'),
+                'half_yearly' => $this->planRepository->activePlans([], 'half_yearly'),
+                'yearly'      => $this->planRepository->activePlans([], 'yearly'),
+            ],
+            'partner_logos'     => $this->partnerLogoRepository->all(),
+            'stories'           => $this->storyRepository->all(),
+            'unique_features'   => $this->uniqueFeatureRepository->all(),
+            'features'          => $this->featureRepository->all(),
+            'whatsapp_features' => $this->featureRepository->whatsapp(),
+            'telegram_features' => $this->featureRepository->telegram(),
+            'advantages'        => $this->advantageRepository->all(),
+            'faqs'              => $this->faqRepository->all(),
+            'testimonials'      => $this->testimonialRepository->all(),
             'menu_quick_links'  => $menu_quick_link,
             'menu_useful_links' => $menu_useful_link,
             'lang'              => $request->lang ?? app()->getLocale(),
             'menu_language'     => headerFooterMenu('header_menu', $lang),
-            'partner_logos'     => $this->partner->all(),
-            'events'            => $this->news_and_event->all(),
-            'abouts'            => $this->about->all(),
-            'services'          => $this->service->all(),
-            'features'          => $this->feature->all(),
-            'testimonials'      => $this->testimonial->all(),
-            'charges'           => Charge::all(),
-
         ];
-        return view('website.page.home', $data);
+
+        return view('website.themes.'.active_theme().'.home', $data);
     }
 
-    public function chargeDetails(Request $request)
+    public function page(Request $request, $link, PageRepository $pageRepository)
     {
-        $data             = [];
-        $packaging_charge = number_format(0, 2);
+        $page              = $pageRepository->findByLink($link);
+        $lang              = $request->lang ?? app()->getLocale();
+        $menu_quick_link   = headerFooterMenu('footer_quick_link_menu', $lang);
+        $menu_useful_link  = headerFooterMenu('footer_useful_link_menu');
+        $data['page_info'] = $pageRepository->getByLang($page->id, $lang);
 
-        if ($request->packaging != null) {
-            $packaging = settingHelper('package_and_charges')->where('id', $request->packaging)->first();
-            if ($packaging) {
-                $packaging_charge = $packaging->charge ?? 0;
-            }
-        }
+        $data              = [
+            'menu_quick_links'  => $menu_quick_link,
+            'menu_useful_links' => $menu_useful_link,
+            'lang'              => $request->lang ?? app()->getLocale(),
+            'menu_language'     => headerFooterMenu('header_menu', $lang),
+            'page_info'         => $pageRepository->getByLang($page->id, $lang),
+        ];
 
-        $fragile_charge = number_format(0, 2);
-        if ($request->fragile == 1) {
-            $fragile_charge = settingHelper('fragile_charge') ?? 0;
-        }
+        return view('website.themes.'.active_theme().'.page', $data);
 
-        if ($request->day == "same_day") {
-            $parcel_type    = 'same_day';
-            $location       = 'inside_city';
-        } elseif ($request->day == "next_day") {
-            $parcel_type    = 'next_day';
-            $location       = 'sub_city';
-        } elseif ($request->city == "sub_city") {
-            $parcel_type    = 'sub_city';
-            $location       = 'sub_city';
-        } elseif ($request->city == "sub_urban_area") {
-            $parcel_type    = 'sub_urban_area';
-            $location       = 'sub_urban_area';
-        } else {
-        }
-
-        $foundCharge = 0;
-        if (isset($parcel_type)) {
-            $system_charges = Charge::where('weight', $request->weight)->first();
-            if ($system_charges) {
-                $foundCharge = $system_charges[$parcel_type] ?? 0;
-            }
-        }
-
-        $total_charge   = $foundCharge + $packaging_charge + $fragile_charge;
-        $data['charge'] = number_format($total_charge, 2);
-
-        return $data;
+        // return view('website.page', $data);
     }
 
     public function cacheClear()
@@ -129,6 +135,4 @@ class HomeController extends Controller
 
         return redirect()->back();
     }
-
-
 }

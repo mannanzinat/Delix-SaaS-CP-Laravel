@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        \DB::statement("INSERT INTO `timezones` (`id`, `country_code`, `timezone`, `gmt_offset`, `dst_offset`, `raw_offset`, `created_at`, `updated_at`) VALUES
+        DB::statement("INSERT INTO `timezones` (`id`, `country_code`, `timezone`, `gmt_offset`, `dst_offset`, `raw_offset`, `created_at`, `updated_at`) VALUES
         (1, 'AD', 'Europe/Andorra', 1.00, 2.00, 1.00, NULL, NULL),
         (2, 'AE', 'Asia/Dubai', 4.00, 4.00, 4.00, NULL, NULL),
         (3, 'AF', 'Asia/Kabul', 4.50, 4.50, 4.50, NULL, NULL),
@@ -444,8 +444,6 @@ return new class extends Migration
         (417, 'ZM', 'Africa/Lusaka', 2.00, 2.00, 2.00, NULL, NULL),
         (418, 'ZW', 'Africa/Harare', 2.00, 2.00, 2.00, NULL, NULL);
         ");
-
-
     }
 
     /**

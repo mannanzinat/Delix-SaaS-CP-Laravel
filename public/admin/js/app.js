@@ -30,6 +30,50 @@ let modal_id = "";
     "use strict";
     // 01. Sidebar Nav
     $(document).ready(function () {
+        $(document).on('click',".bottom-icon.picker",function(e){
+            e.preventDefault();
+            $(".emoji_div").fadeIn(200,function(){$(this).focus();});
+        });
+        $(document).on('click',".gear-icon",function(e){
+            $('.flow-side-nav').toggleClass('sidenavopen');
+        });
+        $(document).on('blur',".emoji_div",function(){
+            $(this).fadeOut(200);
+        });
+        $(document).on('click',".bottom-icon.button-saved",function(e){
+            e.preventDefault();
+            $(".savad-item-area.show-item").fadeIn(200,function(){$(this).focus();});
+        });
+        // $(document).on('click',"#ai_popup",function(e){
+        //     e.preventDefault();
+        //     $(".ai_popup.show-item").fadeIn(200,function(){$(this).focus();});
+        // });
+        // $(document).on('click',"#bot_popup",function(e){
+        //     e.preventDefault();
+        //     $(".bot_popup.show-item").fadeIn(200,function(){$(this).focus();});
+        // });
+
+         $(document).on('click',".dropDown__icon",function(e){
+            e.preventDefault();
+            $('.bottom-icons').toggleClass('active');
+        });
+
+        $(document).on("click", function (e) {
+            if ($(e.target).closest(".new-chat-form").length === 0 && $(e.target).closest(".dropDown__icon").length === 0) {
+                $(".bottom-icons").removeClass("active");
+            }
+        });
+
+
+        $(document).on('blur',".savad-item-area.show-item, .ai_popup.show-item, .bot_popup.show-item",function(){
+            $(this).fadeOut(200);
+        });
+        $(document).on('click',".canned_li",function(){
+            $('.savad-item-area.show-item').fadeOut(200);
+        });
+        $(document).on('click',".sidebar_toggler",function(){
+            $(".navbar-dark-v1").toggleClass("d-none");
+        });
         $(document).on("click", ".copy_text", function () {
             let text = $(this).data("text");
             copyText(text);
@@ -38,12 +82,58 @@ let modal_id = "";
             $(this).closest("form").submit();
         });
 
+        $(document).on('click',".chat-customtoggle",function(){
+            $(".chatpage-wrapper").addClass("active shadow");
+        });
+
+        $(document).on('click',".close__flyout",function(){
+            $(".chatpage-wrapper").removeClass("active shadow");
+        });
+
+        $(document).on("click", function (e) {
+            if ($(e.target).closest(".sp-left-sidebar").length === 0 && $(e.target).closest(".chat-customtoggle, .close__flyout").length === 0) {
+                $(".chatpage-wrapper").removeClass("active shadow");
+            }
+        });
+
+        $(document).on('click',"#bot_popup",function(e){
+            e.preventDefault();
+            $(".bot_popup").addClass('sp-modal');
+        });
+        $(document).on('click',".btn_close",function(e){
+            e.preventDefault();
+            $(".bot_popup").removeClass('sp-modal');
+        });
+
+        $(document).on('click',"#ai_popup",function(e){
+            e.preventDefault();
+            $(".ai_popup").addClass('sp-modal');
+        });
+        $(document).on('click',".btn_close",function(e){
+            e.preventDefault();
+            $(".ai_popup").removeClass('sp-modal');
+        });
+
+        $(document).on("click", function (e) {
+            if ($(e.target).closest(".chat_popupBox").length === 0 && $(e.target).closest(".btn_close").length === 0) {
+                $(".ai_popup").removeClass("sp-modal");
+            }
+        });
+
+
+    /*********************************
+    /*   Select2 Start
+    *********************************/
+    if ($(".dropdown-select-item").length > 0) {
+        $(".dropdown-select-item").select2();
+    }
+
+
         $(document).on("click", ".status-change", function (e) {
             let selector = $(this);
             var value = selector.val().split("/");
             let field_for = selector.data("field_for");
-            // var url = base_url + "/admin/" + value[0];
-            var url =$(this).data('url');
+            var url = base_url + "/admin/" + value[0];
 
             if (field_for == "maintenance_mode") {
                 if (selector.is(":checked")) {
@@ -67,8 +157,6 @@ let modal_id = "";
             } else {
                 var status = 0;
             }
-
-            // alert(url);
 
             let form = {
                 id: id,
@@ -105,12 +193,7 @@ let modal_id = "";
                 },
                 error: function (response) {
                     selector.prop("checked", !status);
-                    if (response.status == 403) {
-                        toastr.error(response.status+' '+response.statusText);
-                    }
-                    else{
-                        toastr["error"](response.message);
-                    }
+                    toastr["error"](response.message);
                 },
             });
         });
@@ -184,12 +267,7 @@ let modal_id = "";
                 },
                 error: function (response) {
                     selector.prop("checked", !status);
-                    if (response.status == 403) {
-                        toastr.error(response.status+' '+response.statusText);
-                    }
-                    else{
-                        toastr["error"](response.message);
-                    }
+                    toastr["error"](response.message);
                 },
             });
         });
@@ -273,21 +351,22 @@ let modal_id = "";
             });
         }
 
-        // const popoverTriggerList = document.querySelectorAll(
-        //     '[data-bs-toggle="popover"]'
-        // );
-        // const popoverList = [...popoverTriggerList].map(
-        //     (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
-        // );
+        const popoverTriggerList = document.querySelectorAll(
+            '[data-bs-toggle="popover"]'
+        );
+        const popoverList = [...popoverTriggerList].map(
+            (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
+        );
 
-        // $("body").on("click", function (e) {
-        //     if (
-        //         $(e.target).data("toggle") !== "popover" &&
-        //         $(e.target).parents(".popover.in").length === 0
-        //     ) {
-        //         $('[data-bs-toggle="popover"]').popover("hide");
-        //     }
-        // });
+        $("body").on("click", function (e) {
+            //did not click a popover toggle or popover
+            if (
+                $(e.target).data("toggle") !== "popover" &&
+                $(e.target).parents(".popover.in").length === 0
+            ) {
+                $('[data-bs-toggle="popover"]').popover("hide");
+            }
+        });
 
         //sidebar scrolling
         var activeMenuItem = $(".side-nav ul .active");
@@ -303,6 +382,7 @@ let modal_id = "";
             section++;
             let target_id = $(this).data("target_id");
             let name = $(this).data("name");
+            let type = $(this).data("var_type");
             let accordion = $(".modal").find("#" + target_id);
 
             let selector = accordion.clone().appendTo("#homepageContent");
@@ -318,30 +398,18 @@ let modal_id = "";
 
             selector.find("*").each(function () {
                 if ($(this).attr("name")) {
-                    let type = $(this).data("type");
-                    let is_array = $(this).data("is_array");
-                    if (type) {
-                        if (is_array) {
-                            $(this).prop(
-                                "name",
-                                "builder[" +
-                                    name +
-                                    "_" +
-                                    section +
-                                    "]" +type
-                            );
-                        } else{
-                            $(this).prop(
-                                "name",
-                                "builder[" +
+                    if ($(this).is("input") || $(this).is("textarea")) {
+                        let type = $(this).data("type");
+                        $(this).prop(
+                            "name",
+                            "builder[" +
                                 name +
                                 "_" +
                                 section +
                                 "][" +
                                 type +
                                 "]"
-                            );
-                        }
+                        );
                     } else {
                         $(this).prop(
                             "name",
@@ -366,7 +434,11 @@ let modal_id = "";
 
         $(document).on("click", ".accordion-header", function () {
             let id = $(this).attr("id");
-            if ($(this).find(".form-select").hasClass("select2-hidden-accessible")) {
+            if (
+                $(this)
+                    .find(".form-select")
+                    .hasClass("select2-hidden-accessible")
+            ) {
                 $(this).find(".form-select").select2("destroy");
             }
             if (id == "instructor") {
@@ -385,11 +457,6 @@ let modal_id = "";
                 searchLessons(
                     $(this).closest(".accordion-item").find(".form-select")
                 );
-            } else if (id == "videoSlider") {
-                $(this).closest(".accordion-item").find(".form-select").select2({
-                    minimumResultsForSearch: Infinity,
-                    placeholder: $(this).attr("placeholder"),
-                });
             }
         });
 
@@ -460,8 +527,6 @@ let modal_id = "";
                             modal_id.find(".edit_sub_title").addClass("d-none");
                             $(".dataTable").DataTable().ajax.reload();
                         } else {
-                            $(selector).find(".loading_button").addClass("d-none");
-                            $(selector).find(":submit").removeClass("d-none");
                             if (response.route) {
                                 window.location.href = response.route;
                             } else {
@@ -491,10 +556,7 @@ let modal_id = "";
                                 $("." + key + "_error").text(value[0]);
                             }
                         );
-                    } else if(response.status == 403){
-                        toastr.error(response.status+' '+response.statusText);
-                    }
-                    else{
+                    } else {
                         toastr.error(response.responseJSON.message);
                     }
                 },
@@ -767,6 +829,7 @@ let modal_id = "";
     sideNav();
     selectionFields();
     defaultEditor();
+    showMore();
 
     $(".lang").on("change", function () {
         $("#lang").submit();
@@ -784,6 +847,16 @@ function instructorValidate(el) {
     selector.find(".tab-pane:first").addClass("active");
     selector.find(".tab-pane:first").addClass("show");
 }
+function resetForm() {
+    modal_id.find("form").trigger("reset");
+    /*modal_id.find('.form-select').select2('destroy');
+    modal_id.find('.form-select').select2({
+    placeholder: modal_id.find('.form-select').attr('placeholder'),
+    dropdownParent: modal_id
+    });
+    modal_id.find('.file-upload-text').text('');
+    modal_id.find('.selected-img').attr('src', '');*/
+}
 
 // Copy Text
 function copyText(text) {
@@ -799,6 +872,23 @@ function copyText(text) {
         });
 }
 
+function showMore() {
+    $(".details").click(function (event) {
+        event.preventDefault();
+        $(this).prev("p").toggleClass("toggle");
+        if ($(this).text() === "Details") {
+            $(this).text("See less");
+        } else {
+            $(this).text("Details");
+        }
+    });
+    $(".details").each(function () {
+        if ($(this).prev("p").height() <= 50.38) {
+            $(this).remove();
+        }
+    });
+}
+
 // Main Sidebar
 function mainSidebar() {
     const toggleBTN = $(".sidebar-toggler"),
@@ -808,15 +898,37 @@ function mainSidebar() {
         document.body.classList.toggle("sidebar-collapse");
     });
 
+   
     $(window).on("resize", function () {
         const width = $(this).width();
-        if (width >= 576 && width <= 991) {
+        if ( screen.width >= 992 && width <= 1366) {
             body.addClass("sidebar-collapse");
         } else {
             body.removeClass("sidebar-collapse");
         }
     });
 }
+    
+
+
+
+// function mainSidebar() {
+//     const toggleBTN = $(".sidebar-toggler"),
+//         body = $("body");
+
+//     toggleBTN.on("click", function () {
+//         document.body.classList.toggle("sidebar-collapse");
+//     });
+
+//     $(window).on("resize", function () {
+//         const width = $(this).width();
+//         if (width >= 576 && width <= 991) {
+//             body.addClass("sidebar-collapse");
+//         } else {
+//             body.removeClass("sidebar-collapse");
+//         }
+//     });
+// }
 
 // 02. Settings Tools Nav
 function settingTools() {
@@ -935,6 +1047,7 @@ function defaultEditor() {
             ["table", ["table"]],
             ["insert", ["link", "picture", "video"]],
             ["view", ["fullscreen", "help"]],
+
         ],
     });
 }
@@ -1167,6 +1280,19 @@ function searchLessons(el) {
     });
 }
 
+function formatState(state) {
+    if (!state.id) {
+        return state.text;
+    }
+
+    return $(
+        '<span><img src="' +
+            state.image +
+            '.png" class="img-flag" /> ' +
+            state.image +
+            "</span>"
+    );
+}
 window.onload = function () {
     const progressBarLength =
         document.querySelectorAll(".line-progress").length;
@@ -1188,3 +1314,458 @@ function AnimateProgress(el) {
         `--animate-progress:${el.getAttribute("data-progress")}%;`
     );
 }
+
+var instructorChart2 = document.getElementById("instructorStatistics2");
+if (instructorChart2) {
+    const instructorChart = new Chart(instructorChart2, {
+        type: "line",
+        data: {
+            labels: [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saterday",
+            ],
+            datasets: [
+                {
+                    label: "Regular Sell",
+                    data: [5, 10, 2, 13, 7, 14, 2],
+                    fill: false,
+                    borderColor: "#3F52E3",
+                    backgroundColor: "#3F52E3",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                    tension: 0.4,
+                },
+                {
+                    label: "Offer Sell",
+                    data: [24, 44, 12, 40, 37, 58, 38],
+                    fill: false,
+                    borderColor: "#24D6A5",
+                    backgroundColor: "#24D6A5",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                    tension: 0.4,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    border: {
+                        display: false,
+                    },
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                    },
+                },
+                y: {
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [5, 5],
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    align: "center",
+                    position: "bottom",
+                    labels: {
+                        boxWidth: 7,
+                        boxHeight: 7,
+                        usePointStyle: true,
+                        pointStyle: "circle",
+                    },
+                },
+            },
+        },
+    });
+}
+// End Instructor Dashboard Statistics
+
+var instructorChart3 = document.getElementById("instructorStatistics3");
+if (instructorChart3) {
+    var context = instructorChart3.getContext("2d");
+    var gradientBGColor = context.createLinearGradient(0, 0, 0, 900);
+    gradientBGColor.addColorStop(0.1, "#3F52E390");
+    gradientBGColor.addColorStop(0.4, "#ffffff10");
+
+    const instructorChartItem3 = new Chart(instructorChart3, {
+        type: "line",
+        data: {
+            labels: [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saterday",
+            ],
+            datasets: [
+                {
+                    label: "Earning",
+                    data: [100, 200, 150, 220, 250, 150, 300],
+                    fill: true,
+                    borderColor: "#3F52E3",
+                    backgroundColor: gradientBGColor,
+                    borderWidth: 2,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    border: {
+                        display: false,
+                    },
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                    },
+                },
+                y: {
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [5, 5],
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+        },
+    });
+}
+// End Instructor Finance Statistics3
+
+var instructorChart4 = document.getElementById("instructorStatistics4");
+if (instructorChart4) {
+    var context = instructorChart4.getContext("2d");
+    var gradientBGColor = context.createLinearGradient(0, 0, 0, 900);
+    gradientBGColor.addColorStop(0.1, "#24D6AC60");
+    gradientBGColor.addColorStop(0.4, "#ffffff30");
+
+    const instructorChartItem3 = new Chart(instructorChart4, {
+        type: "line",
+        data: {
+            labels: [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saterday",
+            ],
+            datasets: [
+                {
+                    label: "Payment",
+                    data: [100, 200, 150, 220, 250, 150, 300],
+                    fill: true,
+                    borderColor: "#24D6AC",
+                    backgroundColor: gradientBGColor,
+                    borderWidth: 2,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    border: {
+                        display: false,
+                    },
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                    },
+                },
+                y: {
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [5, 5],
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+        },
+    });
+}
+// End Instructor Finance Statistics4
+
+var courseStatisticsItem = document.getElementById("courseStatisticChart");
+if (courseStatisticsItem) {
+    const courseChart = new Chart(courseStatisticsItem, {
+        type: "line",
+        data: {
+            labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ],
+            datasets: [
+                {
+                    label: "Total Enrolment",
+                    data: [65, 58, 41, 58, 74, 57, 63, 43, 62, 65, 100],
+                    fill: false,
+                    borderColor: "#3F52E3",
+                    backgroundColor: "#3F52E3",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+                {
+                    label: "Total Orders",
+                    data: [42, 58, 21, 68, 34, 77, 93, 50, 82, 35, 90],
+                    fill: false,
+                    borderColor: "#24D6A5",
+                    backgroundColor: "#24D6A5",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+                {
+                    label: "Total Profit",
+                    data: [20, 28, 71, 38, 54, 90, 71, 31, 34, 25, 79],
+                    fill: false,
+                    borderColor: "#FF5630",
+                    backgroundColor: "#FF5630",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    border: {
+                        display: false,
+                    },
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                    },
+                },
+                y: {
+                    stacked: true,
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [5, 5],
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    align: "start",
+                    position: "right",
+                    labels: {
+                        boxWidth: 7,
+                        boxHeight: 7,
+                        usePointStyle: true,
+                        pointStyle: "circle",
+                    },
+                },
+            },
+        },
+    });
+}
+
+var statisticsItem2 = document.getElementById("statisticsBarChart2");
+if (statisticsItem2) {
+    const stastBar = new Chart(statisticsItem2, {
+        type: "bar",
+        data: {
+            labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ],
+            datasets: [
+                {
+                    label: "New Students",
+                    data: [65, 58, 41, 58, 74, 57, 63, 43, 62, 65, 100],
+                    fill: false,
+                    borderColor: "#3F52E3",
+                    backgroundColor: "#3F52E3",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+                {
+                    label: "New Enrolled",
+                    data: [42, 58, 21, 68, 34, 77, 93, 50, 82, 35, 90],
+                    fill: false,
+                    borderColor: "#24D6A5",
+                    backgroundColor: "#24D6A5",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+                {
+                    label: "Total Sale",
+                    data: [20, 28, 71, 38, 54, 90, 71, 31, 34, 25, 79],
+                    fill: false,
+                    borderColor: "#FF5630",
+                    backgroundColor: "#FF5630",
+                    borderWidth: 1,
+                    barThickness: 5,
+                    borderRadius: 5,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    border: {
+                        display: false,
+                    },
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                    },
+                },
+                y: {
+                    stacked: true,
+                    grid: {
+                        drawBorder: false,
+                        borderDash: [5, 5],
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    align: "start",
+                    position: "right",
+                    labels: {
+                        boxWidth: 7,
+                        boxHeight: 7,
+                        usePointStyle: true,
+                        pointStyle: "circle",
+                    },
+                },
+            },
+        },
+    });
+}
+
+const chartItem7 = document.getElementById("statisticsChart7");
+if (chartItem7) {
+    var context = chartItem7.getContext("2d");
+    var gradientBGColor = context.createLinearGradient(0, 0, 0, 200);
+    gradientBGColor.addColorStop(0.1, "#ff563050");
+    gradientBGColor.addColorStop(0.4, "#ffffff30");
+
+    const chart3 = new Chart(chartItem7, {
+        type: "line",
+        data: {
+            labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Nov",
+                "Des",
+            ],
+            datasets: [
+                {
+                    label: "Free Course",
+                    backgroundColor: gradientBGColor,
+                    borderColor: "#ff5630",
+                    data: [1, 37, 26, 40, 34, 59, 42, 60, 78, 80, 100],
+                    fill: true,
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    display: false,
+                },
+                y: {
+                    display: false,
+                },
+            },
+            elements: {
+                line: {
+                    borderWidth: 2,
+                    tension: 0.4,
+                },
+                point: {
+                    radius: 0,
+                    hitRadius: 10,
+                    hoverRadius: 4,
+                },
+            },
+        },
+    });
+}
+const debounceButton = () => {
+    let preloader = $("#preloader");
+    let saveButton = $(".save");
+  
+    if (preloader.hasClass("d-none")) {
+      preloader.removeClass("d-none");
+      saveButton.addClass("d-none");
+    } else {
+      preloader.addClass("d-none");
+      saveButton.removeClass("d-none");
+    }
+  };
+  

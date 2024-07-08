@@ -10,11 +10,12 @@ class WebsitePartnerLogo extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'image',
     ];
 
     protected $casts    = [
-        'image'       => 'array',
+        'image' => 'array',
     ];
 
     public function languages(): \Illuminate\Database\Eloquent\Relations\HasMany

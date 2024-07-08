@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\CountryDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CountryRequest;
+use App\Repositories\CountryRepository;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Repositories\CountryRepository;
 use Illuminate\Support\Facades\Artisan;
-use App\DataTables\Admin\CountryDataTable;
-use App\Http\Requests\Admin\CountryRequest;
 
 class CountryController extends Controller
 {
@@ -21,12 +21,12 @@ class CountryController extends Controller
 
     public function index(CountryDataTable $dataTable)
     {
-        return $dataTable->render('admin.country.index');
+        return $dataTable->render('backend.admin.country.index');
     }
 
     public function store(CountryRequest $request): \Illuminate\Http\JsonResponse
     {
-        if (config('app.demo_mode')) {
+        if (isDemoMode()) {
             $data = [
                 'status' => 'danger',
                 'error'  => __('this_function_is_disabled_in_demo_server'),
@@ -41,7 +41,7 @@ class CountryController extends Controller
 
             return response()->json(['success' => __('create_successful')]);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json(['error' => __('something_went_wrong_please_try_again')]);
         }
     }
 
@@ -50,25 +50,26 @@ class CountryController extends Controller
         try {
             $country = $this->country->find($id);
 
-            $data    = [
-                'id'              => $country->id,
-                'name'            => $country->name,
-                'iso3'            => $country->iso3,
-                'iso2'            => $country->iso2,
-                'phonecode'       => $country->phonecode,
-                'currency'        => $country->currency,
-                'currency_symbol' => $country->currency_symbol,
+            $data                   = [
+                'id'                => $country->id,
+                'name'              => $country->name,
+                'iso3'              => $country->iso3,
+                'iso2'              => $country->iso2,
+                'phonecode'         => $country->phonecode,
+                'currency'          => $country->currency,
+                'currency_symbol'   => $country->currency_symbol
             ];
 
             return response()->json($data);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json(['error' => __('something_went_wrong_please_try_again')]);
         }
     }
 
+
     public function update(CountryRequest $request, $id): \Illuminate\Http\JsonResponse
     {
-        if (config('app.demo_mode')) {
+        if (isDemoMode()) {
             $data = [
                 'status' => 'danger',
                 'error'  => __('this_function_is_disabled_in_demo_server'),
@@ -83,13 +84,13 @@ class CountryController extends Controller
 
             return response()->json(['success' => __('update_successful')]);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json(['error' => __('something_went_wrong_please_try_again')]);
         }
     }
 
     public function destroy($id): \Illuminate\Http\JsonResponse
     {
-        if (config('app.demo_mode')) {
+        if (isDemoMode()) {
             $data = [
                 'status'  => 'danger',
                 'message' => __('this_function_is_disabled_in_demo_server'),
@@ -111,7 +112,7 @@ class CountryController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status'  => 400,
-                'message' => $e->getMessage(),
+                'message' => __('something_went_wrong_please_try_again'),
                 'title'   => 'error',
             ];
 
@@ -121,7 +122,7 @@ class CountryController extends Controller
 
     public function statusChange(Request $request): \Illuminate\Http\JsonResponse
     {
-        if (config('app.demo_mode')) {
+        if (isDemoMode()) {
             $data = [
                 'status'  => 'danger',
                 'message' => __('this_function_is_disabled_in_demo_server'),
@@ -131,7 +132,7 @@ class CountryController extends Controller
             return response()->json($data);
         }
         try {
-            $this->country->statusChange($request);
+            $this->country->statusChange($request->all());
             $data = [
                 'status'  => 200,
                 'message' => __('update_successful'),
@@ -143,7 +144,7 @@ class CountryController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status'  => 400,
-                'message' => $e->getMessage(),
+                'message' => __('something_went_wrong_please_try_again'),
                 'title'   => 'error',
             ];
 

@@ -2,35 +2,33 @@
 
 namespace App\DataTables\Admin;
 
-use Carbon\Carbon;
+use App\Models\Faq;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use App\Models\Faq;
 use Yajra\DataTables\Services\DataTable;
-
+ 
 class WebsiteFaqDataTable extends DataTable
 {
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->addIndexColumn()
-        ->addColumn('options', function ($faq) {
-            return view('admin.website.faq.action', compact('faq'));
-        })->addColumn('status', function ($faq) {
-            return view('admin.website.faq.status', compact('faq'));
-        })->addColumn('question', function ($faq) {
-            return $faq->lang_question;
-        })->addColumn('answer', function ($faq) {
-            $answer = strip_tags($faq->lang_answer);
+            ->addIndexColumn()
+            ->addColumn('action', function ($faq) {
+                return view('backend.admin.website.faq.action', compact('faq'));
+            })->addColumn('status', function ($faq) {
+                return view('backend.admin.website.faq.status', compact('faq'));
+            })->addColumn('question', function ($faq) {
+                return $faq->lang_question;
+            })->addColumn('answer', function ($faq) {
+                $answer = strip_tags($faq->lang_answer);
 
-            return strlen($answer) > 100 ? substr($answer, 0, 100).'...' : $answer;
-        })->setRowId('id');
+                return strlen($answer) > 100 ? substr($answer, 0, 100).'...' : $answer;
+            })->setRowId('id');
     }
-    public function query(Faq $model): QueryBuilder
+
+    public function query(): QueryBuilder
     {
         $model = new Faq();
 
@@ -43,7 +41,7 @@ class WebsiteFaqDataTable extends DataTable
         ->with('language')->latest()->newQuery();
     }
 
-    public function html()
+    public function html(): HtmlBuilder
     {
         return $this->builder()
             ->columns($this->getColumns())
@@ -74,11 +72,12 @@ class WebsiteFaqDataTable extends DataTable
     {
         return [
             Column::computed('id')->data('DT_RowIndex')->title('#')->searchable(false)->width(10),
-            Column::computed('options')->title(__('options')),
             Column::computed('question')->title(__('question')),
             Column::computed('answer')->title(__('answer')),
             Column::make('ordering')->title(__('order'))->searchable(false),
-            Column::computed('status')->title(__('status'))
+            Column::computed('status')->title(__('status'))->exportable(false)
+                ->printable(false)->width(10),
+            Column::computed('action')->title(__('action'))
                 ->exportable(false)
                 ->printable(false)
                 ->searchable(false)->addClass('action-card')->width(10),
@@ -88,6 +87,6 @@ class WebsiteFaqDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'faq'.date('YmdHis');
+        return 'blog_'.date('YmdHis');
     }
 }

@@ -1,0 +1,29 @@
+name: Salebot
+
+on:
+  push:
+    branches:
+      - chat-system
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+              cd /var/www/chat.salebot.app
+              git stash
+              git pull origin chat-system --ff
+              php artisan cache:clear
+              php artisan config:clear
+              php artisan migrate
+              php artisan migrate --path=database/migrations/v1.4.0
+              chmod -R 777 bootstrap/cache
+              chmod 777 .env
+              chmod -R 777 storage
+              chmod -R 777 public

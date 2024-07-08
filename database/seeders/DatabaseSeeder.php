@@ -1,29 +1,12 @@
 <?php
-namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use Database\Seeders\RoleSeeder;
-use Database\Seeders\UserSeeder;
-use Database\Seeders\BranchSeeder;
-use Database\Seeders\ChargeSeeder;
-use Database\Seeders\NoticeSeeder;
-use Database\Seeders\ParcelSeeder;
-use Database\Seeders\DistrictZilla;
-use Database\Seeders\AccountsSeeder;
-use Database\Seeders\CodChargeSeeder;
-use Database\Seeders\PermissionSeeder;
-use Database\Seeders\DeliveryMenSeeder;
-use Database\Seeders\ParcelEventSeeder;
-use Database\Seeders\SmsTemplateSeeder;
-use Database\Seeders\WithdrawSmsSeeder;
-use Database\Seeders\SettingsTableSeeder;
-use Database\Seeders\MerchantsTableSeeder;
-use Database\Seeders\PaymentMethodsSeeder;
-use Database\Seeders\PreferenceTableSeeder;
-use Database\Seeders\MerchantAccountsSeeder;
-use Database\Seeders\CustomerParcelSmsSeeder;
-use Database\Seeders\DeliveryManAccountsSeeder;
-use Database\Seeders\PackagingAndChargesSeeder;
 
+namespace Database\Seeders;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Addon;
+use Illuminate\Database\Seeder;
+use Database\Seeders\ClientSeeder;
+use Database\Seeders\ContactsListSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,6 +17,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       $this->call(UserSeeder::class);
+        $this->call(TimeZoneSeeder::class);
+        $this->call(CurrencySeeder::class);
+        $this->call(EmailTemplateSeeder::class);
+        $this->call(FlagIconSeeder::class);
+        $this->call(LanguageSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(SettingSeeder::class);
+        $this->call(ClientSeeder::class);
+        $this->call(ContactsListSeeder::class);
+        $this->call(SegmentsSeeder::class);
+        $this->call(ContactsTableSeeder::class);
+        // $this->call(SubscriptionSeeder::class);
+        $this->call(PlanSeeder::class);
+        $this->call(SubscriptionSeeder::class);
+        $this->call(PageSeeder::class);
     }
 }

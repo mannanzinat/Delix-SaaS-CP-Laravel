@@ -8,9 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class WebsiteFeatureLanguage extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'website_feature_id',
-        'title',
         'lang',
+        'title',
+        'description',
+    ];
+
+    protected $casts    = [
+        'description' => 'array',
     ];
 }

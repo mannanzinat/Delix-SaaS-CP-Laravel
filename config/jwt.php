@@ -1,16 +1,6 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | JWT Authentication Secret
@@ -25,7 +15,7 @@ return [
     |
     */
 
-    'secret' => env('JWT_SECRET'),
+    'secret'                    => env('JWT_SECRET'),
 
     /*
     |--------------------------------------------------------------------------
@@ -44,8 +34,7 @@ return [
     |
     */
 
-    'keys' => [
-
+    'keys'                      => [
         /*
         |--------------------------------------------------------------------------
         | Public Key
@@ -57,7 +46,7 @@ return [
         |
         */
 
-        'public' => env('JWT_PUBLIC_KEY'),
+        'public'     => env('JWT_PUBLIC_KEY'),
 
         /*
         |--------------------------------------------------------------------------
@@ -70,7 +59,7 @@ return [
         |
         */
 
-        'private' => env('JWT_PRIVATE_KEY'),
+        'private'    => env('JWT_PRIVATE_KEY'),
 
         /*
         |--------------------------------------------------------------------------
@@ -82,7 +71,6 @@ return [
         */
 
         'passphrase' => env('JWT_PASSPHRASE'),
-
     ],
 
     /*
@@ -101,7 +89,7 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', null),
+    'ttl'                       => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -120,7 +108,7 @@ return [
     |
     */
 
-    'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
+    'refresh_ttl'               => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -134,7 +122,7 @@ return [
     |
     */
 
-    'algo' => env('JWT_ALGO', 'HS256'),
+    'algo'                      => env('JWT_ALGO', 'HS256'),
 
     /*
     |--------------------------------------------------------------------------
@@ -147,10 +135,9 @@ return [
     |
     */
 
-    'required_claims' => [
+    'required_claims'           => [
         'iss',
         'iat',
-//        'exp',
         'nbf',
         'sub',
         'jti',
@@ -169,7 +156,7 @@ return [
     |
     */
 
-    'persistent_claims' => [
+    'persistent_claims'         => [
         // 'foo',
         // 'bar',
     ],
@@ -191,7 +178,7 @@ return [
     |
     */
 
-    'lock_subject' => true,
+    'lock_subject'              => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -208,7 +195,7 @@ return [
     |
     */
 
-    'leeway' => env('JWT_LEEWAY', 0),
+    'leeway'                    => env('JWT_LEEWAY', 0),
 
     /*
     |--------------------------------------------------------------------------
@@ -220,7 +207,7 @@ return [
     |
     */
 
-    'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
+    'blacklist_enabled'         => env('JWT_BLACKLIST_ENABLED', true),
 
     /*
     | -------------------------------------------------------------------------
@@ -235,7 +222,18 @@ return [
     |
     */
 
-    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 0),
+    'blacklist_grace_period'    => env('JWT_BLACKLIST_GRACE_PERIOD', 0),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show blacklisted token option
+    |--------------------------------------------------------------------------
+    |
+    | Specify if you want to show black listed token exception on the laravel logs.
+    |
+    */
+
+    'show_black_list_exception' => env('JWT_SHOW_BLACKLIST_EXCEPTION', 0),
 
     /*
     |--------------------------------------------------------------------------
@@ -253,7 +251,7 @@ return [
     |
     */
 
-    'decrypt_cookies' => false,
+    'decrypt_cookies'           => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -264,8 +262,7 @@ return [
     |
     */
 
-    'providers' => [
-
+    'providers'                 => [
         /*
         |--------------------------------------------------------------------------
         | JWT Provider
@@ -275,7 +272,7 @@ return [
         |
         */
 
-        'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
+        'jwt'     => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -286,7 +283,7 @@ return [
         |
         */
 
-        'auth' => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
+        'auth'    => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -298,7 +295,6 @@ return [
         */
 
         'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
-
     ],
-
 ];
+

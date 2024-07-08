@@ -19,6 +19,7 @@
     </div>
 </div>
 
+
 <div class="{{ $meta_image_class ?? 'col-12'}}">
     <div class="col-lg-12 input_file_div mb-4">
         <div class="mb-3">
@@ -34,7 +35,7 @@
         </div>
         <div class="selected-files d-flex flex-wrap gap-20">
             <div class="selected-files-item">
-                <img class="selected-img" src="{{ getFileLink('original_image',$meta_image ?? []) }}"
+                <img class="selected-img" src="{{  getFileLink('80x80',$meta_image ?? []) }}"
                     alt="favicon">
             </div>
         </div>
@@ -45,7 +46,7 @@
     <div class="mb-4">
         <div class="d-flex justify-content-between">
             <label for="meta_description" class="form-label">{{ __('meta_description') }}</label>
-            @include('common.ai_btn', [
+            @include('backend.common.ai_btn', [
                 'name' => 'ai_meta_description',
                 'length' => '200',
                 'topic' => 'ai_content_name',
@@ -60,26 +61,15 @@
     </div>
 </div>
 
+
 @push('css_asset')
     <link rel="stylesheet" href="{{ static_asset('admin/css/inputTags.min.css') }}">
 @endpush
 @push('js_asset')
-<script src="{{ static_asset('admin/js/inputTags.jquery.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
+    <script src="{{ static_asset('admin/js/inputTags.jquery.min.js') }}"></script>
+@endpush
+@push('js')
+    <script>
         $("#inputTagActive").inputTags();
-        $('#inputTagActive').on('keypress', function(event) {
-            if (event.which == 13) {
-                event.preventDefault();
-                $(this).inputTags('add');
-            }
-        });
-
-        $('form').on('keypress', function(event) {
-            if (event.which == 13 && !$(event.target).is('textarea')) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
+    </script>
 @endpush

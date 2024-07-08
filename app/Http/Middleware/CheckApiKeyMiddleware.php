@@ -2,34 +2,31 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ApiKey;
+use App\Models\Client;
 use App\Traits\ApiReturnFormatTrait;
 use Closure;
-use App\Models\ApiKey;
 use Illuminate\Http\Request;
+use Auth;
 
 class CheckApiKeyMiddleware
 {
     use ApiReturnFormatTrait;
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next)
     {
-
         if ($request->hasHeader('apikey')) {
-            $api_check = ApiKey::where('key', $request->header('apikey'))->where('status', 1)->first();
+            $api_check = Client::where('api_key', $request->header('apikey'))->first();
             if ($api_check) {
+                // API key is valid
                 return $next($request);
             } else {
-                return $this->responseWithError('API key invalid');
+                // API key is invalid
+                return $this->responseWithError(__('API key invalid'), [], 403);
             }
         } else {
-            return $this->responseWithError('API key missing');
-
+            // API key is missing
+            return $this->responseWithError(__('api_key_missing'), [], 401);
         }
     }
+
 }

@@ -26,7 +26,7 @@ class HeaderSettingController extends Controller
         $lang          = $request->site_lang ? $request->site_lang : App::getLocale();
         $menu_language = headerFooterMenu('header_menu', $lang);
 
-        return view('admin.website.menu', compact('languages', 'lang', 'menu_language'));
+        return view('backend.admin.website.menu', compact('languages', 'lang', 'menu_language'));
     }
 
     public function updateHeaderMenu(Request $request): \Illuminate\Http\JsonResponse
@@ -85,9 +85,9 @@ class HeaderSettingController extends Controller
 
                     return response()->json($data);
                 } else {
-                    Toastr::error(__('Something went wrong, please try again.'));
+                    Toastr::error(__('something_went_wrong_please_try_again'));
                     $data = [
-                        'error' => __('Something went wrong, please try again.'),
+                        'error' => __('something_went_wrong_please_try_again'),
                     ];
 
                     return response()->json($data);
@@ -101,7 +101,7 @@ class HeaderSettingController extends Controller
                 return response()->json($data);
             }
         }catch (\Exception $e) {
-            Toastr::error(__('Something went wrong, please try again.'));
+            Toastr::error(__('something_went_wrong_please_try_again'));
         }
     }
 }

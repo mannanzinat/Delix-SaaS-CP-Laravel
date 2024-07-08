@@ -9,7 +9,9 @@ class Permission extends Model
 {
     use HasFactory;
 
-    protected $casts = [
+    protected $fillable = ['name', 'attribute', 'keywords'];
+
+    protected $casts    = [
         'keywords' => 'array',
     ];
 }

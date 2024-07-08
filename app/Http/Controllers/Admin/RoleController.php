@@ -1,60 +1,69 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
+
+use App\DataTables\RoleDataTable;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\DataTables\Admin\RoleDataTable;
-use App\Http\Requests\Admin\Roles\RoleStoreRequest;
-use App\Repositories\Interfaces\Role\RoleInterface;
-use App\Http\Requests\Admin\Roles\RoleUpdateRequest;
-use App\Repositories\Interfaces\PermissionInterface;
+use App\Repositories\RoleRepository;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Admin\RoleRequest;
+use App\Repositories\PermissionRepository;
 
 class RoleController extends Controller
 {
-    protected $roles;
-    protected $permissions;
+    protected $role;
 
-    public function __construct(RoleInterface $roles, PermissionInterface $permissions)
+    protected $permission;
+
+    public function __construct(RoleRepository $role, PermissionRepository $permission)
     {
-        $this->roles=$roles;
-        $this->permissions=$permissions;
-
+        $this->role       = $role;
+        $this->permission = $permission;
     }
 
-     public function index(RoleDataTable $dataTable, Request $request)
-     {
-        $data['total_role'] = $dataTable->getTotalCount();
-         return $dataTable->with($request->all())->render('admin.roles.index',$data);
-     }
-
-
-    public function create()
+    public function index(RoleDataTable $dataTable)
     {
-        if(!hasPermission('role_create')):
-            return view('errors.403');
-        endif;
-        $permissions = $this->permissions->all();
-        return view('admin.roles.create', compact('permissions'));
+        Gate::authorize('roles.index');
+
+        return $dataTable->render('backend.admin.role.all-role');
     }
 
+    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $pemissions = $this->permission->all();
+        $data       = [
+            'pemissions' => $pemissions,
+        ];
 
-    public function store(RoleStoreRequest $request)
+        return view('backend.admin.role.add-role', $data);
+    }
+
+    public function store(RoleRequest $request): \Illuminate\Http\JsonResponse
     {
         if (isDemoMode()) {
-            Toastr::error(__('this_function_is_disabled_in_demo_server'));
-            return back();
+            $data = [
+                'status' => 'danger',
+                'error'  => __('this_function_is_disabled_in_demo_server'),
+                'title'  => 'error',
+            ];
+
+            return response()->json($data);
         }
-        try{
-            if(!hasPermission('role_create')):
-                return view('errors.403');
-            endif;
+        DB::beginTransaction();
+        try {
+            $this->role->store($request->all());
+            DB::commit();
+            Toastr::success(__('create_successful'));
+            return response()->json([
+                'success' => __('create_successful'),
+                'route'   => route('roles.index'),
+            ]);
 
-            $role = $this->roles->store($request->all());
-
-            return redirect()->route('roles.index')->with('success', __('created_successfully'));
-        }catch (\Exception $e){
-            return back()->with('danger', __('something_went_wrong_please_try_again'));
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => __('something_went_wrong_please_try_again')]);
         }
     }
 
@@ -63,83 +72,79 @@ class RoleController extends Controller
         //
     }
 
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
-        if(!hasPermission('role_update')):
-            return view('errors.403');
-        endif;
-        $permissions = $this->permissions->all();
-        $role = $this->roles->get($id);
-        return view('admin.roles.edit', compact('permissions', 'role'));
-    }
+        try {
+            $role       = $this->role->edit($id);
+            $pemissions = $this->permission->all();
+            $data       = [
+                'pemissions' => $pemissions,
+                'role'       => $role,
+            ];
 
-    public function update(RoleUpdateRequest $request, $id)
-    {
-        if (isDemoMode()) {
-            Toastr::error(__('this_function_is_disabled_in_demo_server'));
+            return view('backend.admin.role.edit-role', $data);
+        }catch (\Exception $e) {
+            Toastr::error('something_went_wrong_please_try_again');
             return back();
         }
-        try{
-            if(!hasPermission('role_update')):
-                return view('errors.403');
-            endif;
-            $this->roles->update($id, $request->all());
-            return redirect()->route('roles.index')->with('success', __('updated_successfully'));
-        }catch (\Exception $e){
-            return back()->with('danger', __('something_went_wrong_please_try_again'));
-        }
     }
 
-    public function destroy(Request $request, $id)
+    public function update(RoleRequest $request, $id): \Illuminate\Http\JsonResponse
     {
         if (isDemoMode()) {
-            $success[0] = __('this_function_is_disabled_in_demo_server');
-            $success[1] = 'error';
-            $success[2] = __('oops');
-            return response()->json($success);
-        }
-        try{
-            if($this->roles->delete($id)):
-                $success[0] = __('deleted_successfully');
-                $success[1] = 'success';
-                $success[2] = __('deleted');
-                return response()->json($success);
-            endif;
-        } catch (\Exception $e){
-            $success[0] = __('something_went_wrong_please_try_again');
-            $success[1] = 'error';
-            $success[2] = __('oops');
-            return response()->json($success);
-        }
-    }
+            $data = [
+                'status' => 'danger',
+                'error'  => __('this_function_is_disabled_in_demo_server'),
+                'title'  => 'error',
+            ];
 
+            return response()->json($data);
+        }
+        DB::beginTransaction();
+        try {
+            $this->role->update($request->all(), $id);
 
-    public function statusChange(Request $request)
-    {
-        if (isDemoMode()) {
-            $message = __('this_function_is_disabled_in_demo_server');
+            DB::commit();
+            Toastr::success(__('update_successful'));
+
             return response()->json([
-                'status'=>404,
-                'message'=>$message,
+                'success' => __('update_successful'),
+                'route'   => route('roles.index'),
             ]);
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => __('something_went_wrong_please_try_again')]);
+        }
+    }
+
+    public function destroy($id): \Illuminate\Http\JsonResponse
+    {
+        if (isDemoMode()) {
+            $data = [
+                'status'  => 'danger',
+                'message' => __('this_function_is_disabled_in_demo_server'),
+                'title'   => 'error',
+            ];
+
+            return response()->json($data);
         }
         try {
-            $status = $this->roles->statusChange($request);
-            if($status == true){
-                $success = __('updated_successfully');
-                return response()->json([
-                    'status'=>200,
-                    'message'=>$success,
-                ]);
-            }
+            $this->role->destroy($id);
+            $data = [
+                'status'  => 'success',
+                'message' => __('delete_successful'),
+                'title'   => 'success',
+            ];
 
-        } catch (\Exception $e){
-            $message = __('something_went_wrong_please_try_again');
-            return response()->json($message,404);
+            return response()->json($data);
+        }catch (\Exception $e) {
+            $data = [
+                'status'  => 'danger',
+                'message' => __('something_went_wrong_please_try_again'),
+                'title'   => 'error',
+            ];
+
+            return response()->json($data);
         }
-
     }
-
-
 }
-

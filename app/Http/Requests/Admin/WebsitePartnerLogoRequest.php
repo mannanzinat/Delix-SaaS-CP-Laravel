@@ -14,7 +14,8 @@ class WebsitePartnerLogoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'partner_logo.*' => 'required|array'
+            'name'  => 'required|unique:website_partner_logos,name,'.$this->id,
+            'image' => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
         ];
     }
 }

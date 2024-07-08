@@ -19,12 +19,12 @@ class CountryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'            => 'required|string|unique:countries,name,'.$this->id,
-            'iso3'            => 'required|max:3|unique:countries,iso3,'.$this->id,
-            'iso2'            => 'required|max:2|unique:countries,iso2,'.$this->id,
-            'phonecode'       => 'required|unique:countries,phonecode,'.$this->id,
-            'currency'        => 'required',
-            'currency_symbol' => 'required',
+            'name'              => 'required|string|unique:countries,name,'.$this->id,
+            'iso3'              => 'required|max:3|unique:countries,iso3,'.$this->id,
+            'iso2'              => 'required|max:2|unique:countries,iso2,'.$this->id,
+            'phonecode'         => 'required|unique:countries,phonecode,'.$this->id,
+            'currency'          => 'required',
+            'currency_symbol'   => 'required',
         ];
     }
 }

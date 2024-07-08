@@ -9,5 +9,5 @@ class Addon extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'addon_identifier', 'purchase_code', 'version', 'image', 'status', 'description'];
+    protected $fillable = ['name', 'addon_identifier', 'activation_code', 'version', 'image', 'status', 'description'];
 }

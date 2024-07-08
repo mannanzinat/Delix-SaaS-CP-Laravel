@@ -2,9 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\MediaLibrary;
-use Aws\S3\Exception\S3Exception;
-use Aws\S3\S3Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,618 +11,408 @@ trait ImageTrait
 {
     public function saveImage($requestImage, $for = '_product_', $save_to_db = false, $url = null, $token_id = null)
     {
+
         $extension = 'png';
         $mime_type = 'image/png';
-        if ((!empty($requestImage) && $requestImage != 'null') || $url) {
 
-            if (!$url) {
-                $image      = explode('.', $requestImage->getClientOriginalName());
-                $extension  = strtolower($requestImage->getClientOriginalExtension());
-                $name       = $image[0];
-                $mime_type  = $requestImage->getMimeType();
+        if ((! empty($requestImage) && $requestImage != 'null') || $url) {
+
+            if (! $url) {
+                $image     = explode('.', $requestImage->getClientOriginalName());
+                $extension = strtolower($requestImage->getClientOriginalExtension());
+                $name      = $image[0];
+                $mime_type = $requestImage->getMimeType();
             }
 
-            $storage        = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
-            $response       = false;
+            $storage           = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
+            $response          = false;
 
-            $content_type               = ['visibility' => 'public-read', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
-            $encode_percentage          = $this->getEncodePercentage();
+            $content_type      = ['visibility' => 'public', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
+            $encode_percentage = $this->getEncodePercentage();
             if ($for == 'header1_hero_image1') {
-                $directory              = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_577x505          = date('YmdHis') . 'image_577x505' . $for . rand(1, 500) . '.' . $extension;
-                $image_577x505_url      = $directory . $image_577x505;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_240x240     = date('YmdHis').'image_240x240'.$for.rand(1, 500).'.'.$extension;
+                $image_240x240_url = $directory.$image_240x240;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
-                Image::make($requestImage)->resize(577, 505, function ($constraint) {
+                Image::make($requestImage)->resize(630, 498, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_577x505_url, $encode_percentage);
+                })->save(isLocalhost().$image_240x240_url, $encode_percentage);
+
+                Image::make($requestImage)->resize(630, 498, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
+
+                $movable_image->move(isLocalhost().'images/', $originalImage);
+
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_240x240'  => $image_240x240_url,
+                    'image_80x80'    => $image_80x80_url,
+                ];
+            }
+             elseif ($for == 'unique_feature_image') { 
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
+
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_714x300     = date('YmdHis').'image_714x300'.$for.rand(1, 500).'.'.$extension;
+                $image_714x300_url = $directory.$image_714x300;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
+
+                Image::make($requestImage)->resize(714, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_714x300_url, $encode_percentage);
+
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_577x505'     => $image_577x505_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_714x300'  => $image_714x300_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            } elseif ($for == 'header1_hero_image2') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+            } 
+             elseif ($for == 'header1_hero_image2') {
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_196x196          = date('YmdHis') . 'image_196x196' . $for . rand(1, 500) . '.' . $extension;
-                $image_196x196_url      = $directory . $image_196x196;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_196x196     = date('YmdHis').'image_196x196'.$for.rand(1, 500).'.'.$extension;
+                $image_196x196_url = $directory.$image_196x196;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
-                Image::make($requestImage)->resize(588, 588, function ($constraint) {
+                Image::make($requestImage)->resize(196, 196, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_196x196_url, $encode_percentage);
+                })->save(isLocalhost().$image_196x196_url, $encode_percentage);
 
-                Image::make($requestImage)->resize(588, 588, function ($constraint) {
+                Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_196x196'     => $image_196x196_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_196x196'  => $image_196x196_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            }elseif ($for == 'nid') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+            } 
+            elseif ($for == 'header1_hero_image3') {
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_196x196          = date('YmdHis') . 'image_196x196' . $for . rand(1, 500) . '.' . $extension;
-                $image_196x196_url      = $directory . $image_196x196;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_284x284     = date('YmdHis').'image_284x284'.$for.rand(1, 500).'.'.$extension;
+                $image_284x284_url = $directory.$image_284x284;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
-                Image::make($requestImage)->resize(24, 24, function ($constraint) {
+                Image::make($requestImage)->resize(284, 284, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_196x196_url, $encode_percentage);
+                })->save(isLocalhost().$image_284x284_url, $encode_percentage);
 
-                Image::make($requestImage)->resize(24, 24, function ($constraint) {
+                Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_196x196'     => $image_196x196_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_284x284'  => $image_284x284_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            }elseif ($for == 'trade_license') {
-                    $directory = 'images/';
-                    File::ensureDirectoryExists('public/' . $directory, 0777, true);
+            } elseif ($for == 'qr_image') {
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                    $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                    $originalImageUrl       = $directory . $originalImage;
-                    $movable_image          = $requestImage;
-                    $image_196x196          = date('YmdHis') . 'image_196x196' . $for . rand(1, 500) . '.' . $extension;
-                    $image_196x196_url      = $directory . $image_196x196;
-                    $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                    $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_284x284     = date('YmdHis').'image_284x284'.$for.rand(1, 500).'.'.$extension;
+                $image_284x284_url = $directory.$image_284x284;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
-                    Image::make($requestImage)->resize(24, 24, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_196x196_url, $encode_percentage);
-
-                    Image::make($requestImage)->resize(24, 24, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                    $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                    $images = [
-                        'storage'           => $storage,
-                        'original_image'    => $originalImageUrl,
-                        'image_196x196'     => $image_196x196_url,
-                        'image_80X80'       => $image_80X80_url,
-                    ];
-                } elseif ($for == 'header1_hero_icon') {
-                $directory              = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_284x284          = date('YmdHis') . 'image_284x284' . $for . rand(1, 500) . '.' . $extension;
-                $image_284x284_url      = $directory . $image_284x284;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(24, 24, function ($constraint) {
+                Image::make($requestImage)->resize(928, 954, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_284x284_url, $encode_percentage);
+                })->save(isLocalhost().$image_284x284_url, $encode_percentage);
 
-                Image::make($requestImage)->resize(24, 24, function ($constraint) {
+                Image::make($requestImage)->resize(928, 954, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_284x284'     => $image_284x284_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_284x284'  => $image_284x284_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
             } elseif ($for == 'header1_hero_image4') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_212x212          = date('YmdHis') . 'image_212x212' . $for . rand(1, 500) . '.' . $extension;
-                $image_212x212_url      = $directory . $image_212x212;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_212x212     = date('YmdHis').'image_212x212'.$for.rand(1, 500).'.'.$extension;
+                $image_212x212_url = $directory.$image_212x212;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(212, 212, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_212x212_url, $encode_percentage);
+                })->save(isLocalhost().$image_212x212_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_212x212'     => $image_212x212_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_212x212'  => $image_212x212_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            } // Header2 hero image 1
+            } elseif ($for == ' ') {
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
+
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_212x212     = date('YmdHis').'image_212x212'.$for.rand(1, 500).'.'.$extension;
+                $image_714x300_url = $directory.$image_212x212;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
+
+                Image::make($requestImage)->resize(714, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_714x300_url, $encode_percentage);
+
+                Image::make($requestImage)->resize(714, 447, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
+
+                $movable_image->move(isLocalhost().'images/', $originalImage);
+
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_714x300'  => $image_714x300_url,
+                    'image_80x80'    => $image_80x80_url,
+                ];
+            }
+
+            // Header2 hero image 1
 
             elseif ($for == 'header2_hero_image1') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_240x240          = date('YmdHis') . 'image_240x240' . $for . rand(1, 500) . '.' . $extension;
-                $image_240x240_url      = $directory . $image_240x240;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_240x240     = date('YmdHis').'image_240x240'.$for.rand(1, 500).'.'.$extension;
+                $image_240x240_url = $directory.$image_240x240;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(240, 240, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_240x240_url, $encode_percentage);
+                })->save(isLocalhost().$image_240x240_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_240x240'     => $image_240x240_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_240x240'  => $image_240x240_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            } // Header2 Hero image 2 and 3
+            }
+
+            // Header2 Hero image 2 and 3
 
             elseif ($for == 'header2_hero_image2' || $for == 'header2_hero_image3') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_512x512          = date('YmdHis') . 'image_512x512' . $for . rand(1, 500) . '.' . $extension;
-                $image_512x512_url      = $directory . $image_512x512;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_512x512     = date('YmdHis').'image_512x512'.$for.rand(1, 500).'.'.$extension;
+                $image_512x512_url = $directory.$image_512x512;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(512, 512, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_512x512_url, $encode_percentage);
+                })->save(isLocalhost().$image_512x512_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_512x512'     => $image_512x512_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_512x512'  => $image_512x512_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            } // Header2 hero image 4
+            }
+
+            // Header2 hero image 4
 
             elseif ($for == 'header2_hero_image4') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_418x558      = date('YmdHis') . 'image_418x558' . $for . rand(1, 500) . '.' . $extension;
-                $image_418x558_url  = $directory . $image_418x558;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_418x558     = date('YmdHis').'image_418x558'.$for.rand(1, 500).'.'.$extension;
+                $image_418x558_url = $directory.$image_418x558;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(418, 558, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_418x558_url, $encode_percentage);
+                })->save(isLocalhost().$image_418x558_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_418x558'     => $image_418x558_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_418x558'  => $image_418x558_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
-            } // Header3 hero image
+            }
+
+            // Header3 hero image
 
             elseif ($for == 'header3_hero_image') {
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_596x560          = date('YmdHis') . 'image_596x560' . $for . rand(1, 500) . '.' . $extension;
-                $image_596x560_url      = $directory . $image_596x560;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_596x560     = date('YmdHis').'image_596x560'.$for.rand(1, 500).'.'.$extension;
+                $image_596x560_url = $directory.$image_596x560;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(596, 560, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_596x560_url, $encode_percentage);
+                })->save(isLocalhost().$image_596x560_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_596x560'     => $image_596x560_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_596x560'  => $image_596x560_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
             } elseif ($for == 'cta_image') {
 
-                $directory = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage          = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl       = $directory . $originalImage;
-                $movable_image          = $requestImage;
-                $image_391x541          = date('YmdHis') . 'image_391x541' . $for . rand(1, 500) . '.' . $extension;
-                $image_391x541_url      = $directory . $image_391x541;
-                $image_80X80            = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url        = $directory . $image_80X80;
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_391x541     = date('YmdHis').'image_391x541'.$for.rand(1, 500).'.'.$extension;
+                $image_391x541_url = $directory.$image_391x541;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
 
                 Image::make($requestImage)->resize(391, 541, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_391x541_url, $encode_percentage);
+                })->save(isLocalhost().$image_391x541_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(80, 80, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_391x541'     => $image_391x541_url,
-                    'image_80X80'       => $image_80X80_url,
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_391x541'  => $image_391x541_url,
+                    'image_80x80'    => $image_80x80_url,
                 ];
 
             }
-
-            elseif ($for == 'about_image') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_526X617      = date('YmdHis') . 'image_526X617' . $for . rand(1, 500) . '.' . $extension;
-                $image_526X617_url  = $directory . $image_526X617;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(526, 617, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_526X617_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_526X617'     => $image_526X617_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'partner_logo') {
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_80X31      = date('YmdHis') . 'image_80X31' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X31_url    = $directory . $image_80X31;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(80, 31)->save(isLocalhost() . $image_80X31_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_80X31'       => $image_80X31_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'news_event_image') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_280X190      = date('YmdHis') . 'image_280X190' . $for . rand(1, 500) . '.' . $extension;
-                $image_280X190_url  = $directory . $image_280X190;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(280, 190)->save(isLocalhost() . $image_280X190_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_280X190'     => $image_280X190_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'about_icon') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_44X44        = date('YmdHis') . 'image_44X44' . $for . rand(1, 500) . '.' . $extension;
-                $image_44X44_url    = $directory . $image_44X44;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(44, 44)->save(isLocalhost() . $image_44X44_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_44X44'       => $image_44X44_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'service_image') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_358X270      = date('YmdHis') . 'image_358X270' . $for . rand(1, 500) . '.' . $extension;
-                $image_358X270_url  = $directory . $image_358X270;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(358, 270)->save(isLocalhost() . $image_358X270_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_358X270'     => $image_358X270_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-            elseif ($for == 'feature_icon') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_37X36      = date('YmdHis') . 'image_37X36' . $for . rand(1, 500) . '.' . $extension;
-                $image_37X36_url  = $directory . $image_37X36;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(37, 36)->save(isLocalhost() . $image_37X36_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_37X36'       => $image_37X36_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-            elseif ($for == 'testimonial_image') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_96X96      = date('YmdHis') . 'image_96X96' . $for . rand(1, 500) . '.' . $extension;
-                $image_96X96_url  = $directory . $image_96X96;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(96, 96)->save(isLocalhost() . $image_96X96_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(96, 96)->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_96X96'       => $image_96X96_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'statistic_icon') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_391x541      = date('YmdHis') . 'image_391x541' . $for . rand(1, 500) . '.' . $extension;
-                $image_391x541_url  = $directory . $image_391x541;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(300, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_391x541_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(300, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_391x541'     => $image_391x541_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'contact_btn_icon') {
-
-                $directory          = 'images/';
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $originalImageUrl   = $directory . $originalImage;
-                $movable_image      = $requestImage;
-                $image_22X22        = date('YmdHis') . 'image_22X22' . $for . rand(1, 500) . '.' . $extension;
-                $image_22X22_url    = $directory . $image_22X22;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80_url    = $directory . $image_80X80;
-
-                Image::make($requestImage)->resize(22, 22, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_22X22_url, $encode_percentage);
-
-                Image::make($requestImage)->resize(80, 80, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
-
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
-
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_22X22'       => $image_22X22_url,
-                    'image_80X80'       => $image_80X80_url,
-                ];
-
-            }
-
-            elseif ($for == 'favicon' || $for == 'admin_favicon') {
-                $originalImage          = 'favicon' . '.' . $extension;
-                $image_16x16            = 'favicon' . '-16x16-' . '.jpg';
-                $image_32x32            = 'favicon' . '-32x32-' . '.jpg';
-                $image_57x57            = 'favicon' . '-57x57-' . '.jpg';
-                $image_60x60            = 'favicon' . '-60x60-' . '.jpg';
-                $image_72x72            = 'favicon' . '-72x72-' . '.jpg';
-                $image_76x76            = 'favicon' . '-76x76-' . '.jpg';
-                $image_96x96            = 'favicon' . '-96x96-' . '.jpg';
-                $image_114x114          = 'favicon' . '-114x114-' . '.jpg';
-                $image_120x120          = 'favicon' . '-120x120-' . '.jpg';
-                $image_144x144          = 'favicon' . '-144x144-' . '.jpg';
-                $image_152x152          = 'favicon' . '-152x152-' . '.jpg';
-                $image_180x180          = 'favicon' . '-180x180-' . '.jpg';
-                $image_192x192          = 'favicon' . '-192x192-' . '.jpg';
+        elseif ($for == 'favicon' || $for == 'admin_favicon') {
+                $originalImage        = 'favicon'.'.'.$extension;
+                $image_16x16          = 'favicon'.'-16x16-'.'.jpg';
+                $image_32x32          = 'favicon'.'-32x32-'.'.jpg';
+                $image_57x57          = 'favicon'.'-57x57-'.'.jpg';
+                $image_60x60          = 'favicon'.'-60x60-'.'.jpg';
+                $image_72x72          = 'favicon'.'-72x72-'.'.jpg';
+                $image_76x76          = 'favicon'.'-76x76-'.'.jpg';
+                $image_96x96          = 'favicon'.'-96x96-'.'.jpg';
+                $image_114x114        = 'favicon'.'-114x114-'.'.jpg';
+                $image_120x120        = 'favicon'.'-120x120-'.'.jpg';
+                $image_144x144        = 'favicon'.'-144x144-'.'.jpg';
+                $image_152x152        = 'favicon'.'-152x152-'.'.jpg';
+                $image_180x180        = 'favicon'.'-180x180-'.'.jpg';
+                $image_192x192        = 'favicon'.'-192x192-'.'.jpg';
 
                 //splash screen
-                $splash_640x1136        = 'favicon' . '-640x1136-' . '.jpg';
-                $splash_750x1334        = 'favicon' . '-750x1334-' . '.jpg';
-                $splash_1242x2208       = 'favicon' . '-1242x2208-' . '.jpg';
-                $splash_1125x2436       = 'favicon' . '-1125x2436-' . '.jpg';
-                $splash_828x1792        = 'favicon' . '-828x1792-' . '.jpg';
-                $splash_1242x2688       = 'favicon' . '-1242x2688-' . '.jpg';
-                $splash_1536x2048       = 'favicon' . '-1536x2048-' . '.jpg';
-                $splash_1668x2224       = 'favicon' . '-1668x2224-' . '.jpg';
-                $splash_1668x2388       = 'favicon' . '-1668x2388-' . '.jpg';
-                $splash_2048x2732       = 'favicon' . '-2048x2732-' . '.jpg';
+                $splash_640x1136      = 'favicon'.'-640x1136-'.'.jpg';
+                $splash_750x1334      = 'favicon'.'-750x1334-'.'.jpg';
+                $splash_1242x2208     = 'favicon'.'-1242x2208-'.'.jpg';
+                $splash_1125x2436     = 'favicon'.'-1125x2436-'.'.jpg';
+                $splash_828x1792      = 'favicon'.'-828x1792-'.'.jpg';
+                $splash_1242x2688     = 'favicon'.'-1242x2688-'.'.jpg';
+                $splash_1536x2048     = 'favicon'.'-1536x2048-'.'.jpg';
+                $splash_1668x2224     = 'favicon'.'-1668x2224-'.'.jpg';
+                $splash_1668x2388     = 'favicon'.'-1668x2388-'.'.jpg';
+                $splash_2048x2732     = 'favicon'.'-2048x2732-'.'.jpg';
 
                 if ($for == 'admin_favicon') {
                     $directory = 'images/favicon/admin-panel/';
@@ -633,38 +420,36 @@ trait ImageTrait
                     $directory = 'images/favicon/website/';
                 }
 
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-                $originalImageUrl   = $directory . $originalImage;
-                $image_16x16_url    = $directory . $image_16x16;
-                $image_32x32_url    = $directory . $image_32x32;
-                $image_57x57_url    = $directory . $image_57x57;
-                $image_60x60_url    = $directory . $image_60x60;
-                $image_72x72_url    = $directory . $image_72x72;
-                $image_76x76_url    = $directory . $image_76x76;
-                $image_96x96_url    = $directory . $image_96x96;
-                $image_114x114_url  = $directory . $image_114x114;
-                $image_120x120_url  = $directory . $image_120x120;
-                $image_144x144_url  = $directory . $image_144x144;
-                $image_152x152_url  = $directory . $image_152x152;
-                $image_180x180_url  = $directory . $image_180x180;
-                $image_192x192_url  = $directory . $image_192x192;
-
-
+                $originalImageUrl     = $directory.$originalImage;
+                $image_16x16_url      = $directory.$image_16x16;
+                $image_32x32_url      = $directory.$image_32x32;
+                $image_57x57_url      = $directory.$image_57x57;
+                $image_60x60_url      = $directory.$image_60x60;
+                $image_72x72_url      = $directory.$image_72x72;
+                $image_76x76_url      = $directory.$image_76x76;
+                $image_96x96_url      = $directory.$image_96x96;
+                $image_114x114_url    = $directory.$image_114x114;
+                $image_120x120_url    = $directory.$image_120x120;
+                $image_144x144_url    = $directory.$image_144x144;
+                $image_152x152_url    = $directory.$image_152x152;
+                $image_180x180_url    = $directory.$image_180x180;
+                $image_192x192_url    = $directory.$image_192x192;
 
                 //splash screen
-                $splash_640x1136_url    = $directory . $splash_640x1136;
-                $splash_750x1334_url    = $directory . $splash_750x1334;
-                $splash_1242x2208_url   = $directory . $splash_1242x2208;
-                $splash_1125x2436_url   = $directory . $splash_1125x2436;
-                $splash_828x1792_url    = $directory . $splash_828x1792;
-                $splash_1242x2688_url   = $directory . $splash_1242x2688;
-                $splash_1536x2048_url   = $directory . $splash_1536x2048;
-                $splash_1668x2224_url   = $directory . $splash_1668x2224;
-                $splash_1668x2388_url   = $directory . $splash_1668x2388;
-                $splash_2048x2732_url   = $directory . $splash_2048x2732;
+                $splash_640x1136_url  = $directory.$splash_640x1136;
+                $splash_750x1334_url  = $directory.$splash_750x1334;
+                $splash_1242x2208_url = $directory.$splash_1242x2208;
+                $splash_1125x2436_url = $directory.$splash_1125x2436;
+                $splash_828x1792_url  = $directory.$splash_828x1792;
+                $splash_1242x2688_url = $directory.$splash_1242x2688;
+                $splash_1536x2048_url = $directory.$splash_1536x2048;
+                $splash_1668x2224_url = $directory.$splash_1668x2224;
+                $splash_1668x2388_url = $directory.$splash_1668x2388;
+                $splash_2048x2732_url = $directory.$splash_2048x2732;
 
-                Image::make($requestImage)->save(isLocalhost() . $originalImageUrl);
+                Image::make($requestImage)->save(isLocalhost().$originalImageUrl);
 
                 Image::make($requestImage)->resize(
                     16,
@@ -672,8 +457,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_16x16_url, $encode_percentage);
-
+                )->save(isLocalhost().$image_16x16_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     32,
@@ -681,7 +465,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_32x32_url, $encode_percentage);
+                )->save(isLocalhost().$image_32x32_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     57,
@@ -689,7 +473,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_57x57_url, $encode_percentage);
+                )->save(isLocalhost().$image_57x57_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     60,
@@ -697,7 +481,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_60x60_url, $encode_percentage);
+                )->save(isLocalhost().$image_60x60_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     72,
@@ -705,7 +489,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_72x72_url, $encode_percentage);
+                )->save(isLocalhost().$image_72x72_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     76,
@@ -713,7 +497,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_76x76_url, $encode_percentage);
+                )->save(isLocalhost().$image_76x76_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     96,
@@ -721,7 +505,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_96x96_url, $encode_percentage);
+                )->save(isLocalhost().$image_96x96_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     114,
@@ -729,7 +513,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_114x114_url, $encode_percentage);
+                )->save(isLocalhost().$image_114x114_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     120,
@@ -737,7 +521,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_120x120_url, $encode_percentage);
+                )->save(isLocalhost().$image_120x120_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     144,
@@ -745,7 +529,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_144x144_url, $encode_percentage);
+                )->save(isLocalhost().$image_144x144_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     152,
@@ -753,7 +537,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_152x152_url, $encode_percentage);
+                )->save(isLocalhost().$image_152x152_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     180,
@@ -761,7 +545,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_180x180_url, $encode_percentage);
+                )->save(isLocalhost().$image_180x180_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     192,
@@ -769,7 +553,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_192x192_url, $encode_percentage);
+                )->save(isLocalhost().$image_192x192_url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     640,
@@ -777,124 +561,122 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_640x1136_url, $encode_percentage);
+                )->save(isLocalhost().$splash_640x1136_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     750,
                     1334,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_750x1334_url, $encode_percentage);
+                )->save(isLocalhost().$splash_750x1334_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1242,
                     2208,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1242x2208_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1242x2208_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1125,
                     2436,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1125x2436_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1125x2436_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1125,
                     2436,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1125x2436_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1125x2436_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     828,
                     1792,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_828x1792_url, $encode_percentage);
+                )->save(isLocalhost().$splash_828x1792_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1242,
                     2688,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1242x2688_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1242x2688_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1536,
                     2048,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1536x2048_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1536x2048_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1668,
                     2224,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1668x2224_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1668x2224_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     1668,
                     2388,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_1668x2388_url, $encode_percentage);
+                )->save(isLocalhost().$splash_1668x2388_url, $encode_percentage);
                 Image::make($requestImage)->resize(
                     2048,
                     2732,
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $splash_2048x2732_url, $encode_percentage);
+                )->save(isLocalhost().$splash_2048x2732_url, $encode_percentage);
 
-
-                $images = [
-                    'originalImage_url'     => $originalImageUrl,
-                    'image_16x16_url'       => $image_16x16_url,
-                    'image_32x32_url'       => $image_32x32_url,
-                    'image_57x57_url'       => $image_57x57_url,
-                    'image_60x60_url'       => $image_60x60_url,
-                    'image_72x72_url'       => $image_72x72_url,
-                    'image_76x76_url'       => $image_76x76_url,
-                    'image_96x96_url'       => $image_96x96_url,
-                    'image_114x114_url'     => $image_114x114_url,
-                    'image_120x120_url'     => $image_120x120_url,
-                    'image_144x144_url'     => $image_144x144_url,
-                    'image_152x152_url'     => $image_152x152_url,
-                    'image_180x180_url'     => $image_180x180_url,
-                    'image_192x192_url'     => $image_192x192_url,
-                    'splash_640x1136_url'   => $splash_640x1136_url,
-                    'splash_750x1334_url'   => $splash_750x1334_url,
-                    'splash_1242x2208_url'  => $splash_1242x2208_url,
-                    'splash_1125x2436_url'  => $splash_1125x2436_url,
-                    'splash_828x1792_url'   => $splash_828x1792_url,
-                    'splash_1242x2688_url'  => $splash_1242x2688_url,
-                    'splash_1536x2048_url'  => $splash_1536x2048_url,
-                    'splash_1668x2224_url'  => $splash_1668x2224_url,
-                    'splash_1668x2388_url'  => $splash_1668x2388_url,
-                    'splash_2048x2732_url'  => $splash_2048x2732_url,
+                $images               = [
+                    'originalImage_url'    => $originalImageUrl,
+                    'image_16x16_url'      => $image_16x16_url,
+                    'image_32x32_url'      => $image_32x32_url,
+                    'image_57x57_url'      => $image_57x57_url,
+                    'image_60x60_url'      => $image_60x60_url,
+                    'image_72x72_url'      => $image_72x72_url,
+                    'image_76x76_url'      => $image_76x76_url,
+                    'image_96x96_url'      => $image_96x96_url,
+                    'image_114x114_url'    => $image_114x114_url,
+                    'image_120x120_url'    => $image_120x120_url,
+                    'image_144x144_url'    => $image_144x144_url,
+                    'image_152x152_url'    => $image_152x152_url,
+                    'image_180x180_url'    => $image_180x180_url,
+                    'image_192x192_url'    => $image_192x192_url,
+                    'splash_640x1136_url'  => $splash_640x1136_url,
+                    'splash_750x1334_url'  => $splash_750x1334_url,
+                    'splash_1242x2208_url' => $splash_1242x2208_url,
+                    'splash_1125x2436_url' => $splash_1125x2436_url,
+                    'splash_828x1792_url'  => $splash_828x1792_url,
+                    'splash_1242x2688_url' => $splash_1242x2688_url,
+                    'splash_1536x2048_url' => $splash_1536x2048_url,
+                    'splash_1668x2224_url' => $splash_1668x2224_url,
+                    'splash_1668x2388_url' => $splash_1668x2388_url,
+                    'splash_2048x2732_url' => $splash_2048x2732_url,
                 ];
-
             } elseif (
-                $for == 'admin_mini_logo' || $for == 'admin_logo' || $for == 'footer_logo' || $for == 'invoice_logo' || $for == 'light_logo' || $for == 'dark_logo' || $for == 'meta_image' || $for == 'og_image' || $for == 'popup_image' || $for == 'payment_method_banner'
+                $for == 'admin_mini_logo' || $for == 'admin_logo' || $for == 'copyright_logo' || $for == 'invoice_logo' || $for == 'light_logo' || $for == 'dark_logo' || $for == 'meta_image' || $for == 'og_image' || $for == 'popup_image' || $for == 'payment_method_banner'
             ) {
 
-                $directory = 'images/';
+                $directory        = 'images/';
 
-                File::ensureDirectoryExists('public/' . $directory, 0777, true);
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
                 if ($for == 'admin_mini_logo' || $for == 'admin_logo') {
-                    $image_100x36           = date('YmdHis') . '-' . $for . '-100x36' . rand(1, 500) . ".$extension";
-                    $image_100x36_url       = $directory . $image_100x36;
+                    $image_100x36     = date('YmdHis').'-'.$for.'-100x36'.rand(1, 500).".$extension";
+                    $image_100x36_url = $directory.$image_100x36;
 
-                    $image_80X80            = date('YmdHis') . '-' . $for . '-80X80' . rand(1, 500) . '.' . $extension;
-                    $image_80X80_url        = $directory . $image_80X80;
+                    $image_80x80      = date('YmdHis').'-'.$for.'-80x80'.rand(1, 500).'.'.$extension;
+                    $image_80x80_url  = $directory.$image_80x80;
 
                     Image::make($requestImage)->resize(100, 36, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_100x36_url, $encode_percentage);
+                    })->save(isLocalhost().$image_100x36_url, $encode_percentage);
 
                     Image::make($requestImage)->resize(
                         80,
@@ -902,46 +684,53 @@ trait ImageTrait
                         function ($constraint) {
                             $constraint->aspectRatio();
                         }
-                    )->save(isLocalhost() . $image_80X80_url);
-                } elseif ($for == 'footer_logo') {
-                    $image_89x33 = date('YmdHis') . '-' . $for . '-89x33' . rand(1, 500) . '.' . $extension;
-                    $image_89x33_url = $directory . $image_89x33;
+                    )->save(isLocalhost().$image_80x80_url);
+                } elseif ($for == 'copyright_logo') {
+                    $image_89x33     = date('YmdHis').'-'.$for.'-89x33'.rand(1, 500).'.'.$extension;
+                    $image_89x33_url = $directory.$image_89x33;
 
-                    Image::make($requestImage)->resize(100, 38, function ($constraint) {
+                    Image::make($requestImage)->resize(165, 32, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_89x33_url, $encode_percentage);
+                    })->save(isLocalhost().$image_89x33_url, $encode_percentage);
                 } elseif ($for == 'popup_image' || $for == 'meta_image' || $for == 'og_image') {
-                    $image_80X80        = date('YmdHis') . '-' . $for . '-80X80' . rand(1, 500) . '.' . $extension;
-                    $image_80X80_url    = $directory . $image_80X80;
-                    $image_500x500      = date('YmdHis') . '-' . $for . '-500x500' . rand(1, 500) . '.' . $extension;
-                    $image_500x500      = $directory . $image_500x500;
-                    $image_1200x630     = date('YmdHis') . '-' . $for . '-1200x630' . rand(1, 500) . '.' . $extension;
-                    $image_1200x630_url = $directory . $image_1200x630;
+                    $image_80x80        = date('YmdHis').'-'.$for.'-80x80'.rand(1, 500).'.'.$extension;
+                    $image_80x80_url    = $directory.$image_80x80;
+                    $image_500x500      = date('YmdHis').'-'.$for.'-500x500'.rand(1, 500).'.'.$extension;
+                    $image_500x500      = $directory.$image_500x500;
+                    $image_1200x630     = date('YmdHis').'-'.$for.'-1200x630'.rand(1, 500).'.'.$extension;
+                    $image_1200x630_url = $directory.$image_1200x630;
 
                     Image::make($requestImage)->resize(80, 80, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_80X80_url, $encode_percentage);
+                    })->save(isLocalhost().$image_80x80_url, $encode_percentage);
 
                     Image::make($requestImage)->resize(500, 500, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_500x500, $encode_percentage);
+                    })->save(isLocalhost().$image_500x500, $encode_percentage);
 
                     Image::make($requestImage)->resize(1200, 630, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_1200x630_url, $encode_percentage);
-                }elseif ($for == 'light_logo' || $for == 'dark_logo') {
-                    $image_138x52       = date('YmdHis') . '-' . $for . '-138x52' . rand(1, 500) . ".$extension";
-                    $image_138x52_url   = $directory . $image_138x52;
+                    })->save(isLocalhost().$image_1200x630_url, $encode_percentage);
+                } elseif ($for == 'light_logo' || $for == 'dark_logo') {
+                    $image_138x52     = date('YmdHis').'-'.$for.'-138x52'.rand(1, 500).".$extension";
+                    $image_138x52_url = $directory.$image_138x52;
 
-                    Image::make($requestImage)->resize(138, 52, function ($constraint) {
+                    Image::make($requestImage)->resize(165, 32, function ($constraint) {
                         $constraint->aspectRatio();
-                    })->save(isLocalhost() . $image_138x52_url, $encode_percentage);
-                } elseif ($for == 'invoice_logo') {
-                    $image_100x36       = date('YmdHis') . '-' . $for . '-100x36' . rand(1, 500) . '.' . $extension;
-                    $image_100x36_url   = $directory . $image_100x36;
+                    })->save(isLocalhost().$image_138x52_url, $encode_percentage);
+                } elseif ($for == 'payment_method_banner') {
+                    $image_138x52     = date('YmdHis').'-'.$for.'-138x52'.rand(1, 500).".$extension";
+                    $image_138x52_url = $directory.$image_138x52;
 
-                    $image_80X80        = date('YmdHis') . '-' . $for . '-80X80' . rand(1, 500) . '.' . $extension;
-                    $image_80X80_url    = $directory . $image_80X80;
+                    Image::make($requestImage)->resize(2039, 129, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(isLocalhost().$image_138x52_url, $encode_percentage);
+                } elseif ($for == 'invoice_logo') {
+                    $image_100x36     = date('YmdHis').'-'.$for.'-100x36'.rand(1, 500).'.'.$extension;
+                    $image_100x36_url = $directory.$image_100x36;
+
+                    $image_80x80      = date('YmdHis').'-'.$for.'-80x80'.rand(1, 500).'.'.$extension;
+                    $image_80x80_url  = $directory.$image_80x80;
 
                     Image::make($requestImage)->resize(
                         100,
@@ -949,7 +738,7 @@ trait ImageTrait
                         function ($constraint) {
                             $constraint->aspectRatio();
                         }
-                    )->save(isLocalhost() . $image_100x36_url);
+                    )->save(isLocalhost().$image_100x36_url);
 
                     Image::make($requestImage)->resize(
                         80,
@@ -957,20 +746,15 @@ trait ImageTrait
                         function ($constraint) {
                             $constraint->aspectRatio();
                         }
-                    )->save(isLocalhost() . $image_80X80_url);
-                } elseif ($for == 'payment_method_banner') {
-                    $image_payment = date('YmdHis') . '-' . $for . '-48x25' . rand(1, 500) . ".$extension";
-                    $image_payment_url = $directory . $image_payment;
-                    Image::make($requestImage)->save(isLocalhost() . $image_payment_url, $encode_percentage);
+                    )->save(isLocalhost().$image_80x80_url);
                 }
+                $originalImage    = date('YmdHis').'-'.$for.rand(1, 500).'.'.$extension;
+                $imageSmallTwo    = date('YmdHis').'image_small_two'.$for.rand(1, 500).'.'.$extension;
 
-                $originalImage = date('YmdHis') . '-' . $for . rand(1, 500) . '.' . $extension;
-                $imageSmallTwo = date('YmdHis') . 'image_small_two' . $for . rand(1, 500) . '.' . $extension;
+                $originalImageUrl = $directory.$originalImage;
+                $imageSmallTwoUrl = $directory.$imageSmallTwo;
 
-                $originalImageUrl = $directory . $originalImage;
-                $imageSmallTwoUrl = $directory . $imageSmallTwo;
-
-                Image::make($requestImage)->save(isLocalhost() . $originalImageUrl, $encode_percentage);
+                Image::make($requestImage)->save(isLocalhost().$originalImageUrl, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     72,
@@ -978,92 +762,93 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $imageSmallTwoUrl, $encode_percentage);
+                )->save(isLocalhost().$imageSmallTwoUrl, $encode_percentage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_80X80'       => $image_80X80_url ?? '',
-                    'image_500x500'     => $image_500x500 ?? '',
-                    'image_100x36'      => $image_100x36_url ?? '',
-                    'image_1200x630'    => $image_1200x630_url ?? '',
+                $images           = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_80x80'    => $image_80x80_url    ?? '',
+                    'image_500x500'  => $image_500x500      ?? '',
+                    'image_100x36'   => $image_100x36_url   ?? '',
+                    'image_1200x630' => $image_1200x630_url ?? '',
                 ];
             } elseif ($for == '_staff_') {
                 if ($url) {
                     $requestImage = $url;
                 }
 
-                $directory = 'images/';
+                $directory        = 'images/';
 
-                File::ensureDirectoryExists(isLocalhost() . $directory, 0777, true);
+                File::ensureDirectoryExists(isLocalhost().$directory, 0777, true);
 
-                $originalImage  = date('YmdHis') . '-' . $for . rand(1, 500) . '.' . $extension;
-                $image80X80     = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image40X40     = date('YmdHis') . 'image_40X40' . $for . rand(1, 500) . '.' . $extension;
-                $image1000X100  = date('YmdHis') . 'image_100X100' . $for . rand(1, 500) . '.' . $extension;
-                $image210X210   = date('YmdHis') . 'image_210X210' . $for . rand(1, 500) . '.' . $extension;
+                $originalImage    = date('YmdHis').'-'.$for.rand(1, 500).'.'.$extension;
+                $image80X80       = date('YmdHis').'image_80X80'.$for.rand(1, 500).'.'.$extension;
+                $image40X40       = date('YmdHis').'image_40X40'.$for.rand(1, 500).'.'.$extension;
+                $image1000X100    = date('YmdHis').'image_100X100'.$for.rand(1, 500).'.'.$extension;
+                $image210X210     = date('YmdHis').'image_210X210'.$for.rand(1, 500).'.'.$extension;
 
-                $originalImageUrl   = $directory . $originalImage;
-                $image80X80Url      = $directory . $image80X80;
-                $image40X40Url      = $directory . $image40X40;
-                $image100X100Url    = $directory . $image1000X100;
-                $image210X210Url    = $directory . $image210X210;
+                $originalImageUrl = $directory.$originalImage;
+                $image80X80Url    = $directory.$image80X80;
+                $image40X40Url    = $directory.$image40X40;
+                $image100X100Url  = $directory.$image1000X100;
+                $image210X210Url  = $directory.$image210X210;
 
-                Image::make($requestImage)->save(isLocalhost() . $originalImageUrl, $encode_percentage);
-                Image::make($requestImage)->fit(40, 40)->save(isLocalhost() . $image40X40Url, $encode_percentage);
-                Image::make($requestImage)->fit(80, 80)->save(isLocalhost() . $image80X80Url, $encode_percentage);
-                Image::make($requestImage)->fit(100, 100)->save(isLocalhost() . $image100X100Url, $encode_percentage);
-                Image::make($requestImage)->fit(210, 210)->save(isLocalhost() . $image210X210Url, $encode_percentage);
+                Image::make($requestImage)->save(isLocalhost().$originalImageUrl, $encode_percentage);
+                Image::make($requestImage)->fit(40, 40)->save(isLocalhost().$image40X40Url, $encode_percentage);
+                Image::make($requestImage)->fit(80, 80)->save(isLocalhost().$image80X80Url, $encode_percentage);
+                Image::make($requestImage)->fit(100, 100)->save(isLocalhost().$image100X100Url, $encode_percentage);
+                Image::make($requestImage)->fit(210, 210)->save(isLocalhost().$image210X210Url, $encode_percentage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_40x40'       => $image40X40Url,
-                    'image_80X80'       => $image80X80Url,
-                    'image_100x100'     => $image100X100Url,
-                    'image_210x210'     => $image210X210Url,
+                $images           = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_40x40'    => $image40X40Url,
+                    'image_80x80'    => $image80X80Url,
+                    'image_100x100'  => $image100X100Url,
+                    'image_210x210'  => $image210X210Url,
                 ];
             } elseif ($for == 'single_file') {
 
-                $directory = 'images/';
+                $directory        = 'images/';
 
-                File::ensureDirectoryExists(isLocalhost() . $directory, 0777, true);
+                File::ensureDirectoryExists(isLocalhost().$directory, 0777, true);
 
-                $originalImage      = date('YmdHis') . '-' . $for . rand(1, 500) . '.' . $extension;
+                $originalImage    = date('YmdHis').'-'.$for.rand(1, 500).'.'.$extension;
 
-                $originalImageUrl   = $directory . $originalImage;
+                $originalImageUrl = $directory.$originalImage;
 
-                Image::make($requestImage)->save(isLocalhost() . $originalImageUrl, $encode_percentage, 'png');
+                Image::make($requestImage)->save(isLocalhost().$originalImageUrl, $encode_percentage, 'png');
 
-                $images = [
+                $images           = [
                     'storage'        => $storage,
                     'original_image' => $originalImageUrl,
                 ];
             } else {
-                $directory = 'images/';
+                $directory           = 'images/';
 
-                File::ensureDirectoryExists(isLocalhost() . $directory, 0777, true);
+                File::ensureDirectoryExists(isLocalhost().$directory, 0777, true);
 
-                $originalImage      = date('YmdHis') . '_original_' . $for . rand(1, 500) . '.' . $extension;
-                $image_40x40        = date('YmdHis') . 'image_40x40' . $for . rand(1, 500) . '.' . $extension;
-                $image_68x48        = date('YmdHis') . 'image_68x48' . $for . rand(1, 500) . '.' . $extension;
-                $image_80X80        = date('YmdHis') . 'image_80X80' . $for . rand(1, 500) . '.' . $extension;
-                $image_190x230      = date('YmdHis') . 'image_190x230' . $for . rand(1, 500) . '.' . $extension;
-                $image_163x116      = date('YmdHis') . 'image_163x116' . $for . rand(1, 500) . '.' . $extension;
-                $image_295x248      = date('YmdHis') . 'image_295x248' . $for . rand(1, 500) . '.' . $extension;
-                $image_417x384      = date('YmdHis') . 'image_417x384' . $for . rand(1, 500) . '.' . $extension;
-                $image_thumbnail    = date('YmdHis') . 'image_thumbnail' . $for . rand(1, 500) . '.' . $extension;
+                $originalImage       = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $image_40x40         = date('YmdHis').'image_40x40'.$for.rand(1, 500).'.'.$extension;
+                $image_68x48         = date('YmdHis').'image_68x48'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80         = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_190x230       = date('YmdHis').'image_190x230'.$for.rand(1, 500).'.'.$extension;
+                $image_163x116       = date('YmdHis').'image_163x116'.$for.rand(1, 500).'.'.$extension;
+                $image_295x248       = date('YmdHis').'image_295x248'.$for.rand(1, 500).'.'.$extension;
+                $image_417x384       = date('YmdHis').'image_417x384'.$for.rand(1, 500).'.'.$extension;
+                $image_thumbnail     = date('YmdHis').'image_thumbnail'.$for.rand(1, 500).'.'.$extension;
 
-                $originalImageUrl       = $directory . $originalImage;
-                $image_40x40_Url        = $directory . $image_40x40;
-                $image_80X80_Url        = $directory . $image_80X80;
-                $image_68x48_Url        = $directory . $image_68x48;
-                $image_190x230_Url      = $directory . $image_190x230;
-                $image_163x116_Url      = $directory . $image_163x116;
-                $image_295x248_Url      = $directory . $image_295x248;
-                $image_417x384_Url      = $directory . $image_417x384;
-                $image_thumbnail_Url    = $directory . $image_thumbnail;
-                $movable_image          = $requestImage;
+                $originalImageUrl    = $directory.$originalImage;
+                $image_40x40_Url     = $directory.$image_40x40;
+                $image_80x80_Url     = $directory.$image_80x80;
+                $image_68x48_Url     = $directory.$image_68x48;
+                $image_190x230_Url   = $directory.$image_190x230;
+                $image_163x116_Url   = $directory.$image_163x116;
+                $image_295x248_Url   = $directory.$image_295x248;
+                $image_417x384_Url   = $directory.$image_417x384;
+                $image_thumbnail_Url = $directory.$image_thumbnail;
+
+                $movable_image       = $requestImage;
 
                 Image::make($requestImage)->resize(
                     40,
@@ -1071,7 +856,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_40x40_Url, $encode_percentage);
+                )->save(isLocalhost().$image_40x40_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     80,
@@ -1079,7 +864,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_80X80_Url, $encode_percentage);
+                )->save(isLocalhost().$image_80x80_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     68,
@@ -1087,7 +872,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_68x48_Url, $encode_percentage);
+                )->save(isLocalhost().$image_68x48_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     190,
@@ -1095,7 +880,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_190x230_Url, $encode_percentage);
+                )->save(isLocalhost().$image_190x230_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     163,
@@ -1103,7 +888,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_163x116_Url, $encode_percentage);
+                )->save(isLocalhost().$image_163x116_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     297,
@@ -1111,7 +896,7 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_295x248_Url, $encode_percentage);
+                )->save(isLocalhost().$image_295x248_Url, $encode_percentage);
 
                 Image::make($requestImage)->resize(
                     417,
@@ -1119,25 +904,25 @@ trait ImageTrait
                     function ($constraint) {
                         $constraint->aspectRatio();
                     }
-                )->save(isLocalhost() . $image_417x384_Url, $encode_percentage);
+                )->save(isLocalhost().$image_417x384_Url, $encode_percentage);
 
-                $movable_image->move(isLocalhost() . 'images/', $originalImage);
+                $movable_image->move(isLocalhost().'images/', $originalImage);
 
-                $images = [
-                    'storage'           => $storage,
-                    'original_image'    => $originalImageUrl,
-                    'image_40x40'       => $image_40x40_Url,
-                    'image_80X80'       => $image_80X80_Url,
-                    'image_68x48'       => $image_68x48_Url,
-                    'image_190x230'     => $image_190x230_Url,
-                    'image_163x116'     => $image_163x116_Url,
-                    'image_295x248'     => $image_295x248_Url,
-                    'image_417x384'     => $image_417x384_Url,
-                    'image_thumbnail'   => $image_thumbnail_Url,
+                $images              = [
+                    'storage'         => $storage,
+                    'original_image'  => $originalImageUrl,
+                    'image_40x40'     => $image_40x40_Url,
+                    'image_80x80'     => $image_80x80_Url,
+                    'image_68x48'     => $image_68x48_Url,
+                    'image_190x230'   => $image_190x230_Url,
+                    'image_163x116'   => $image_163x116_Url,
+                    'image_295x248'   => $image_295x248_Url,
+                    'image_417x384'   => $image_417x384_Url,
+                    'image_thumbnail' => $image_thumbnail_Url,
                 ];
             }
-            $error = false;
-            $size = File::size(public_path($originalImageUrl));
+            $error             = false;
+            $size              = File::size(public_path($originalImageUrl));
             if ($storage == 'aws_s3' && array_key_exists('storage', $images)) {
                 $response = $this->uploadToS3($images, $content_type);
                 if ($response === true) {
@@ -1156,27 +941,12 @@ trait ImageTrait
                     $error = 'wasabi_error';
                 }
             }
-            if ($save_to_db && $error == false) {
-
-                $media                  = new MediaLibrary();
-                $media->name            = @$name;
-                $media->user_id         = auth()->id();
-                $media->storage         = ($response === true) ? $storage : 'local';
-                $media->type            = 'image';
-                $media->extension       = $extension;
-                $media->size            = $size;
-                $media->original_file   = $originalImageUrl;
-                $media->image_variants  = $images ?? [];
-                $media->save();
-            }
-
             if ($error === 's3_error') {
                 return $error;
             }
 
-            $data['images']         = $images;
-            $data['id']             = isset($media) ? $media->id : null;
-
+            $data['images']    = $images;
+            $data['id']        = isset($media) ? $media->id : null;
             return $data;
         } else {
             return false;
@@ -1192,7 +962,7 @@ trait ImageTrait
                 } elseif ($storage == 'wasabi') {
                     Storage::disk('wasabi')->delete($file);
                 } else {
-                    File::delete('public/' . $file);
+                    File::delete('public/'.$file);
                 }
             }
 
@@ -1204,32 +974,32 @@ trait ImageTrait
 
     public function saveFile($requested_file, $type, $save_to_db = true)
     {
+        if (! empty($requested_file) && $requested_file != 'null') {
+            $image           = explode('.', $requested_file->getClientOriginalName());
+            $extension       = $requested_file->getClientOriginalExtension();
+            $name            = $image[0];
+            $size            = @$requested_file->getSize();
+            $storage         = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
+            $response        = false;
+            $mime_type       = $requested_file->getMimeType();
+            // dd($mime_type);
+            $content_type    = ['visibility' => 'public', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
+            $originalFile    = date('YmdHis').'_original_'.rand(1, 500).'.'.$extension;
+            $directory       = 'files/';
 
-        if (!empty($requested_file) && $requested_file != 'null') {
-            $image          = explode('.', $requested_file->getClientOriginalName());
-            $extension      = $requested_file->getClientOriginalExtension();
-            $name           = $image[0];
-            $size           = @$requested_file->getSize();
-            $storage        = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
-            $response       = false;
-            $mime_type      = $requested_file->getMimeType();
-            $content_type   = ['visibility' => 'public', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
-            $originalFile   = date('YmdHis') . '_original_' . rand(1, 500) . '.' . $extension;
-            $directory      = 'files/';
+            File::ensureDirectoryExists('public/'.$directory, 0777, true);
 
-            File::ensureDirectoryExists('public/' . $directory, 0777, true);
+            $originalFileUrl = $directory.$originalFile;
 
-            $originalFileUrl = $directory . $originalFile;
-
-            $requested_file->move('public/' . $directory, 'public/' . $originalFileUrl);
+            $requested_file->move('public/'.$directory, 'public/'.$originalFileUrl);
 
             if ($storage == 'aws_s3') {
                 $response = $this->uploadFileToS3($originalFileUrl, $content_type);
 
                 if ($response == true) {
-                    $this->deleteFile('public/' . $originalFileUrl);
+                    $this->deleteFile('public/'.$originalFileUrl);
                 } else {
-                    $this->deleteFile('public/' . $originalFileUrl);
+                    $this->deleteFile('public/'.$originalFileUrl);
 
                     return 's3_error';
                 }
@@ -1237,25 +1007,12 @@ trait ImageTrait
                 $response = $this->uploadFileToWasabi($originalFileUrl, $content_type);
 
                 if ($response == true) {
-                    $this->deleteFile('public/' . $originalFileUrl);
+                    $this->deleteFile('public/'.$originalFileUrl);
                 } else {
-                    $this->deleteFile('public/' . $originalFileUrl);
+                    $this->deleteFile('public/'.$originalFileUrl);
 
                     return 'wasabi_error';
                 }
-            }
-
-            if ($save_to_db) {
-                $media                  = new MediaLibrary();
-                $media->name            = $name;
-                $media->user_id         = auth()->id();
-                $media->storage         = ($response == true) ? $storage : 'local';
-                $media->type            = $type;
-                $media->extension       = $extension;
-                $media->size            = $size;
-                $media->original_file   = $originalFileUrl;
-                $media->image_variants  = [];
-                $media->save();
             }
 
             if ($type == 'pos_file') {
@@ -1276,7 +1033,7 @@ trait ImageTrait
             } elseif ($storage == 'wasabi') {
                 Storage::disk('wasabi')->delete($file);
             } else {
-                File::delete('public/' . $file);
+                File::delete('public/'.$file);
             }
 
             return true;
@@ -1288,36 +1045,8 @@ trait ImageTrait
     public function getImage($id)
     {
         $image = MediaLibrary::find($id);
-        if (!blank($image)) {
+        if (! blank($image)) {
             $data = $image->image_variants;
-
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function getFile($id)
-    {
-        $file               = MediaLibrary::find($id);
-        $data['storage']    = $file->storage;
-        $data['file_type']  = $file->type;
-        $data['file']       = $file->original_file;
-
-        return $data;
-    }
-
-    public function getAllType($id)
-    {
-        $file = MediaLibrary::find($id);
-        if ($file) {
-            if ($file->type != 'image') {
-                $data['storage'] = $file->storage;
-                $data['file_type'] = $file->type;
-                $data['original_file'] = $file->original_file;
-            } else {
-                $data = array_merge($file->image_variants, ['file_type' => 'image']);
-            }
 
             return $data;
         } else {
@@ -1328,8 +1057,8 @@ trait ImageTrait
     protected function uploadToS3($files, $contentType)
     {
         foreach (array_slice($files, 1) as $file) {
-            if ($file != '' && file_exists('public/' . $file)) {
-                Storage::disk('s3')->put($file, file_get_contents('public/' . $file), $contentType);
+            if ($file != '' && file_exists('public/'.$file)) {
+                Storage::disk('s3')->put($file, file_get_contents('public/'.$file), $contentType);
             }
         }
 
@@ -1338,8 +1067,8 @@ trait ImageTrait
 
     protected function uploadFileToS3($file, $contentType)
     {
-        if ($file != '' && file_exists('public/' . $file)) {
-            Storage::disk('s3')->put($file, file_get_contents('public/' . $file), $contentType);
+        if ($file != '' && file_exists('public/'.$file)) {
+            Storage::disk('s3')->put($file, file_get_contents('public/'.$file), $contentType);
 
             return true;
         }
@@ -1350,8 +1079,8 @@ trait ImageTrait
     protected function uploadToWasabi($files, $contentType)
     {
         foreach (array_slice($files, 1) as $file) {
-            if ($file != '' && file_exists('public/' . $file)) {
-                Storage::disk('wasabi')->put($file, file_get_contents('public/' . $file), $contentType);
+            if ($file != '' && file_exists('public/'.$file)) {
+                Storage::disk('wasabi')->put($file, file_get_contents('public/'.$file), $contentType);
             }
         }
 
@@ -1360,8 +1089,8 @@ trait ImageTrait
 
     protected function uploadFileToWasabi($file, $contentType)
     {
-        if ($file != '' && file_exists('public/' . $file)) {
-            Storage::disk('wasabi')->put($file, file_get_contents('public/' . $file), $contentType);
+        if ($file != '' && file_exists('public/'.$file)) {
+            Storage::disk('wasabi')->put($file, file_get_contents('public/'.$file), $contentType);
 
             return true;
         }
@@ -1369,9 +1098,9 @@ trait ImageTrait
         return false;
     }
 
-
-    public function getImageWithRecommendedSize($image, $width, $height)
+    public function getImageWithRecommendedSize($width, $height, $image)
     {
+
         $extension        = strtolower($image->getClientOriginalExtension());
         $directory        = 'images/';
 
@@ -1402,19 +1131,13 @@ trait ImageTrait
         return $data;
     }
 
-
     public function getImageArrayRecommendedSize($id, $widths = [], $heights = [])
     {
         foreach ($widths as $key => $width) {
             $height = $heights[$key];
             $this->getImageWithRecommendedSize($id, $width, $height);
         }
-        $image = MediaLibrary::find($id);
-        if ($image) {
-            return $image->image_variants;
-        } else {
-            return [];
-        }
+
     }
 
     protected function getEncodePercentage(): int
@@ -1430,7 +1153,7 @@ trait ImageTrait
 
     public function saveMultipleImage($images, $product): array
     {
-        $storage = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
+        $storage            = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
 
         $description_images = [];
         if ($images && count($images) > 0) {
@@ -1440,12 +1163,12 @@ trait ImageTrait
                 }
             }
             foreach ($images as $description_image) {
-                $image_name     = Str::uuid() . '.' . $description_image->getClientOriginalExtension();
-                $path           = "images/description_images/$image_name";
+                $image_name           = Str::uuid().'.'.$description_image->getClientOriginalExtension();
+                $path                 = "images/description_images/$image_name";
                 $description_image->move('public/images/description_images', $image_name);
                 $description_images[] = [
-                    'image'     => $path,
-                    'storage'   => $storage,
+                    'image'   => $path,
+                    'storage' => $storage,
                 ];
             }
         }
@@ -1459,31 +1182,31 @@ trait ImageTrait
 
     public function saveFont($requested_file)
     {
-        if (!empty($requested_file) && $requested_file != 'null') {
-            $image          = explode('.', $requested_file->getClientOriginalName());
-            $extension      = $requested_file->getClientOriginalExtension();
-            $name           = $image[0];
-            $size           = @$requested_file->getSize();
-            $storage        = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
-            $response       = false;
-            $mime_type      = $requested_file->getMimeType();
-            $content_type   = ['visibility' => 'public', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
-            $originalFile   = date('YmdHis') . '_original_' . rand(1, 500) . '.' . $extension;
-            $directory      = 'fonts/';
+        if (! empty($requested_file) && $requested_file != 'null') {
+            $image           = explode('.', $requested_file->getClientOriginalName());
+            $extension       = $requested_file->getClientOriginalExtension();
+            $name            = $image[0];
+            $size            = @$requested_file->getSize();
+            $storage         = setting('default_storage') != '' || setting('default_storage') != null ? setting('default_storage') : 'local';
+            $response        = false;
+            $mime_type       = $requested_file->getMimeType();
+            $content_type    = ['visibility' => 'public', 'ContentType' => $extension == 'svg' ? 'image/svg+xml' : $mime_type];
+            $originalFile    = date('YmdHis').'_original_'.rand(1, 500).'.'.$extension;
+            $directory       = 'fonts/';
 
-            File::ensureDirectoryExists('resources/' . $directory, 0777, true);
+            File::ensureDirectoryExists('resources/'.$directory, 0777, true);
 
             $originalFileUrl = $originalFile;
 
-            $requested_file->move('resources/' . $directory, 'resources/' . $originalFileUrl);
+            $requested_file->move('resources/'.$directory, 'resources/'.$originalFileUrl);
 
             if ($storage == 'aws_s3') {
                 $response = $this->uploadFileToS3($originalFileUrl, $content_type);
 
                 if ($response == true) {
-                    $this->deleteFile('resources/' . $originalFileUrl);
+                    $this->deleteFile('resources/'.$originalFileUrl);
                 } else {
-                    $this->deleteFile('resources/' . $originalFileUrl);
+                    $this->deleteFile('resources/'.$originalFileUrl);
 
                     return 's3_error';
                 }
@@ -1491,9 +1214,9 @@ trait ImageTrait
                 $response = $this->uploadFileToWasabi($originalFileUrl, $content_type);
 
                 if ($response == true) {
-                    $this->deleteFile('resources/' . $originalFileUrl);
+                    $this->deleteFile('resources/'.$originalFileUrl);
                 } else {
-                    $this->deleteFile('resources/' . $originalFileUrl);
+                    $this->deleteFile('resources/'.$originalFileUrl);
 
                     return 'wasabi_error';
                 }

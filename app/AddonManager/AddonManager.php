@@ -4,6 +4,7 @@ namespace App\AddonManager;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Illuminate\Support\Facades\File;
 
 class AddonManager
 {
@@ -64,6 +65,10 @@ class AddonManager
 
     protected function bootAddons()
     {
+        $addonDirectoryPath = base_path('app/Addons/');
+        if (!File::exists($addonDirectoryPath)) {
+            File::makeDirectory($addonDirectoryPath, 0755, true);
+        }
         foreach (Finder::create()->in($this->addonDirectory)->directories()->depth(0) as $dir) {
             /** @var SplFileInfo $dir */
             $directoryName              = $dir->getBasename();
@@ -116,6 +121,8 @@ class AddonManager
      */
     protected function getAddonClassNameFromDirectory($directory)
     {
+     
+
         return 'App\\Addons\\'.$directory.'\\'.$directory.'Addon';
     }
 

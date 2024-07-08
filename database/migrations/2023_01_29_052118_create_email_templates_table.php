@@ -1,12 +1,12 @@
 <?php
 
-use App\Enums\StatusEnum;
 use App\Models\EmailTemplate;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -19,66 +19,69 @@ return new class extends Migration {
             $table->string('subject');
             $table->string('identifier');
             $table->string('title')->nullable();
-            $table->text('body')->nullable();
+            $table->longText('body')->nullable();
             $table->string('short_codes')->nullable();
-            $table->string('email_type')->nullable();
-            $table->enum('status', [
-                StatusEnum::ACTIVE->value,
-                StatusEnum::INACTIVE->value,
-            ])->default(StatusEnum::ACTIVE->value);
+            $table->string('email_type');
+            $table->tinyInteger('status')->default(1)->comment('0 inactive, 1 active');
             $table->timestamps();
         });
 
-
-
-        $now = now();
-
+        $now  = now();
         $data = [
-            [
-                'subject'       => 'Email Confirmation',
-                'identifier'    => 'Email Confirmation',
-                'title'         => 'email_confirmation',
-                'short_codes'   => '{name},{email},{site_name},{confirmation_link}',
-                'body'          => '<p>Hi {name},</p><p>Please confirm your email by clicking the link below:</p><p>{confirmation_link}</p><p><br></p><p>Thanks</p><p>{site_name}</p>',
-                'email_type'    => 'authentication',
-                'created_at'    => $now,
-                'updated_at'    => $now
-            ],
-            [
-                'subject'       => 'Welcome Email',
-                'identifier'    => 'Welcome Email',
-                'title'         => 'welcome_email',
-                'short_codes'   => '{site_name}',
-                'body'          => 'Welcome to {site_name}',
-                'email_type'    => 'authentication',
-                'created_at'    => $now,
-                'updated_at'    => $now
-            ],
-            [
-                'subject'       => 'Password Reset Mail',
-                'identifier'    => 'Password Reset Mail',
-                'title'         => 'password_reset',
-                'short_codes'   => '{site_name}',
-                'body'          => 'Email temple is working Perfectly!! This is test email template from',
-                'email_type'    => 'authentication',
-                'created_at'    => $now,
-                'updated_at'    => $now
-            ],
-            [
-                'subject'       => 'Recovery Successful Mail',
-                'identifier'    => 'Recovery Successful Mail',
-                'title'         => 'recovery_mail',
-                'short_codes'   => '{site_name}',
-                'body'          => 'Email temple is working Perfectly!! This is test email template from',
-                'email_type'    => 'authentication',
-                'created_at'    => $now,
-                'updated_at'    => $now
-            ],
+            'subject'     => 'SMTP Configuration Test',
+            'identifier'  => 'test_email',
+            'title'       => 'SMTP Test Mail',
+            'short_codes' => '{name},{email},{site_name},{login_link}',
+            'body'        => 'Great News!!Email is working Perfectly.',
+            'email_type'  => 'system',
+            'created_at'  => $now,
+            'updated_at'  => $now,
         ];
-
         EmailTemplate::insert($data);
-
-
+        $data = [
+            'Subject'     => 'Confirm your email',
+            'identifier'  => 'confirmation_email',
+            'title'       => 'Email Confirmation',
+            'short_codes' => '{name},{email},{site_name},{confirmation_link}',
+            'body'        => '<p>Hi {name},</p><p>Please confirm your email by clicking the link below:</p><p>{confirmation_link}</p><p><br></p><p>Thanks</p><p>{site_name}</p>',
+            'email_type'  => 'user',
+            'created_at'  => $now,
+            'updated_at'  => $now,
+        ];
+        EmailTemplate::insert($data);
+        $data = [
+            'subject'     => 'Welcome to',
+            'identifier'  => 'welcome_email',
+            'title'       => 'Welcome Email',
+            'short_codes' => '{name},{email},{site_name},{login_link}',
+            'body'        => 'Welcome to {site_name}',
+            'email_type'  => 'user',
+            'created_at'  => $now,
+            'updated_at'  => $now,
+        ];
+        EmailTemplate::insert($data);
+        $data = [
+            'Subject'     => 'Reset your password',
+            'identifier'  => 'password_reset_email',
+            'title'       => 'password_reset',
+            'short_codes' => '{name},{email},{site_name},{reset_link}',
+            'body'        => 'Hi {name},<br>Reset your password using below link:',
+            'email_type'  => 'user',
+            'created_at'  => $now,
+            'updated_at'  => $now,
+        ];
+        EmailTemplate::insert($data);
+        $data = [
+            'subject'     => 'Your password has been changed',
+            'identifier'  => 'recovery_email',
+            'title'       => 'recovery_mail',
+            'short_codes' => '{name},{email},{site_name},{login_link}',
+            'body'        => 'Email temple is working Perfectly!! This is Recovery Successful email template from',
+            'email_type'  => 'user',
+            'created_at'  => $now,
+            'updated_at'  => $now,
+        ];
+        EmailTemplate::insert($data);
     }
 
     /**

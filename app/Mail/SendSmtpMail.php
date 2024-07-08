@@ -17,10 +17,9 @@ class SendSmtpMail extends Mailable
         $this->data = $data;
     }
 
-    public function build(): SendSmtpMail
-    {
-
-        // $this->data['content']['body'] = '';
+    public function build()
+    { 
+ 
         $this->data['content']['body'] = '';
         $subject                       = getArrayValue('subject', $this->data['content']);
         if (arrayCheck('template_title', $this->data['content'])) {
@@ -36,11 +35,8 @@ class SendSmtpMail extends Mailable
                 '<a href="'.$login_link.'">'.$login_link.'</a>'];
             $subject                       = str_replace($tags, $replaces, $template->subject);
             $this->data['content']['body'] = str_replace($tags, $replaces, $template->body);
-        }else{
-            $this->data['content']['body'] = $this->data['content'];
-
         }
-
+        // dd($this->data);
         return $this->subject($subject)->view($this->data['view'], $this->data['content']);
     }
 }

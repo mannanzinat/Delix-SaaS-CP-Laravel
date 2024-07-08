@@ -4,7 +4,6 @@
         var token = "{{ @csrf_token() }}";
         Swal.fire({
             title: '<?php echo e(__('are_you_sure')); ?>',
-            //text: "<?php echo e(__('you_will_not_be_able_to_revert_this')); ?>",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: '<?php echo e(__('yes_do_it')); ?>',

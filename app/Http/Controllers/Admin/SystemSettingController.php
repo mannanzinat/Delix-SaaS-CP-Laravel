@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Country;
-use App\Models\Language;
 use App\Models\Timezone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +15,9 @@ use App\Repositories\SettingRepository;
 use Illuminate\Support\Facades\Artisan;
 use App\Repositories\CurrencyRepository;
 use App\Repositories\LanguageRepository;
+use Pusher\Pusher;
+use Pusher\PusherException;
+use Illuminate\Support\Facades\Http;
 
 class SystemSettingController extends Controller
 {
@@ -28,87 +28,113 @@ class SystemSettingController extends Controller
         $this->setting = $setting;
     }
 
-    public function generalSetting(Request $request) {
+    public function generalSetting(LanguageRepository $languageRepository, CountryRepository $countryRepository, CurrencyRepository $currencyRepository, Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    {
+        Gate::authorize('general.setting');
         try {
+            if ($timeZoneSetting = setting('time_zone')) {
+                $time_zone = Timezone::where('id', $timeZoneSetting)->first();
+                if ($time_zone) {
+                    $time_zone = $time_zone->timezone;
+                    // envWrite('APP_TIMEZONE', $time_zone);
+                    // session()->forget('time_zone');
+                }
+            }
             $data = [
-                'languages'  => Language::active()->pluck('name','locale'),
-                'time_zones' => Timezone::select('timezone','id','gmt_offset')->get(),
-                'countries'  => Country::active()->pluck('name','id'),
+                'languages'  => $languageRepository->activeLanguage(),
+                'time_zones' => Timezone::all(),
+                'countries'  => $countryRepository->all(),
+                'currencies' => $currencyRepository->activeCurrency(),
                 'lang'       => $request->site_lang ? $request->site_lang : App::getLocale(),
             ];
-            return view('admin.system_setting.general_setting', $data);
+
+            return view('backend.admin.system_setting.general_setting', $data);
         } catch (\Exception $e) {
-            return back()->with('danger', __('something_went_wrong.please_try_again.'));
+            Toastr::error('something_went_wrong_please_try_again');
+
+            return back();
         }
     }
 
-    public function updateSetting(Request $request)
+    public function updateSetting(Request $request): \Illuminate\Http\RedirectResponse
     {
+        $request->validate([
+            'admin_logo'      => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
+            'admin_mini_logo' => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
+            'admin_favicon'   => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
+        ]);
+
+        Gate::authorize('admin.panel-setting.update');
         if (isDemoMode()) {
-            return back()->with('danger', __('this_function_is_disabled_in_demo_server'));
+            Toastr::error(__('this_function_is_disabled_in_demo_server'));
+
+            return back();
         }
+
         DB::beginTransaction();
         try {
             $this->setting->update($request);
 
+            Toastr::success(__('update_successful'));
             DB::commit();
-            return back()->with('success', __('update_successful'));
+
+            return back();
         } catch (\Exception $e) {
             DB::rollBack();
+            Toastr::error('something_went_wrong_please_try_again');
 
-            return back()->with('danger', __('something_went_wrong.please_try_again.'));
+            return back();
         }
     }
-
 
     public function generalSettingUpdate(Request $request): \Illuminate\Http\RedirectResponse
     {
         if (isDemoMode()) {
             Toastr::error(__('this_function_is_disabled_in_demo_server'));
+
             return back();
         }
-
         $request->validate([
-            'system_name'        => 'required',
-            'company_name'       => 'required',
-            'tagline'            => 'required',
-            'phone'              => 'required|numeric',
-            'email_address'      => 'required|email',
-            'time_zone'          => 'required',
-            'default_weight'     => 'required',
+            'system_name'     => 'required',
+            'company_name'    => 'required',
+            'phone'           => 'required|numeric',
+            'email_address'   => 'required|email',
+            'activation_code' => 'required',
+            'time_zone'       => 'required',
+            'favicon'         => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
         ]);
-
 
         DB::beginTransaction();
         try {
-
             $this->setting->update($request);
+
             $time_zone = Timezone::where('id', $request->time_zone)->first();
-
-
-            if ($time_zone)
-            {
+            if ($time_zone) {
                 $time_zone = $time_zone->timezone;
                 envWrite('APP_TIMEZONE', $time_zone);
             }
+            Toastr::success(__('update_successful'));
             DB::commit();
 
-            return back()->with('success', __('update_successful'));
+            return back();
         } catch (\Exception $e) {
-
             DB::rollBack();
-            return back()->withInput()->with('danger', __('something_went_wrong.please_try_again.'));
+            Toastr::error('something_went_wrong_please_try_again');
+
+            return back()->withInput();
         }
     }
 
-
     public function cache(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.cache_setting');
+        Gate::authorize('admin.cache');
+
+        return view('backend.admin.system_setting.cache_setting');
     }
 
     public function cacheUpdate(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
+        Gate::authorize('cache.update');
         if (isDemoMode()) {
             $data = [
                 'status' => 'danger',
@@ -145,7 +171,7 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
@@ -154,11 +180,14 @@ class SystemSettingController extends Controller
 
     public function firebase(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.firebase');
+        Gate::authorize('admin.firebase');
+
+        return view('backend.admin.system_setting.firebase');
     }
 
     public function firebaseUpdate(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
+        Gate::authorize('firebase.update');
         if (isDemoMode()) {
             $data = [
                 'status' => 'danger',
@@ -196,7 +225,7 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
@@ -205,16 +234,18 @@ class SystemSettingController extends Controller
 
     public function preference(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.preference');
+        Gate::authorize('preference');
+
+        return view('backend.admin.system_setting.preference');
     }
 
     public function systemStatus(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         if (isDemoMode()) {
             $data = [
-                'status' => 'danger',
-                'error'  => __('this_function_is_disabled_in_demo_server'),
-                'title'  => 'error',
+                'status'  => 'danger',
+                'message' => __('this_function_is_disabled_in_demo_server'),
+                'title'   => 'error',
             ];
 
             return response()->json($data);
@@ -228,13 +259,13 @@ class SystemSettingController extends Controller
 
                     return redirect('/' . $command);
                 } else {
-                    Toastr::error(__('Something went wrong, please try again'));
+                    Toastr::error(__('something_went_wrong_please_try_again'));
 
                     return back();
                 }
             }
             if (isDemoMode()) {
-                $response['message'] = __('This function is disabled in demo server.');
+                $response['message'] = __('this_function_is_disabled_in_demo_server');
                 $response['title']   = __('Ops..!');
                 $response['status']  = 'error';
 
@@ -269,14 +300,14 @@ class SystemSettingController extends Controller
                 $response['title']   = __('Success');
                 $response['status']  = 'success';
             } else {
-                $response['message'] = __('Something went wrong, please try again');
+                $response['message'] = __('something_went_wrong_please_try_again');
                 $response['title']   = __('Ops..!');
                 $response['status']  = 'error';
             }
 
             return response()->json($response);
         } catch (\Exception $e) {
-            $response['message'] = __('something_went_wrong.please_try_again.');
+            $response['message'] = 'something_went_wrong_please_try_again';
             $response['title']   = __('Ops..!');
             $response['status']  = 'error';
 
@@ -286,7 +317,9 @@ class SystemSettingController extends Controller
 
     public function storageSetting(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.storage_setting');
+        Gate::authorize('storage.setting');
+
+        return view('backend.admin.system_setting.storage_setting');
     }
 
     public function saveStorageSetting(Request $request): \Illuminate\Http\JsonResponse
@@ -322,7 +355,7 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
@@ -331,7 +364,9 @@ class SystemSettingController extends Controller
 
     public function chatMessenger(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.chat_messenger');
+        Gate::authorize('chat.messenger');
+
+        return view('backend.admin.system_setting.chat_messenger');
     }
 
     public function saveMessengerSetting(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -364,7 +399,7 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
@@ -373,7 +408,7 @@ class SystemSettingController extends Controller
 
     public function paymentGateways(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.payment_gateways');
+        return view('backend.admin.system_setting.payment_gateways');
     }
 
     public function savePGSetting(PGRequest $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -399,7 +434,7 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
@@ -408,7 +443,7 @@ class SystemSettingController extends Controller
 
     public function pusher(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.pusher');
+        return view('backend.admin.system_setting.pusher');
     }
 
     public function savePusherSetting(PGRequest $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -422,47 +457,114 @@ class SystemSettingController extends Controller
 
             return response()->json($data);
         }
-
         $request->validate([
             'pusher_app_id'      => 'required',
             'pusher_app_key'     => 'required',
             'pusher_app_secret'  => 'required',
             'pusher_app_cluster' => 'required',
         ]);
-
+        $pusherKey = $request->pusher_app_key;
+        $pusherSecret = $request->pusher_app_secret;
+        $pusherAppId = $request->pusher_app_id;
+        $pusherCluster = $request->pusher_app_cluster;
         try {
+            $pusher = new Pusher($pusherKey, $pusherSecret, $pusherAppId, [
+                'cluster' => $pusherCluster,
+                'useTLS' => true,
+            ]);
+            $pusher->get('/channels');
             $this->setting->update($request);
-
+            Artisan::call('all:clear');
             Toastr::success(__('update_successful'));
             $data = [
                 'success' => __('update_successful'),
             ];
-
             return response()->json($data);
         } catch (\Exception $e) {
+            if (config('app.debug')) {
+                // dd($e->getMessage());
+            }
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'status' => 'danger',
+                'error'  => $e->getMessage(),
+                'title'  => 'error',
             ];
-
             return response()->json($data);
+        }
+    }
+
+    public function oneSignal(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('backend.admin.system_setting.onesignal');
+    }
+
+    public function saveOneSignalSetting(PGRequest $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+    {
+        if (isDemoMode()) {
+            $data = [
+                'status' => 'danger',
+                'error'  => __('this_function_is_disabled_in_demo_server'),
+                'title'  => 'error',
+            ];
+            return response()->json($data);
+        }
+        $request->validate([
+            'onesignal_app_id' => 'required',
+            'onesignal_rest_api_key' => 'required',
+        ]);
+        try {
+            $onesignalAppId = $request->onesignal_app_id;
+            $onesignalRestApiKey = $request->onesignal_rest_api_key;
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . $onesignalRestApiKey,
+            ])->get('https://onesignal.com/api/v1/apps/' . $onesignalAppId);
+            if ($response->successful()) {
+                $this->setting->update($request);
+                Toastr::success(__('update_successful'));
+                $data = [
+                    'success' => __('update_successful'),
+                ];
+                return response()->json($data);
+            } else {
+                $data = [
+                    'status' => 'danger',
+                    'error'  => __('invalid_onesignal_credentials'),
+                    'title'  => 'error',
+                ];
+                return response()->json($data);
+            }
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 'danger',
+                'error'  => $e->getMessage(),
+                'title'  => 'error',
+            ];
+           return response()->json($data);
         }
     }
 
     public function adminPanelSetting()
     {
+        Gate::authorize('admin.panel-setting');
+
         $lang = \App::getLocale();
 
-        return view('admin.system_setting.admin_panel_setting', compact('lang'));
+        return view('backend.admin.system_setting.admin_panel_setting', compact('lang'));
     }
 
     public function miscellaneousSetting()
     {
-        return view('admin.system_setting.miscellaneous_setting');
+        return view('backend.admin.system_setting.miscellaneous_setting');
+    }
+
+    public function cronSetting()
+    {
+        return view('backend.admin.system_setting.cron_setting');
     }
 
     public function aiWriterSetting()
     {
-        return view('admin.system_setting.ai_writer_setting');
+        return view('backend.admin.system_setting.ai_writer_setting');
     }
 
     public function miscellaneousUpdate(Request $request): \Illuminate\Http\JsonResponse
@@ -497,17 +599,54 @@ class SystemSettingController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Toastr::error(__(__('something_went_wrong.please_try_again.')));
+            Toastr::error(__('something_went_wrong_please_try_again'));
 
             return response()->json([
-                'error' => __(__('something_went_wrong.please_try_again.')),
+                'error' => __('something_went_wrong_please_try_again'),
+            ]);
+        }
+    }
+
+    public function updateMessageSetting(Request $request): \Illuminate\Http\JsonResponse
+    {
+        if (isDemoMode()) {
+            $data = [
+                'status' => 'danger',
+                'error'  => __('this_function_is_disabled_in_demo_server'),
+                'title'  => 'error',
+            ];
+
+            return response()->json($data);
+        }
+        $request->validate([
+            'message_limit' => 'required|numeric',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $this->setting->update($request);
+
+            Toastr::success(__('update_successful'));
+            DB::commit();
+
+            return response()->json([
+                'success' => __('update_successful'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Toastr::error(__('something_went_wrong_please_try_again'));
+
+            return response()->json([
+                'error' => __('something_went_wrong_please_try_again'),
             ]);
         }
     }
 
     public function refund(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.system_setting.refund');
+        Gate::authorize('admin.refund');
+
+        return view('backend.admin.system_setting.refund');
     }
 
     public function saveRefundSetting(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -518,6 +657,7 @@ class SystemSettingController extends Controller
                 'error'  => __('this_function_is_disabled_in_demo_server'),
                 'title'  => 'error',
             ];
+
             return response()->json($data);
         }
 
@@ -538,21 +678,30 @@ class SystemSettingController extends Controller
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
-                'error' => __('something_went_wrong.please_try_again.'),
+                'error' => __('something_went_wrong_please_try_again'),
             ];
 
             return response()->json($data);
         }
     }
 
-    public function adminSocialMedia()
+    public function triggerPusherTestEvent()
     {
-        $view = view('admin.system_setting.social_media_new_row')->render();
-        return response()->json(['view' => $view]);
+        return $this->setting->triggerPusherTestEvent();
+    }
+    public function checkPusherCredentials()
+    {
+        return $this->setting->checkPusherCredentials();
     }
 
-    public function cronSetting()
+    public function checkOneSignalCredentials()
     {
-        return view('admin.system_setting.cron_setting');
+        return $this->setting->checkOneSignalCredentials();
+    }
+
+    public function testOneSignalNotification(Request $request)
+    {
+        $response = $this->checkOneSignalCredentials();
+        return $this->setting->testOneSignalNotification($request);
     }
 }
