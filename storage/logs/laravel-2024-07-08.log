@@ -1,0 +1,824 @@
+[2024-07-08 09:55:01] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:01] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:02] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:02] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:02] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:03] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:03] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:03] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:04] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:04] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:05] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:05] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:05] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:05] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:05] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:06] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:07] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:09] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:10] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:10] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 D:\\xampp\\htdocs\\DeliX-SAS\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:11] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Class "Cartalyst\Sentinel\Laravel\SentinelServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider\" not found at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php:206)
+[stacktrace]
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(142): Illuminate\\Foundation\\ProviderRepository->createProvider('Cartalyst\\\\Senti...')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\ProviderRepository.php(61): Illuminate\\Foundation\\ProviderRepository->compileManifest(Array)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(664): Illuminate\\Foundation\\ProviderRepository->load(Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\RegisterProviders.php(17): Illuminate\\Foundation\\Application->registerConfiguredProviders()
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(242): Illuminate\\Foundation\\Bootstrap\\RegisterProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(383): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "translator" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('translator')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('translator')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('translator', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('translator', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('translator', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('translator', Array)
+#6 Command line code(1): app('translator')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [translator] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('translator')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('translator', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('translator', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('translator', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('translator', Array)
+#5 Command line code(1): app('translator')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"translator\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('translator')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('translator')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('translator', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('translator', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('translator', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('translator', Array)
+#6 Command line code(1): app('translator')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [translator] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('translator')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('translator', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('translator', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('translator', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('translator', Array)
+#5 Command line code(1): app('translator')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes" does not exist in Command line code:1
+Stack trace:
+#0 Command line code(1): ReflectionMethod->__construct('Mcamara\\Laravel...', 'handle')
+#1 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"Mcamara\\LaravelLocalization\\Middleware\\LaravelLocalizationRoutes\" does not exist in Command line code:1
+Stack trace:
+#0 Command line code(1): ReflectionMethod->__construct('Mcamara\\\\Laravel...', 'handle')
+#1 {main}
+  thrown at Command line code:1)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught Error: Class "Cartalyst\Sentinel\Roles\EloquentRole" not found in D:\xampp\htdocs\DeliX-SAS\app\Models\Role.php:10
+Stack trace:
+#0 Command line code(1): include_once()
+#1 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught Error: Class \"Cartalyst\\Sentinel\\Roles\\EloquentRole\" not found in D:\\xampp\\htdocs\\DeliX-SAS\\app\\Models\\Role.php:10
+Stack trace:
+#0 Command line code(1): include_once()
+#1 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\app\\Models\\Role.php:10)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
+[2024-07-08 09:55:12] local.ERROR: Uncaught ReflectionException: Class "view" does not exist in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:889
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#5 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [view] does not exist. in D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php:891
+Stack trace:
+#0 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(770): Illuminate\Container\Container->build('view')
+#1 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(856): Illuminate\Container\Container->resolve('view', Array, true)
+#2 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Container\Container.php(706): Illuminate\Foundation\Application->resolve('view', Array)
+#3 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(841): Illuminate\Container\Container->make('view', Array)
+#4 D:\xampp\htdocs\DeliX-SAS\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(120): Illuminate\Foundation\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ReflectionException: Class \"view\" does not exist in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:889
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(889): ReflectionClass->__construct('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#5 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#6 Command line code(1): app('view')
+#7 {main}
+
+Next Illuminate\\Contracts\\Container\\BindingResolutionException: Target class [view] does not exist. in D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891
+Stack trace:
+#0 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(770): Illuminate\\Container\\Container->build('view')
+#1 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(856): Illuminate\\Container\\Container->resolve('view', Array, true)
+#2 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(706): Illuminate\\Foundation\\Application->resolve('view', Array)
+#3 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(841): Illuminate\\Container\\Container->make('view', Array)
+#4 D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(120): Illuminate\\Foundation\\Application->make('view', Array)
+#5 Command line code(1): app('view')
+#6 {main}
+  thrown at D:\\xampp\\htdocs\\DeliX-SAS\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php:891)
+[stacktrace]
+#0 {main}
+"} 
