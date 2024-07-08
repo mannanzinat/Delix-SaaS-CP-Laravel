@@ -109,6 +109,15 @@
 						</a>
 					</li>
 				@endcan
+
+				@can('payment_methods.index')
+					<li class="{{ menuActivation('admin/payment-gateway', 'active') }}">
+						<a href="{{ route('payment.gateway') }}">
+							<i class="las la-credit-card"></i>
+							<span>{{ __('cloud_server') }}</span>
+						</a>
+					</li>
+				@endcan
 				@can('custom-notification.index')
 					<li class="{{ menuActivation(['admin/custom-notification', 'admin/custom-notification*'], 'active') }}">
 						<a href="{{ route('custom-notification.index') }}">
