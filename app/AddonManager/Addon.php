@@ -4,7 +4,6 @@ namespace App\AddonManager;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 abstract class Addon
 {
@@ -50,7 +49,7 @@ abstract class Addon
      *
      * @var string
      */
-    public $purchase_code;
+    public $activation_code;
 
     /**
      * Author Url of the addon.
@@ -149,13 +148,18 @@ abstract class Addon
      */
     protected function getViewNamespace()
     {
-        return 'addon:'.Str::camel(
+        // dd('addon:'.
+        // mb_substr(
+        //     get_called_class(),
+        //     strrpos(get_called_class(), '\\') + 1,
+        //     -5
+        // ));
+        return 'addon:'.
             mb_substr(
                 get_called_class(),
                 strrpos(get_called_class(), '\\') + 1,
                 -5
-            )
-        );
+            );
     }
 
     /**

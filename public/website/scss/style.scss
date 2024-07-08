@@ -1,66 +1,72 @@
-/*-------------------------------------
-    Template Name:  Delix - Logistics and Transportation Html Template 
-    Template URI: https://---.com
-    Description:  Delix - Logistics and Transportation Html Template
-    Author: ...
-    Author URI: https://---.com
-    Version: 1.0
-    Tags: theme, template, etc
----------------------------------------*/
+/**************************************
+ CSS Index  
+****************************
 
-/*
-    Table of Context
-    -------------------------------
-    01. Common CSS
-    02. Content Box
-    03. Video Box
-    04. Icon Box
-    05. Order, Unorder List
-    06. Round One side
-    07. Overlap Image Box
-    08. Image Box
-    09. Icon list block
-    
-    01. Header style
-    02. Banner style
-   
-*/
+/--- Default Styles -----/
 
-/*********************************
-/* Fonts
-/* Jost
-/* 
-/*
-*********************************/
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+01.Variables
+02.Mixins
+03.Reset
+04.Typography
+05.Extend
+06.Animations
+07.Shortcode
+08.Spacing
+09.Common
+10.Forms
+11.Sal
+12.Text Animation
 
-// Partial files
-@import "base/functions";
-// @import "base/themes";
-@import "base/mediaQuery";
-@import "base/variables";
-@import "base/mixins";
-@import "base/reset";
-@import "base/util";
-@import "base/common";
+/--- Header Styles -----/
 
-// Components
-@import "components/button";
-@import "components/section-title";
-@import "components/header";
-@import "components/banner";
-@import "components/breadcrumb";
-@import "components/partner";
-@import "components/event";
-@import "components/about";
-@import "components/service";
-@import "components/feature";
-@import "components/ctaBox";
-@import "components/counter";
-@import "components/pricing";
-@import "components/testimonial";
-@import "components/contact";
-@import "components/privacy";
-@import "components/tracking";
-@import "components/footer";
+01.Headerdefault
+02.Nav
+03.Header Top
+04.HeaderTopBar
+05.Mobilemenu
 
+
+
+***************************************/
+
+
+
+/**************************************
+    Default Styles
+***************************************/
+@import 'default/variables';
+@import 'default/mixins';
+@import 'default/reset';
+@import 'default/typography';
+@import 'default/extend';
+@import 'default/animations';
+@import 'default/shortcode';
+@import 'default/spacing';
+@import 'default/common';
+@import 'default/forms';
+@import 'default/sal';
+@import 'default/text-animation';
+
+
+
+/**************************************
+    Header Styles
+***************************************/
+@import 'header/headerdefault';
+@import 'header/nav';
+@import 'header/mobilemenu';
+
+
+
+/**************************************
+    Elements Styles
+***************************************/
+@import 'elements/button';
+@import 'elements/banner';
+@import 'elements/section-title';
+@import 'elements/template';
+@import 'elements/counter';
+@import 'elements/brand';
+@import 'elements/service';
+@import 'elements/accordion';
+@import 'elements/footer';

@@ -1,17 +1,28 @@
-@extends('errors.master')
-
-@section('title')
-{{__('error')}} {{__('403')}}
-@endsection
-@section('mainContent')
-<div class="nk-content ">
-    <div class="nk-block nk-block-middle wide-xs mx-auto">
-        <div class=" nk-error-ld text-center">
-            <h1 class="nk-error-head">{{__('403')}}</h1>
-            <h3 class="nk-error-title">{{__('opps_why_are_you_here')}}</h3>
-            <p class="nk-error-text">{{__('403_message')}}</p>
-            <a href="{{route('dashboard')}}" class="btn btn-lg btn-primary mt-2">{{__('back_to_home')}}</a>
-        </div>
-    </div>
-</div>
-@endsection
+@php
+    $page = App\Models\Page::with('language')->find(403);
+@endphp
+@extends($page ? 'frontend.layouts.master' : 'errors::minimal')
+@if($page)
+    @section('content')
+        <section class="error-section">
+            <div class="container container-1278">
+                <div class="row align-items-center justify-content-center text-center vh-100">
+                    <div class="col-lg-8 col-md-10 col-sm-10">
+                        <div class="error-page-title">
+                            <h1 class="m-b-65 m-b-md-30 m-b-sm-20"><span>403</span></h1>
+                            <h2 class="m-b-15">{{ $page->lang_title }}</h2>
+                            <p class="m-b-55 m-b-md-30 m-b-sm-20">{{ $page->lang_content }}</p>
+                            <a href="{{ url('/') }}" class="template-btn">
+                                {{__('back_to_homepage')}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endsection
+@else
+    @section('title', __('403 Forbidden'))
+    @section('code', '403')
+    @section('message', __('403 Forbidden'))
+@endif

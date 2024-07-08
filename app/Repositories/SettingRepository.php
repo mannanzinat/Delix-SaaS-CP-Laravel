@@ -2,53 +2,28 @@
 
 namespace App\Repositories;
 
+use Pusher\Pusher;
 use App\Models\Setting;
 use App\Traits\ImageTrait;
-use Illuminate\Support\Facades\DB;
+use Pusher\PusherException;
+use App\Traits\RepoResponse;
+use App\Events\TestPusherEvent;
+use App\Traits\SendNotification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Http;
 
 class SettingRepository
 {
-    use ImageTrait;
+    use ImageTrait,RepoResponse,SendNotification;
 
     public function update($request): bool
     {
-        DB::beginTransaction();
-        try{
         $site_lang = $request->site_lang ?? 'en';
 
-
-        if (!empty($request->input('social_media'))) {
-            $socialArray = [];
-            foreach ($request->input('social_media') as $_key => $socialMedia) {
-                $url = $request->social_media_url[$_key];
-                $socialArray[$socialMedia] = $url;
-            }
-
-            $title = 'social_media';
-            $value = json_encode($socialArray);
-
-
-            $existingSetting = Setting::where('title', $title)->first();
-
-            if ($existingSetting) {
-                // Update existing setting
-                $existingSetting->value = $value;
-                $existingSetting->save();
-            } else {
-                // Create new setting
-                $setting = new Setting();
-                $setting->title = $title;
-                $setting->value = $value;
-                $setting->save();
-            }
-        }
-
-        foreach ($request->except('_token', '_method', 'site_lang', 'mobile_app', 'chat_messenger', 'countries', 'r','social_media','social_media_url') as $key => $value) {
-
-            if ($key !== 'social_media' && $key !== 'social_media_url') {
-
+        foreach ($request->except('_token', '_method', 'site_lang', 'mobile_app', 'chat_messenger', 'countries', 'r') as $key => $value) {
             if ($key == 'default_language') {
                 $setting = Setting::where('title', $key)->first();
             } else {
@@ -59,32 +34,29 @@ class SettingRepository
                 }
             }
 
-
             if (in_array($key, get_yrsetting('setting_image'))) {
 
-                if (!blank($setting)) {
+                if (! blank($setting)) {
                     $this->deleteImage(setting($key));
                 }
 
                 $response = $this->saveImage($request->file($key), $key);
 
-
                 $value    = serialize($response['images']);
-
             }
 
             if (in_array($key, get_yrsetting('setting_array'))) {
                 $value = serialize($value);
             }
+
             if (blank($setting)) {
                 $setting        = new Setting();
                 $setting->title = $key;
-                //if change by chosen lang set lang = chosen lang
             }
+
             if (blank($setting)) {
                 $setting        = new Setting();
                 $setting->title = $key;
-                //if change by chosen lang set lang = chosen lang
                 if (isset($site_lang) && in_array($key, get_yrsetting('setting_by_lang'))) {
                     $setting->lang = $site_lang;
                 } else {
@@ -92,7 +64,6 @@ class SettingRepository
                 }
                 $setting->value = $value;
             } else {
-                //if change by chosen lang set lang = chosen lang
                 if (isset($site_lang) && in_array($key, get_yrsetting('setting_by_lang'))) {
                     $setting->lang = $site_lang;
                 } else {
@@ -101,15 +72,8 @@ class SettingRepository
                 $setting->value = $value;
             }
 
-
             $setting->save();
-
         }
-
-
-        }
-
-
         Cache::flush();
 
         if ($request->has('system_name')) {
@@ -164,23 +128,20 @@ class SettingRepository
         }
 
         if ($request->has('pusher_app_key')) {
-            //pushar
             if (checkEmptyProvider('is_pusher_notification_active')) {
-                envWrite('PUSHER_APP_KEY', setting('pusher_app_key'));
-                envWrite('PUSHER_APP_SECRET', setting('pusher_app_secret'));
-                envWrite('PUSHER_APP_ID', setting('pusher_app_id'));
-                envWrite('PUSHER_APP_CLUSTER', setting('pusher_app_cluster'));
+                envWrite('PUSHER_APP_KEY', $request->pusher_app_key);
+                envWrite('PUSHER_APP_SECRET', $request->pusher_app_secret);
+                envWrite('PUSHER_APP_ID', $request->pusher_app_id);
+                envWrite('PUSHER_APP_CLUSTER', $request->pusher_app_cluster);
+            }
+            if ($request->is_pusher_notification_active == '1') {
+                envWrite('BROADCAST_DRIVER', 'pusher');
+            } else {
+                envWrite('BROADCAST_DRIVER', 'log');
             }
         }
 
-        DB::commit();
         return true;
-
-     } catch (\Exception $e) {
-         DB::rollback();
-         dd($e->getMessage());
-         return false;
-     }
     }
 
     public function statusChange($request): bool
@@ -190,15 +151,15 @@ class SettingRepository
         } else {
             $default_language = 'en';
         }
-        $setting            = Setting::where('title', $request['name'])->where('lang', $default_language)->first();
+        $setting        = Setting::where('title', $request['name'])->where('lang', $default_language)->first();
 
         if (! $setting) {
             $setting        = new Setting();
             $setting->title = $request['name'];
         }
 
-        $setting->value     = $request['value'];
-        $setting->lang      = $default_language;
+        $setting->value = $request['value'];
+        $setting->lang  = $default_language;
 
         $setting->save();
 
@@ -215,4 +176,136 @@ class SettingRepository
 
         return true;
     }
+
+
+
+
+    public function triggerPusherTestEvent()
+    { 
+        try {
+            $pusherAppId = setting('pusher_app_id');
+            $pusherKey = setting('pusher_app_key');
+            $pusherSecret = setting('pusher_app_secret');
+            $pusherCluster = setting('pusher_app_cluster');
+            if (empty($pusherAppId) || empty($pusherKey) || empty($pusherSecret) || empty($pusherCluster)) {
+                return response()->json([
+                    'error' => __('please_update_credential')
+                ]);
+            }
+            try {
+                $pusher = new Pusher($pusherKey, $pusherSecret, $pusherAppId, [
+                    'cluster' => $pusherCluster,
+                    'useTLS' => true,
+                ]);
+                $pusher->get('/channels');
+            } catch (PusherException $e) {
+                return $this->formatResponse(false, __('invalid_pusher_credential'), 'admin.pusher.notification', []);
+            }
+             $companyName = setting('company_name'); 
+             $message = sprintf(__('pusher_working'), $companyName);
+            event(new TestPusherEvent($message));
+            return $this->formatResponse(true, __('event_has_been_sent_successfully'), 'admin.pusher.notification', []);
+        } catch (\Exception $e) {
+            Log::error('Error triggering event: '.$e->getMessage());
+            return $this->formatResponse(false, $e->getMessage(), 'admin.pusher.notification', []);
+
+        }
+    }
+
+    public function checkPusherCredentials()
+    {
+        try {
+            $pusherAppId = setting('pusher_app_id');
+            $pusherKey = setting('pusher_app_key');
+            $pusherSecret = setting('pusher_app_secret');
+            $pusherCluster = setting('pusher_app_cluster');
+            if (empty($pusherAppId) || empty($pusherKey) || empty($pusherSecret) || empty($pusherCluster)) {
+                return $this->formatResponse(false, __('please_update_credential'), 'admin.pusher.notification', []);
+            }
+            try {
+                $pusher = new Pusher($pusherKey, $pusherSecret, $pusherAppId, [
+                    'cluster' => $pusherCluster,
+                    'useTLS' => true,
+                ]);
+                $pusher->get('/channels');
+                return $this->formatResponse(true, __('pusher_credentials_are_valid'), 'admin.pusher.notification', []);
+            } catch (PusherException $e) {
+                return $this->formatResponse(false, $e->getMessage(), 'admin.pusher.notification', []);
+                // return $this->formatResponse(false, __('invalid_pusher_credential'), 'admin.pusher.notification', []);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error checking Pusher credentials: '.$e->getMessage());
+            return $this->formatResponse(false, $e->getMessage(), 'admin.onesignal.notification', []);
+        }
+    }
+
+
+
+
+    public function checkOneSignalCredentials()
+    {
+        $onesignalAppId = setting('onesignal_app_id');
+        $onesignalRestApiKey = setting('onesignal_rest_api_key');
+        if (empty($onesignalAppId) || empty($onesignalRestApiKey)) {
+            return $this->formatResponse(false, __('please_update_onesignal_credential'), 'admin.onesignal.notification', []);
+        }
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . $onesignalRestApiKey,
+            ])->get('https://onesignal.com/api/v1/apps/' . $onesignalAppId);
+                if ($response->successful()) {
+                return $this->formatResponse(true, __('onesignal_credentials_are_valid'), 'admin.onesignal.notification', []);
+            } else {
+                return $this->formatResponse(false, __('invalid_onesignal_credentials'), 'admin.onesignal.notification', []);
+            }
+        } catch (\Exception $e) { 
+            Log::error('Error checking OneSignal credentials: ' . $e->getMessage());
+            // if (config('app.debug')) {
+            //     dd($e->getMessage());            
+            // }
+            return $this->formatResponse(false, $e->getMessage(), 'admin.onesignal.notification', []);
+        }
+    }
+
+    public function testOneSignalNotification($request)
+    {
+        try {
+            $onesignalAppId = setting('onesignal_app_id');
+            $onesignalRestApiKey = setting('onesignal_rest_api_key');
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . $onesignalRestApiKey,
+            ])->get('https://onesignal.com/api/v1/apps/' . $onesignalAppId);
+
+            if ($response->successful() !== true) {
+                return $this->formatResponse(false, __('invalid_onesignal_credentials'), 'admin.onesignal.notification', []);
+            }
+            $companyName = setting('company_name'); 
+            $message = sprintf(__('onesignal_notification_message'), $companyName);
+            $heading = __('onesignal_notification');
+            $url = route('admin.dashboard'); // Example URL
+               // Check if the user's onesignal_player_id is set
+            if (isset(auth()->user()->onesignal_player_id)) {
+                $this->pushNotification([
+                    'ids' => auth()->user()->onesignal_player_id,
+                    'message' => $message,
+                    'heading' => $heading,
+                    'url' => $url,
+                ]);
+
+                return $this->formatResponse(true, __('test_onesignal_notification_sent_successfully'), 'admin.onesignal.notification', []);
+            } else {
+                return $this->formatResponse(false, __('onesignal_player_id_not_set'), 'admin.onesignal.notification', []);
+            }
+            
+            return $this->formatResponse(true, __('test_onesignal_notification_sent_successfully'), 'admin.onesignal.notification', []);
+        } catch (\Exception $e) {
+            Log::error('Error sending OneSignal test notification: '.$e->getMessage());
+            return $this->formatResponse(false, $e->getMessage(), 'admin.onesignal.notification', []);
+
+        }
+    }
+
+    
+
+
 }

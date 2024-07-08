@@ -14,7 +14,10 @@ class WebsiteFeatureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'        => 'required|unique:website_features,title,'.$this->id,
+            'title'       => 'required',
+            'description' => 'nullable',
+            'image'       => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
+            'type'        => 'required',
         ];
     }
 }

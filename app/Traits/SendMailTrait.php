@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 
 trait SendMailTrait
 {
-    public function sendMail($to, $view, $data, $sender = null): bool
+    protected function sendMail($to, $view, $data, $sender = null): bool
     {
         $engine    = env('MAIL_MAILER');
 
@@ -15,18 +15,16 @@ trait SendMailTrait
             $from = $sender;
         } else {
             if ($engine == 'smtp') {
-                $from = setting('email_address') ?? env('MAIL_FROM_ADDRESS');
+                $from = env('MAIL_FROM_ADDRESS');
             } else {
                 $from = env('SENDER_MAIL');
             }
-        }
-
+        } 
         $attribute = [
             'from'    => $from,
             'content' => $data,
             'view'    => $view,
         ];
-
 
         if (is_array($to)) {
             $emails = array_filter($to);

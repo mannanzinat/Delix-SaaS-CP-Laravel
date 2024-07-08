@@ -19,14 +19,14 @@
     <div class="selected-files d-flex flex-wrap gap-20">
         @if ($media)
             <div class="selected-files-item">
-                <img src="{{ getFileLink('80X80', $media) }}" alt="gallery image" class="selected-img">
+                <img src="{{ getFileLink('80x80', $media) }}" alt="gallery image" class="selected-img">
                 <div class="remove-icon" data-id="">
                     <i class="las la-times"></i>
                 </div>
             </div>
         @endif
         <div class="selected-files-item {{ $media ? 'd-none' : '' }}">
-            <img class="selected-img" src="{{ static_asset('images/default/default-image-80X80.png') }}"
+            <img class="selected-img" src="{{ static_asset('images/default/default-image-80x80.png') }}"
                 alt="Headphone">
         </div>
     </div>

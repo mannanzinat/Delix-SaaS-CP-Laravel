@@ -14,10 +14,11 @@ class WebsiteTestimonialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'required',
+            'name'        => 'required|unique:website_testimonials,name,'.$this->id,
             'title'       => 'required',
             'designation' => 'required',
             'description' => 'required',
+            'image'       => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
         ];
     }
 }

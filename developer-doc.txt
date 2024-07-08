@@ -1,1 +1,0 @@
-details for all staff, delivery man, marchant -> route with route('detail')

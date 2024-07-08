@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Email;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailConfigureRequest;
+use App\Repositories\EmailTemplateRepository;
+use App\Repositories\SettingRepository;
+use App\Traits\SendMailTrait;
+use Brian2694\Toastr\Facades\Toastr;
 use Exception;
 use Illuminate\Http\Request;
-use App\Traits\SendMailTrait;
-use App\Http\Controllers\Controller;
-use Brian2694\Toastr\Facades\Toastr;
-use App\Repositories\SettingRepository;
 use Illuminate\Support\Facades\Artisan;
-use App\Repositories\EmailTemplateRepository;
-use App\Http\Requests\Admin\EmailConfigureRequest;
 
 class EmailController extends Controller
 {
@@ -33,26 +33,30 @@ class EmailController extends Controller
             'mail_driver' => $mail_driver,
         ];
 
-        return view('admin.email-setup.server-configuration', $data);
+        return view('backend.admin.email-setup.server-configuration', $data);
     }
 
     public function emailTemplate(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
             $data = [
-                'email_templates' => $this->emailTemplate->authentication(),
+                'email_templates' => $this->emailTemplate->emailTemplate(),
             ];
 
-            return view('admin.email-setup.email-template', $data);
+            return view('backend.admin.email-setup.email-template', $data);
         } catch (Exception $e) {
-            return back()->with('danger', $e->getMessage());
+            Toastr::error(__('something_went_wrong_please_try_again'));
+
+            return back();
         }
     }
 
     public function serverConfigurationUpdate(EmailConfigureRequest $request): \Illuminate\Http\RedirectResponse
     {
         if (isDemoMode()) {
-            return back()->with('danger', __('this_function_is_disabled_in_demo_server'));
+            Toastr::error(__('this_function_is_disabled_in_demo_server'));
+
+            return back();
         }
         $driver = $request->mail_server;
         if ($this->settings->update($request)) {
@@ -93,30 +97,43 @@ class EmailController extends Controller
             Artisan::call('config:clear');
             Artisan::call('cache:clear');
             Artisan::call('view:clear');
-            return redirect()->back()->with('success', __('Setting Updated Successfully'));
-        } else {
 
-            return back()->with('danger', __('something_went_wrong_please_try_again'));
+            Toastr::success(__('updated_successfully'));
+
+            return redirect()->back();
+        } else {
+            Toastr::error(__('something_went_wrong_please_try_again'));
+
+            return back();
         }
     }
 
     public function sendTestMail(Request $request)
     {
         if (isDemoMode()) {
-            return back()->with('danger', __('this_function_is_disabled_in_demo_server'));
+            Toastr::error(__('this_function_is_disabled_in_demo_server'));
+
+            return back();
         }
         $request->validate([
             'send_to' => 'required|email',
         ]);
-        $send_to = $request->send_to;
-
+        $send_to       = $request->send_to;
+        $template_data = $this->emailTemplate->testMail();
+        $data          = [
+            'email_templates' => $template_data,
+            'subject'         => $template_data->subject,
+        ];
         try {
-            $data['content'] = __('Email is working Perfectly!! This is just a test email');
-            $data['subject'] = __('Test Email');
-            $this->sendmail($send_to, 'emails.auth.email-template', $data);
-            return redirect()->back()->with('success', __('successfully_email_send'));
+
+            $this->sendmail($send_to, 'emails.test', $data);
+            Toastr::success(__('successfully_email_send'));
+
+            return redirect()->back();
         } catch (Exception $e) {
-            return redirect()->back()->with('danger', $e->getMessage());
+            Toastr::error(__('something_went_wrong_please_try_again'));
+
+            return redirect()->back();
         }
     }
 
@@ -130,9 +147,13 @@ class EmailController extends Controller
     public function emailTemplateUpdate(Request $request): \Illuminate\Http\JsonResponse
     {
         if (isDemoMode()) {
-            return response()->json([
-                'error' => __('this_function_is_disabled_in_demo_server'),
-            ]);
+            $data = [
+                'status' => 'danger',
+                'error'  => __('this_function_is_disabled_in_demo_server'),
+                'title'  => 'error',
+            ];
+
+            return response()->json($data);
         }
 
         $request->validate([
@@ -141,13 +162,14 @@ class EmailController extends Controller
         ]);
         try {
             $this->emailTemplate->update($request->all());
+            Toastr::success(__('update_successful'));
 
             return response()->json([
                 'success' => __('message_sent_successfully'),
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'error' => $e->getMessage(),
+                'error' => __('something_went_wrong_please_try_again'),
             ]);
         }
     }

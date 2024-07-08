@@ -1,7 +1,12 @@
 /*.jpg
 /*.png
 /*.webp
-!sms
+/*.jpeg
+/*.gif
+!payment-method
+!others
+!icon
+!ico
 !flags
 !default
 !addons

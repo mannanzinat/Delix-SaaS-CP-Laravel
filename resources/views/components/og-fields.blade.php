@@ -22,19 +22,19 @@
     </div>
 </div>
 
-<div class="{{ $og_image_class ?? 'col-12'}}">
+<div class="{{ $meta_image_class ?? 'col-12'}}">
     <div class="col-lg-12 input_file_div mb-3">
         <div class="mb-3">
             <label for="ogUpload" class="form-label mb-1">{{ __('image') }} (1200x630)</label>
             <label for="ogUpload" class="file-upload-text">
-                <p></p>
+                <p>{{ isset($og_image) && arrayCheck('image_80x80',$og_image) ? getFileName($og_image['image_80x80']) : '0 ' .__('file_selected') }}</p>
                 <span class="file-btn">{{ __('choose_file') }}</span>
             </label>
             <input class="d-none file_picker" type="file" name="og_image" id="ogUpload">
         </div>
         <div class="selected-files d-flex flex-wrap gap-20">
             <div class="selected-files-item">
-                <img class="selected-img" src="{{  getFileLink('80X80', $og_image) }}" alt="favicon">
+                <img class="selected-img" src="{{  getFileLink('80x80',$og_image ?? []) }}" alt="favicon">
             </div>
         </div>
     </div>

@@ -1,70 +1,119 @@
-@extends('auth.master')
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-@section('title')
-    {{__('reset_password')}}
-@endsection
-
-@section('mainContent')
-    <section class="login-section">
-      <div class="container">
+    <title>{{__('login')}}</title>
+    <!--====== LineAwesome ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/line-awesome.min.css') }}">
+    <!--====== Dropzone CSS ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
+    <!--====== Summernote CSS ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/summernote-lite.min.css') }}">
+    <!--====== Choices CSS ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/choices.min.css') }}">
+    <!--====== AppCSS ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/app.css') }}">
+    <!--====== ResponsiveCSS ======-->
+    <link rel="stylesheet" href="{{ static_asset('admin/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('admin/css/toastr.min.css') }}">
+</head>
+<body>
+<section class="signup-section">
+    <div class="container">
         <div class="row justify-content-center align-items-center min-vh-100">
-          <div class="col-lg-5 col-md-8 col-sm-10 position-relative">
-              <img src="{{ static_asset('admin/assets/img/shape/rect.svg')}}" alt="Rect Shape" class="bg-rect-shape">
-              <img src="{{ static_asset('admin/assets/img/shape/circle.svg')}}" alt="Rect Shape" class="bg-circle-shape">
-              <img src="{{ static_asset('admin/assets/img/shape/circle-block.svg')}}" alt="Rect Shape" class="bg-circle-block-shape">
+            <div class="col-lg-5 col-md-8 col-sm-10 position-relative">
 
-              <div class="login-form bg-white rounded-20 mt-4 mb-4">
-                  <a href="{{ url('/') }}" class="logo-link">
-                      <img class="mx-auto d-block mb-3" style="max-height: 42px;"
-                           src="{{ setting('dark_logo') && @is_file_exists(setting('dark_logo')['original_image']) ? get_media(setting('dark_logo')['original_image']) : get_media('images/default/logo/logo_dark.png') }}"
-                           alt="Logo">
-                  </a>
-                <h3>{{ __('reset_password') }}</h3>
+                <img src="{{ static_asset('admin/img/shape/rect.svg') }}" alt="Rect Shape" class="bg-rect-shape">
+                <img src="{{ static_asset('admin/img/shape/circle.svg') }}" alt="Rect Shape" class="bg-circle-shape">
+                <img src="{{ static_asset('admin/img/shape/circle-block.svg') }}" alt="Rect Shape" class="bg-circle-block-shape">
 
-                <form action="{{ route('reset-password', [$email, $resetCode]) }}" class="form-validate" method="post">
-                    @csrf
-                    <div class="mb-3">
-                        <div class="form-label-group">
-                            <label class="form-label" for="default-01">{{ __('password') }}</label>
-                        </div>
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="default-01"
-                               placeholder="{{ __('password') }}" required>
-                        @if($errors->has('password'))
-                            <div class="invalid-feedback help-block">
-                                <p>{{ $errors->first('password') }}</p>
+                <div class="login-form bg-white rounded-20">
+                    <div class="logo">
+                        <a href="{{ url('/') }}" class="">
+                            <img class="logo mx-auto d-block mb-30" src="{{ static_asset('website/images/logo/logo.png')}}" alt="Corporate Logo">
+                        </a>
+                    </div>
+                    <h3>{{__('confirm_your_password') }}</h3>
+                    <form method="POST" action="{{ route('user.password-update') }}" class="form needs-validation" novalidate>
+                        @csrf
+                        {{--                            <input type="hidden" name="otp" value="{{ $otp_request->otp }}" required>--}}
+                        {{--                            <input type="hidden" name="email" value="{{ $otp_request->user->email }}" required>--}}
+                        <div class="row">
+                            <div class="col-12 password-input">
+                                <label for="password">{{__('password') }} *</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Choose Password" data-lpignore="true" required>
+                                <x-input-error :messages="$errors->get('password')" class="mt-2 nk-block-des text-danger" />
+                                <div class="invalid-feedback">
+                                    {{__('please_add_a_password') }}.
+                                </div>
+                                <div class="valid-feedback">
+                                    {{__('looks_good') }}!
+                                </div>
+                                <span id="#password" class="fa fa-fw fa-eye toggle-password"></span>
+                                @if($errors->has('password'))
+                                    <div class="nk-block-des text-danger">
+                                        <p>{{ $errors->first('password') }}</p>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-label-group">
-                            <label class="form-label" for="default-01">{{ __('confirm_password') }}</label>
-                        </div>
-                        <input type="password" name="password_confirmation" class="form-control  @error('confirm_password') is-invalid @enderror" id="default-01"
-                               placeholder="{{ __('confirm_password') }}" required>
-                        @if($errors->has('password_confirmation'))
-                            <div class="invalid-feedback help-block">
-                                <p>{{ $errors->first('password_confirmation') }}</p>
+                            <div class="col-12 password-input mt-2">
+                                <label for="password_confirmation">{{__('confirm_password') }}</label>
+                                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Choose Password" data-lpignore="true" required>
+                                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 nk-block-des text-danger" />
+                                <div class="invalid-feedback">
+                                    {{__('please_add_a_confirm_password') }}.
+                                </div>
+                                <div class="valid-feedback">
+                                    {{__('looks_good') }}!
+                                </div>
+                                <span id="#password_confirmation" class="fa fa-fw fa-eye toggle-password"></span>
+                                @if($errors->has('password_confirmation'))
+                                    <div class="nk-block-des text-danger">
+                                        <p>{{ $errors->first('password_confirmation') }}</p>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-label-group">
-                            <label class="form-label" for="password"></label>
-                            <a class="" href="{{route('login')}}">{{ __('login') }}?</a>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="mb-20"><button type="submit" class="btn btn-lg sg-btn-primary d-block w-100">{{__('login')}}</button></div>
-                    </div>
-                </form>
-                  <div class="form-note-s2 pt-4"> {{ __('new_on_our_platform') }} <a
-                          href="{{ route('register') }}">{{ __('sign_up_here') }}</a>
-                  </div>
-              </div>
-          </div>
+                        <div class="mb-30 mt-20"><button type="submit" class="btn btn-lg sg-btn-primary d-block w-100">{{__('submit')}}</button></div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
-@endsection
+    </div>
+</section>
+<!-- JS Files -->
+<!--====== jQuery ======-->
+<script src="{{ static_asset('admin/js/jquery.min.js') }}"></script>
+<!--====== Bootstrap & Popper JS ======-->
+<script src="{{ static_asset('admin/js/bootstrap.bundle.min.js') }}"></script>
+<!--====== NiceScroll ======-->
+<script src="{{ static_asset('admin/js/jquery.nicescroll.min.js') }}"></script>
+<!--====== Bootstrap-Select JS ======-->
+<script src="{{ static_asset('admin/js/choices.min.js') }}"></script>
+<!--====== Summernote JS ======-->
+<script src="{{ static_asset('admin/js/summernote-lite.min.js') }}"></script>
+<!--====== Dropzone JS ======-->
+
+<!--====== ReCAPTCHA ======-->
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<!--====== MainJS ======-->
+<script src="{{ static_asset('admin/js/app.js') }}"></script>
+
+<script src="{{ static_asset('admin/js/toastr.min.js') }}"></script>
+{!! Toastr::message() !!}
+@if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
+    <script type="text/javascript">
+        var onloadCallback = function() {
+            grecaptcha.render('html_element', {
+                'sitekey' : '{{setting('recaptcha_site_key')}}',
+                'size' : 'md'
+            });
+        };
+    </script>
+@endif
+</body>
+</html>
+

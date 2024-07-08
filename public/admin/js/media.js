@@ -51,6 +51,10 @@ $(document).ready(function () {
         load_modal_content();
     });
 
+    $(document).on('click', '#uploadMedia', function () {
+        // Dropzone.forElement("form#media-upload").removeAllFiles(true);
+        console.log("upload_done");
+    });
     $(document).on('change', '.media_selector', function () {
 
         var id = $(this).val();
@@ -88,6 +92,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.add-selected', function () {
+        console.log("upload_done_selected");
         selector.find('.selected-files .selected-files-item').addClass('d-none');
         for (let i = 0; i < selected_images.length; i++) {
             getImages(selected_images[i]);

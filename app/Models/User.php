@@ -2,119 +2,122 @@
 
 namespace App\Models;
 
-use App\Models\RoleUser;
-use App\Enums\StatusEnum;
-use App\Models\Account\Account;
-use App\Models\Account\FundTransfer;
-use Illuminate\Auth\Authenticatable;
-use App\Models\Account\CompanyAccount;
-use App\Models\Account\MerchantAccount;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
-use Cartalyst\Sentinel\Users\EloquentUser;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-use Illuminate\Foundation\Auth\User as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Authenticatable as ContractAuthenticatable;
-
-class User extends EloquentUser implements JWTSubject,ContractAuthenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, Authenticatable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-
+    use HasApiTokens, HasFactory, Notifiable;
+    use \Illuminate\Auth\Authenticatable;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone_country_id',
+        'phone',
         'password',
         'permissions',
-        'dashboard',
+        'user_type',
+        'firebase_auth_id',
+        'language_id',
+        'currency_id',
+        'client_id',
+        'images',
+        'role_id',
+        'address',
+        'country_id',
+        'about',
+        'status',
+        'is_newsletter_enabled',
+        'is_notification_enabled',
+        'email_verified_at',
+        'is_user_banned',
+        'onesignal_player_id',
+        'is_onesignal_subscribed',
+        'is_primary',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
+    protected $hidden   = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'permissions' => 'array',
-        'shops' => 'array',
-        'status' => StatusEnum::class,
-
+    protected $casts    = [
+        'permissions'         => 'array',
+        'images'              => 'array',
+        'onesignal_player_id' => 'array',
     ];
 
+    public function getNameAttribute(): string
+    {
+        return $this->first_name.' '.$this->last_name;
+    }
+
+    public function getProfilePicAttribute(): string
+    {
+        return arrayCheck('image_40x40', $this->images) && is_file_exists($this->images['image_40x40'], $this->images['storage']) ?
+            get_media($this->images['image_40x40'], $this->images['storage']) : static_asset('images/default/user.jpg');
+    }
+
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function lastActivity(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ActivityLog::class)->latest();
+    }
+
+    public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function phoneCountry(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'phone_country_id');
+    }
+
+    public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function language(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function client_staff()
+    {
+        return $this->hasOne(ClientStaff::class, 'user_id');
+    }
 
     public function scopeActive($query)
     {
-        return $query->where('status', StatusEnum::ACTIVE);
+        return $query->where('status', 1);
     }
 
-    public static function byEmail($email){
-        return static::whereEmail($email)->first();
-
-    }
-
-    public static function byPhoneNumber($phone_number){
-        return static::wherePhoneNumber($phone_number)->first();
-
-    }
-
-    public function image()
+    public function scopeNotBanned($query)
     {
-        return $this->belongsTo(Image::class);
+        return $query->where('is_user_banned', 0);
     }
 
-
-    public function merchant()
+    public function scopeNotDeleted($query)
     {
-        return $this->hasOne(Merchant::class);
-    }
-    public function roleUser()
-    {
-        return $this->hasOne(RoleUser::class);
-    }
-
-    public function deliveryMan()
-    {
-        return $this->hasOne(DeliveryMan::class);
-    }
-
-    public function bankAccount()
-    {
-        return $this->hasOne(Account::class);
-    }
-
-    public function fromAccount()
-    {
-        return $this->hasManyThrough(FundTransfer::class, Account::class, 'user_id', 'from_account_id', 'id', 'id');
-    }
-
-    public function toAccount()
-    {
-        return $this->hasManyThrough(FundTransfer::class, Account::class, 'user_id', 'to_account_id', 'id', 'id');
-    }
-
-    public function companyAccount()
-    {
-        return $this->hasMany(CompanyAccount::class);
+        return $query->where('is_deleted', 0);
     }
 
     public function getJWTIdentifier()
@@ -122,88 +125,30 @@ class User extends EloquentUser implements JWTSubject,ContractAuthenticatable
         return $this->getKey();
     }
 
-    public function branch(){
-        return $this->belongsTo(Branch::class);
-    }
-
-    public function accounts($id)
+    public function getJWTCustomClaims(): array
     {
-        return $this->hasMany(Account::class)->where('user_id', $id)->get();
+        return [];
     }
 
-    public function getJWTCustomClaims()
+    public function client()
     {
-        return [
-            'id'              => $this->id,
-            'name'            => $this->name,
-            'email'           => $this->email,
-            'created_at'      => $this->created_at,
-            'updated_at'      => $this->updated_at,
-        ];
+        return $this->belongsTo(Client::class);
     }
 
-    public function staffMerchant()
+    public function clientStaff()
     {
-        return $this->belongsTo(Merchant::class, 'merchant_id');
+        return $this->hasOne(ClientStaff::class, 'user_id', 'id');
     }
 
-    public function balance($id)
+    public function activeSubscription(): HasOne
     {
-        $user = User::find($id);
-        $parcels = Parcel::where('merchant_id', $user->merchant_id)
-            ->where(function ($query) {
-                $query->where('is_partially_delivered', '=', 1)
-                    ->orWhereIn('status',['delivered','delivered-and-verified']);
-            })
-            ->when(!in_array('all_parcel_payment',$user->permissions), function ($q) use ($id){
-                $q->where('user_id', $id);
-            })
-            ->where("withdraw_id", "=", null)
-            ->where('is_paid',false)
-            ->get();
-
-
-        $payable   = $parcels->sum('payable');
-
-        $merchant_accounts = MerchantAccount::where('merchant_id', $user->merchant_id)
-            ->where(function ($query) use ($user){
-                $query->whereHas('parcel',function ($query) use ($user){
-                    $query->when(!in_array('all_parcel_payment', $user->permissions), function ($inner) use ($user){
-                        $inner->where('user_id', $user->id);
-                    });
-                })
-                ->whereIn('source', ['parcel_return','paid_parcels_delivery_reverse'])
-                ->orWhere(function ($q){
-                    $q->where('source','vat_adjustment')
-                        ->whereIn('details',['govt_vat_for_parcel_return','govt_vat_for_parcel_return_reversed']);
-                });
-            })
-            ->where('payment_withdraw_id', null)->where('is_paid',false)->get();
-
-        $income = $merchant_accounts->where('type', 'income')->sum('amount');
-        $expense = $merchant_accounts->where('type', 'expense')->sum('amount');
-
-        $current_payable = $payable + $income - $expense;
-
-        return $current_payable;
+        return $this->hasOne(Subscription::class, 'client_id', 'client_id')->latest()->where('purchase_date', '<=', now())
+            ->where('expire_date', '>=', now())->where('status', 1);
     }
 
-
-    public static function boot()
+    public function pendingSubscription(): HasOne
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $user = Sentinel::check();
-            // $model->created_by = $user ? $user->id : null;
-            $model->created_at = date('Y-m-d H:i:s');
-        });
-
-        static::updating(function ($model) {
-            $user = Sentinel::check();
-            $model->updated_by = $user ? $user->id : null;
-            $model->updated_at = date('Y-m-d H:i:s');
-        });
+        return $this->hasOne(Subscription::class, 'client_id', 'client_id')->where('purchase_date', '<=', now())
+            ->where('expire_date', '>=', now())->where('status', 0)->latest();
     }
-
 }

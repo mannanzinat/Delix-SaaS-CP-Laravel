@@ -1,0 +1,14 @@
+{
+    "name": "ChatWidget",
+    "description": "ChatWidget is a versatile addon for integrating a floating chat widget into your web application.",
+    "version": "1.0.0",
+    "author": "SpaGreen Creative",
+    "author_url": "https://codecanyon.net/user/spagreen/portfolio",
+    "tag": "Social Chat Widget, Chat Widget, Addon, Floating chat widget",
+    "addon_identifier": "chat_widget",
+    "required_cms_version": "190",
+    "required_app_version": "190",
+    "license": "General Public License",
+    "license_url": "https://mit-license.org/GPL",
+    "terms": "This software is licensed under the GPL for those who have purchased it via CodeCanyon. Redistribution is prohibited without proper licensing."
+}

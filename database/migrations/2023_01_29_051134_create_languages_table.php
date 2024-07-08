@@ -1,10 +1,9 @@
 <?php
 
 use App\Models\Language;
-use App\Enums\StatusEnum;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -21,10 +20,7 @@ return new class extends Migration
             $table->string('locale', 30)->unique()->index();
             $table->string('flag', 50)->nullable();
             $table->string('text_direction', 30)->default('ltr')->nullable();
-            $table->enum('status', [
-                StatusEnum::ACTIVE->value,
-                StatusEnum::INACTIVE->value,
-            ])->default(StatusEnum::ACTIVE->value);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
 
@@ -32,11 +28,6 @@ return new class extends Migration
             'name'      => 'English',
             'locale'    => 'en',
             'flag'      => 'images/flags/us.png'
-        ]);
-        Language::create([
-            'name'      => 'Bengali',
-            'locale'    => 'bn',
-            'flag'      => 'images/flags/bd.png'
         ]);
     }
 

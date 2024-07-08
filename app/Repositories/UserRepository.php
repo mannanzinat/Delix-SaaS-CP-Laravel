@@ -1,342 +1,250 @@
 <?php
 
 namespace App\Repositories;
-use Image;
+
+use App\Models\Client;
+use App\Models\OneSignalToken;
 use App\Models\User;
-use App\Models\RoleUser;
-use App\Enums\StatusEnum;
-use App\Traits\CommonHelperTrait;
-use App\Traits\RepoResponseTrait;
-use Illuminate\Support\Facades\DB;
-use App\Models\Image as ImageModel;
-use App\Traits\ApiReturnFormatTrait;
-use App\Repositories\Interfaces\UserInterface;
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Cartalyst\Sentinel\Laravel\Facades\Activation;
+use App\Traits\ImageTrait;
+use App\Traits\SendMailTrait;
 
-class UserRepository implements UserInterface {
-    use RepoResponseTrait, ApiReturnFormatTrait;
+class UserRepository
+{
+    use ImageTrait, SendMailTrait;
 
-    private $model;
+    protected $emailTemplate;
 
-    public function __construct(User $model)
+    public function __construct(EmailTemplateRepository $emailTemplate)
     {
-        $this->model = $model;
+        $this->emailTemplate = $emailTemplate;
     }
 
-    public function all()
+    public function index($data)
     {
-        return User::get();
-    }
-
-    public function paginate($limit)
-    {
-        return User::where('id', '!=', \Sentinel::getUser()->id)->where('id', '!=', '1')->where('user_type', 'staff')->paginate($limit);
-    }
-
-    public function get($id)
-    {
-        return User::with('roleUser')->find($id);
-    }
-
-
-
-    public function store($request)
-    {
-
-        DB::beginTransaction();
-        try{
-
-            if (!blank($request->file('image'))) {
-
-                $requestImage           = $request->file('image');
-                $fileType               = $requestImage->getClientOriginalExtension();
-                $originalImage          = date('YmdHis') . "_original_" . rand(1, 50) . '.' . $fileType;
-                $imageSmallOne          = date('YmdHis') . "image_small_one" . rand(1, 50) . '.' . $fileType;
-                $imageSmallTwo          = date('YmdHis') . "image_small_two" . rand(1, 50) . '.' . $fileType;
-                $imageSmallThree        = date('YmdHis') . "image_small_three" . rand(1, 50) . '.' . $fileType;
-                $directory              = 'admin/profile-images/';
-
-                $storagePath = public_path($directory);
-                if (!is_dir($storagePath)) {
-                    mkdir($storagePath, 0755, true);
-                }
-                $originalImageUrl       = $storagePath . $originalImage;
-                $imageSmallOneUrl       = $storagePath . $imageSmallOne;
-                $imageSmallTwoUrl       = $storagePath . $imageSmallTwo;
-                $imageSmallThreeUrl     = $storagePath . $imageSmallThree;
-
-                Image::make($requestImage)->save($originalImageUrl, 80);
-                Image::make($requestImage)->fit(32, 32)->save($imageSmallOneUrl, 80);
-                Image::make($requestImage)->fit(40, 40)->save($imageSmallTwoUrl, 80);
-                Image::make($requestImage)->fit(80, 80)->save($imageSmallThreeUrl, 80);
-
-                $image                          = new ImageModel();
-                $image->original_image          =  static_asset($directory . $originalImage);
-                $image->image_small_one         =  static_asset($directory . $imageSmallOne);
-                $image->image_small_two         =  static_asset($directory . $imageSmallTwo);
-                $image->image_small_three       =  static_asset($directory . $imageSmallThree);;
-                $image->save();
-
-            }
-
-            $user = new User();
-            $user->first_name    = $request->first_name;
-            $user->last_name     = $request->last_name;
-            $user->email         = $request->email;
-            $user->dashboard     = $request->dashboard;
-            $user->password      = bcrypt($request->password);
-            $user->permissions   = isset($request->permissions) ? $request->permissions : [];
-            $user->image_id      = $image->id ?? null;
-            $user->branch_id     = $request->branch ? $request->branch : null;
-            $user->save();
-
-            $role                = new RoleUser();
-            $role->user_id       = $user->id;
-            $role->role_id       = $request->role;
-            $role->save();
-
-            $activation = Activation::create($user);
-            Activation::complete($user, $activation->code);
-            //$superAdminRole->users()->attach($superAdmin);
-
-            DB::commit();
-            return true;
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return false;
+        if (! arrayCheck('paginate', $data)) {
+            $data['paginate'] = setting('pagination');
         }
+
+        return User::paginate($data['paginate']);
     }
 
-    public function update($request)
+    public function store($data)
     {
-        DB::beginTransaction();
-        try{
-
-            $user = User::find($request->id);
-
-            if (!blank($request->file('image'))) {
-
-                $image           = ImageModel::find($user->image_id);
-
-                if(!blank($image)):
-                    if($image->original_image != "" && file_exists($image->original_image)):
-                        unlink($image->original_image);
-                    endif;
-                    if($image->image_small_one != "" && file_exists($image->image_small_one)):
-                        unlink($image->image_small_one);
-                    endif;
-                    if($image->image_small_two != "" && file_exists($image->image_small_two)):
-                        unlink($image->image_small_two);
-                    endif;
-                    if($image->image_small_three != "" && file_exists($image->image_small_three)):
-                        unlink($image->image_small_three);
-                    endif;
-                else:
-                    $image              = new ImageModel();
-                endif;
-
-                $requestImage           = $request->file('image');
-                $fileType               = $requestImage->getClientOriginalExtension();
-                $originalImage          = date('YmdHis') . "_original_" . rand(1, 50) . '.' . $fileType;
-                $imageSmallOne          = date('YmdHis') . "image_small_one" . rand(1, 50) . '.' . $fileType;
-                $imageSmallTwo          = date('YmdHis') . "image_small_two" . rand(1, 50) . '.' . $fileType;
-                $imageSmallThree        = date('YmdHis') . "image_small_three" . rand(1, 50) . '.' . $fileType;
-                $directory              = 'admin/profile-images/';
-
-                $storagePath = public_path($directory);
-                if (!is_dir($storagePath)) {
-                    mkdir($storagePath, 0755, true);
-                }
-
-                $originalImageUrl       = $storagePath . $originalImage;
-                $imageSmallOneUrl       = $storagePath . $imageSmallOne;
-                $imageSmallTwoUrl       = $storagePath . $imageSmallTwo;
-                $imageSmallThreeUrl     = $storagePath . $imageSmallThree;
-
-                Image::make($requestImage)->save($originalImageUrl, 80);
-                Image::make($requestImage)->fit(32, 32)->save($imageSmallOneUrl, 80);
-                Image::make($requestImage)->fit(80, 80)->save($imageSmallTwoUrl, 80);
-                Image::make($requestImage)->fit(80, 80)->save($imageSmallThreeUrl, 80);
-
-                $image->original_image          =  static_asset($directory . $originalImage);
-                $image->image_small_one         =  static_asset($directory . $imageSmallOne);
-                $image->image_small_two         =  static_asset($directory . $imageSmallTwo);
-                $image->image_small_three       =  static_asset($directory . $imageSmallThree);;
-                $image->save();
-                $user->image_id                 = $image->id;
-
-            }
-
-            $user->first_name                   = $request->first_name;
-            $user->last_name                    = $request->last_name;
-            $user->email                        = $request->email;
-            $user->branch_id                    = $request->branch ? $request->branch : null;
-            $user->dashboard                    = $request->dashboard;
-
-            if($request->password != ""):
-                $user->password                 = bcrypt($request->password);
-            endif;
-            $user->permissions                  = isset($request->permissions) ? $request->permissions : [];
-            $user->save();
-
-            $existingRole                       = RoleUser::where('user_id', $user->id)->first();
-
-            if ($existingRole) {
-                $existingRole->role_id          = $request->role;
-                $existingRole->save();
-            } else {
-                RoleUser::create([
-                    'user_id' => $user->id,
-                    'role_id' => $request->role,
-                ]);
-            }
-
-            DB::commit();
-            return true;
-
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-            DB::rollback();
-            return false;
+        if (arrayCheck('image', $data)) {
+            $data['image'] = $this->getImageWithRecommendedSize($data['image'], 260, 175);
         }
+        $data['password'] = bcrypt($data['password']);
+
+        return User::create($data);
     }
 
-    public function delete($id)
+    public function find($id)
     {
-        DB::beginTransaction();
-        try{
-
-            $user  = User::find($id);
-            $image = ImageModel::find($user->image_id);
-            if(!blank($image)):
-                if($image->original_image != "" && file_exists($image->original_image)):
-                    unlink($image->original_image);
-                endif;
-                if($image->image_small_one != "" && file_exists($image->image_small_one)):
-                    unlink($image->image_small_one);
-                endif;
-                if($image->image_small_two != "" && file_exists($image->image_small_two)):
-                    unlink($image->image_small_two);
-                endif;
-                if($image->image_small_three != "" && file_exists($image->image_small_three)):
-                    unlink($image->image_small_three);
-                endif;
-                $image->delete();
-            else:
-                $user->delete();
-            endif;
-
-            DB::commit();
-            return true;
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return false;
-        }
+        return User::find($id);
     }
 
+    public function totalUser()
+    {
+        return User::all()->whereNotIn('user_type', ['admin'])->count();
+    }
+
+    public function update($request, $id)
+    {
+        $user   = User::findOrFail($id);
+
+        if (arrayCheck('image', $request)) {
+            $requestImage      = $request['image'];
+            $response          = $this->saveImage($requestImage, '_user_');
+            $request['images'] = $response['images'];
+        }
+        if (arrayCheck('password', $request)) {
+            $request['password'] = bcrypt($request['password']);
+        }
+        $user->update($request);
+
+     
+
+        if (auth()->user()->user_type == 'client-staff') {
+            $client = Client::findOrFail($user->client_id);
+            $client->update($request);
+            $staff           = $user->client_staff;
+            $request['slug'] = getSlug('clients', $user->name, 'slug', $staff->id);
+
+            return $staff->update($request);
+        }
+
+    }
+
+    public function destroy($id): int
+    {
+        return User::destroy($id);
+    }
+
+    public function findByEmail($mail)
+    {
+        return User::where('email', $mail)->first();
+    }
+
+    public function searchUsers($relation, $data): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return User::with($relation)->when(arrayCheck('search', $data), function ($query) use ($data) {
+            $query->where('name', 'like', '%'.$data['search'].'%');
+        })->when(arrayCheck('role_id', $data), function ($query) use ($data) {
+            $query->where('role_id', $data['role_id']);
+        })->when(arrayCheck('status', $data), function ($query) use ($data) {
+            $query->where('status', $data['status'])->where('is_user_banned', 0)->where('is_deleted', 0);
+        })->when(arrayCheck('ids', $data), function ($query) use ($data) {
+            $query->whereIn('id', $data['ids']);
+        })->when(arrayCheck('role_id', $data) && $data['role_id'] == 2, function ($query) use ($data) {
+            $query->whereHas('instructor.organization', function ($query) use ($data) {
+                $query->when(arrayCheck('organization_id', $data), function ($query) use ($data) {
+                    $query->where('id', $data['organization_id']);
+                });
+            });
+        })->when(arrayCheck('instructor_student', $data), function ($query) use ($data) {
+            $query->whereHas('checkout', function ($query) use ($data) {
+                $query->whereHas('enrolls', function ($query) use ($data) {
+                    $query->whereIn('enrollable_id', $data['total_course'])->where('enrollable_type', Course::class);
+                });
+            });
+        })->latest()->paginate($data['paginate']);
+    }
+
+    public function findUsers($data, $relation = [])
+    {
+        return User::with($relation)->when(arrayCheck('role_id', $data) && $data['role_id'] == 2, function ($query) {
+            $query->where('role_id', 2)->whereHas('instructor.organization');
+        })->when(arrayCheck('role_id', $data) && ! is_array($data['role_id']), function ($query) use ($data) {
+            $query->where('role_id', $data['role_id']);
+        })->when(arrayCheck('role_id', $data) && is_array($data['role_id']), function ($query) use ($data) {
+            $query->whereIn('role_id', $data['role_id']);
+        })->when(arrayCheck('q', $data), function ($query) use ($data) {
+            $query->where(function ($query) use ($data) {
+                $query->where('first_name', 'like', '%'.$data['q'].'%')->orWhere('last_name', 'like', '%'.$data['q'].'%')
+                    ->orWhere('email', 'like', '%'.$data['q'].'%')->orWhere('phone', 'like', '%'.$data['q'].'%');
+            });
+        })->when(arrayCheck('ids', $data), function ($query) use ($data) {
+            $query->whereIn('id', $data['ids']);
+        })->when(arrayCheck('status', $data), function ($query) use ($data) {
+            $query->where('status', $data['status'])->where('is_user_banned', 0)->where('is_deleted', 0);
+        })->where('role_id', '!=', 1)->when(arrayCheck('take', $data), function ($query) use ($data) {
+            $query->take($data['take']);
+        })->when(arrayCheck('onesignal', $data), function ($query) {
+            $query->where('is_onesignal_subscribed', 1);
+        })->when(arrayCheck('organization_id', $data), function ($query) use ($data) {
+            $query->whereHas('instructor', function ($query) use ($data) {
+                $query->where('organization_id', $data['organization_id']);
+            });
+        })->get();
+    }
 
     public function statusChange($request)
     {
-        try {
-            DB::beginTransaction();
-            $row                = $this->model->find($request->id);
-            if ($row->status == StatusEnum::ACTIVE) {
-                $row->status    = StatusEnum::INACTIVE;
-            } elseif ($row->status == StatusEnum::INACTIVE) {
-                $row->status    = StatusEnum::ACTIVE;
-            }
-            $row->save();
-            DB::commit();
-            return $this->responseWithSuccess('updated successfully', []);
-        } catch (\Throwable $th) {
-            dd($th->getMessage());
-            DB::rollback();
-            return $this->responseWithError($th->getMessage(), []);
+        $id            = $request['id'];
+        $status        = $request['status'];
+        $staff         = User::findOrfail($id);
+        $staff->status = $status;
+        $staff->save();
+
+        return true;
+    }
+
+    public function userVerified($id)
+    {
+        $staff = User::findOrfail($id);
+        $data  = [
+            'user'            => $staff,
+            'email_templates' => $this->emailTemplate->welcomeMail(),
+            'template_title'  => 'Welcome Email',
+        ];
+
+        if (! empty($staff->email_verified_at)) {
+            $staff->email_verified_at = null;
+            $staff->save();
+            $data                     = [
+                'status'  => true,
+                'message' => __('verified_remove_successful'),
+            ];
+
+            return $data;
+        } else {
+            $staff->email_verified_at = date('Y-m-d H:i:s');
+            $this->sendmail($staff->email, 'emails.template_mail', $data);
+            $staff->save();
+            $data                     = [
+                'status'  => true,
+                'message' => __('verified_this_successful'),
+            ];
+
+            return $data;
         }
     }
 
-
-
-    public function updateProfile($request)
+    public function userBan($id)
     {
-        DB::beginTransaction();
-        try{
-            $id    = Sentinel::getUser()->id ?? jwtUser()->id;
-
-            $user  = User::find($id);
-
-            if (!blank($request->file('image'))) {
-
-                $image           = ImageModel::find($user->image_id);
-
-                if(!blank($image)):
-                    if($image->original_image != "" && file_exists($image->original_image)):
-                        unlink($image->original_image);
-                    endif;
-                    if($image->image_small_one != "" && file_exists($image->image_small_one)):
-                        unlink($image->image_small_one);
-                    endif;
-                    if($image->image_small_two != "" && file_exists($image->image_small_two)):
-                        unlink($image->image_small_two);
-                    endif;
-                    if($image->image_small_three != "" && file_exists($image->image_small_three)):
-                        unlink($image->image_small_three);
-                    endif;
-                else:
-                    $image     = new ImageModel();
-                endif;
-
-                $requestImage           = $request->file('image');
-                $fileType               = $requestImage->getClientOriginalExtension();
-
-                $originalImage          = date('YmdHis') . "_original_" . rand(1, 50) . '.' . $fileType;
-                $imageSmallOne          = date('YmdHis') . "image_small_one" . rand(1, 50) . '.' . $fileType;
-                $imageSmallTwo          = date('YmdHis') . "image_small_two" . rand(1, 50) . '.' . $fileType;
-                $imageSmallThree        = date('YmdHis') . "image_small_three" . rand(1, 50) . '.' . $fileType;
-
-                $directory              = 'admin/profile-images/';
-
-                $storagePath            = public_path($directory);
-                if (!is_dir($storagePath)) {
-                    mkdir($storagePath, 0755, true);
-                }
-
-                $originalImageUrl       = $storagePath . $originalImage;
-                $imageSmallOneUrl       = $storagePath . $imageSmallOne;
-                $imageSmallTwoUrl       = $storagePath . $imageSmallTwo;
-                $imageSmallThreeUrl     = $storagePath . $imageSmallThree;
-
-                Image::make($requestImage)->save($originalImageUrl, 80);
-                Image::make($requestImage)->fit(32, 32)->save($imageSmallOneUrl, 80);
-                Image::make($requestImage)->fit(80, 80)->save($imageSmallTwoUrl, 80);
-                Image::make($requestImage)->fit(80, 80)->save($imageSmallThreeUrl, 80);
-
-                $image->original_image          =  static_asset($directory . $originalImage);
-                $image->image_small_one         =  static_asset($directory . $imageSmallOne);
-                $image->image_small_two         =  static_asset($directory . $imageSmallTwo);
-                $image->image_small_three       =  static_asset($directory . $imageSmallThree);
-                $image->save();
-                $user->image_id    = $image->id;
-            }
-
-            $user->first_name    = $request->first_name;
-            $user->last_name     = $request->last_name;
-            $user->email         = $request->email;
-            if($user->user_type == 'merchant_staff'):
-                $user->phone_number = $request->phone_number;
-            endif;
-
-            $user->save();
-
-            DB::commit();
-            return true;
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return false;
+        $staff = user::findOrfail($id);
+        if ($staff->is_user_banned == 0) {
+            $staff->is_user_banned = 1;
+            $staff->save();
+            $data                  = [
+                'status'  => true,
+                'message' => __('successfully_banned_this_person'),
+            ];
+        } else {
+            $staff->is_user_banned = 0;
+            $staff->save();
+            $data                  = [
+                'status'  => true,
+                'message' => __('active_this_successful'),
+            ];
         }
+
+        return $data;
+    }
+
+    public function userDelete($id)
+    {
+        $staff = user::findOrfail($id);
+        if ($staff->is_deleted == 0) {
+            $staff->is_deleted = 1;
+            $staff->save();
+            $data              = [
+                'status'  => true,
+                'message' => __('delete_successful'),
+            ];
+        } else {
+            $staff->is_deleted = 0;
+            $staff->save();
+            $data              = [
+                'status'  => true,
+                'message' => __('restore_successful'),
+            ];
+        }
+
+        return $data;
+    }
+
+    public function oneSignalSubscription($data)
+    {
+        $current_id  = $data['current']['id'];
+        $previous_id = $data['previous']['id'];
+        $token       = OneSignalToken::where('subscription_id', $previous_id)->first();
+        if ($token) {
+            $token->update([
+                'subscription_id' => $current_id,
+                'token'           => $data['current']['token'],
+            ]);
+        } else {
+            $if_exists_current = OneSignalToken::where('subscription_id', $current_id)->first();
+            if (! $if_exists_current) {
+                $token = OneSignalToken::create([
+                    'client_id'       => auth()->user()->client_id,
+                    'subscription_id' => $current_id,
+                    'token'           => $data['current']['token'],
+                ]);
+            }
+        }
+
+        return $token;
     }
 }

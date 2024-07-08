@@ -13,6 +13,7 @@ trait UpdateTrait
 
     public function recurse_copy($src, $dst)
     {
+        // return $src;
         $dir = opendir($src);
 
         if (! is_dir($dst)) {
@@ -90,7 +91,7 @@ trait UpdateTrait
         }
         closedir($dir_handle);
         if ($is_remove) {
-            rmdir($dirname, 0777);
+            rmdir($dirname);
         }
 
         return true;
@@ -100,21 +101,21 @@ trait UpdateTrait
     {
         try {
             $script_url   = str_replace('admin/update-system', '', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-            $fields       = [
-                'domain'        => urlencode($_SERVER['SERVER_NAME']),
-                'version'       => getArrayValue('version', $data, setting('current_version') + 1),
-                'item_id'       => '47989504',
-                'purchase_code' => urlencode(setting('purchase_code')),
-                'url'           => urlencode($script_url),
-                'is_beta'       => config('app.dev_mode') ? 1 : 0,
-            ];
 
-            $request      = curlRequest('https://license.spagreen.net/verify-installation-v2', $fields);
+            $fields       = [
+                'domain'          => urlencode($_SERVER['SERVER_NAME']),
+                'current_version' => (int) setting('current_version'),
+                'item_id'         => '51330626',
+                'activation_code' => urlencode(setting('activation_code')),
+                'url'             => urlencode($script_url),
+                'is_beta'         => config('app.beta_channel') ? 1 : 0,
+            ];
+            $request      = curlRequest('https://license.spagreen.net/update-installation', $fields);
 
             if (property_exists($request, 'status') && $request->status) {
                 $response = $request->status;
             } else {
-                return 'Something went wrong with your purchase code/Contact with Script Author';
+                return 'Please ensure that your activation code has been properly configured in the system settings, or verify that your domain name and purchase code are valid.';
             }
 
             $zip_file     = $request->release_zip_link;
@@ -127,8 +128,6 @@ trait UpdateTrait
 
                     return 'Zip file cannot be Imported. Please check your server permission or Contact with Script Author.';
                 }
-            } else {
-                return 'Zip file cannot be Imported. Please check your server permission or Contact with Script Author.';
             }
 
             if (file_exists($file_path)) {
@@ -149,8 +148,8 @@ trait UpdateTrait
                 return 'Config File Not Found, Please Try Again';
             }
 
-            $version      = isAppMode() ? $config['app_version'] : $config['web_version'];
-            $version_code = isAppMode() ? $config['app_version_code'] : $config['web_version_code'];
+            $version      = $config['web_version'];
+            $version_code = $config['web_version_code'];
 
             $code         = Setting::where('title', 'version_code')->first();
             $version_no   = Setting::where('title', 'current_version')->first();
