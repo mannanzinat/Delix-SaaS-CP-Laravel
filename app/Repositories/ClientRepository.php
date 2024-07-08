@@ -23,6 +23,7 @@ use App\Models\User;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use phpseclib3\Net\SSH2;
 
 class ClientRepository
 {
@@ -101,6 +102,13 @@ class ClientRepository
         $request['user_id']              = $user->id;
         $request['client_id']            = $client->id;
         $request['slug']                 = getSlug('clients', $client->company_name);
+        $ssh = new SSH2('178.128.107.213');
+        if ($ssh->login('root', 'manarA@2050a')) {
+            $output = $ssh->exec("clpctl site:add:php --domainName=spagreen.delix.cloud --phpVersion=8.2 --vhostTemplate='Laravel 11' --siteUser='spagreen658635855' --siteUserPassword='Dhaka@2050'");
+            echo $output;
+        } else {
+            echo 'SSH login failed.';
+        }
 
         return ClientStaff::create($request);
 
