@@ -107,6 +107,12 @@ return new class extends Migration
                 'edit'   => 'partner_logo.edit',
                 'delete' => 'partner_logo.destroy',
             ],
+            'cloud_server'   => [
+                'view'   => 'cloud_server.index',
+                'create' => 'cloud_server.create',
+                'edit'   => 'cloud_server.edit',
+                'delete' => 'cloud_server.destroy',
+            ],
             'story_section'   => [
                 'view'   => 'story_section.index',
                 'create' => 'story_section.create',

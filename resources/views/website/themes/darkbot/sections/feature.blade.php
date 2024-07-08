@@ -12,7 +12,6 @@
 		<div class="row">
 			@foreach($features as $index => $feature)
 				@if (!empty($feature))
-					
 				
 				@if ($index == 2)
 						<div class="col-lg-12">

@@ -58,6 +58,7 @@ class RegisteredUserController extends Controller
             $client->first_name           = $request->first_name;
             $client->last_name            = $request->last_name;
             $client->company_name         = $request->company_name;
+            $client->domain               = $request->domain;
             $client->timezone             = $timeZoneService['timezone'] ?? setting('time_zone');
             $client->webhook_verify_token = Str::random(30);
             $client->api_key              = Str::random(30);

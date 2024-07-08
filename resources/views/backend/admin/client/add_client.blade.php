@@ -55,6 +55,20 @@
 										</div>
 									</div>
 									<div class="col-lg-4">
+										<div class="mb-4">
+											<label for="domain"
+												   class="form-label">{{__('domain') }}<span
+														class="text-danger">*</span></label>
+											<input type="text" class="form-control rounded-2" id="domain"
+												   name="domain" value="{{ old('domain') }}" placeholder="{{ __('domain') }}" required>
+											@if ($errors->has('domain'))
+												<div class="nk-block-des text-danger">
+													<p>{{ $errors->first('domain') }}</p>
+												</div>
+											@endif
+										</div>
+									</div>
+									<div class="col-lg-4">
 										@include('backend.common.tel-input', [
 											'name' => 'phone_number',
 											'value' => old('phone_number'),
@@ -143,7 +157,7 @@
 											@endif
 										</div>
 									</div>
-									<div class="col-lg-6 input_file_div">
+									<div class="col-lg-4 input_file_div">
 										<div class="mb-3">
 											<label class="form-label mb-1">{{ __('profile_image') }}</label>
 											<label for="images"
@@ -163,7 +177,7 @@
 										</div>
 									</div>
 
-									<div class="col-lg-6 input_file_div">
+									<div class="col-lg-4 input_file_div">
 										<div class="mb-3">
 											<label class="form-label mb-1">{{ __('logo') }}</label>
 											<label for="logo"
@@ -204,6 +218,14 @@
 @push('css_asset')
 	<link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
 @endpush
-@push('js_asset')
-
+@push('js')
+	<script>
+		$(document).ready(function() {
+			$('#company_name').on('input', function() {
+				var companyName = $(this).val();
+				$('#domain').val(companyName.replace(/\s+/g, '').toLowerCase() + '.delix.cloud');
+			});
+		});
+	</script>
 @endpush
+

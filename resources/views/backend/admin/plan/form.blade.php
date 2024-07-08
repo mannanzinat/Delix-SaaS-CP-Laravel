@@ -68,13 +68,9 @@
                                                     class="text-danger">*</span></label>
                                         <div class="select-type-v2">
                                             <select id="planValidity" name="billing_period" class="form-select form-select-lg mb-3 without_search">
-                                                {{-- <option value="daily" @selected(isset($plan) ? $plan->billing_period == 'daily' : '' )>{{__('daily')}}</option> --}}
-                                                {{-- <option value="weekly" @selected(isset($plan) ? $plan->billing_period == 'weekly' : '' )>{{__('weekly')}}</option> --}}
                                                 <option value="monthly" @selected(isset($plan) ? $plan->billing_period == 'monthly' : '' )>{{__('monthly')}}</option>
-                                                {{-- <option value="quarterly" @selected(isset($plan) ? $plan->billing_period == 'quarterly' : '' )>{{__('quarterly')}}</option> --}}
-                                                {{-- <option value="half_yearly" @selected(isset($plan) ? $plan->billing_period == 'half_yearly' : '' )>{{__('half_yearly')}}</option> --}}
                                                 <option value="yearly" @selected(isset($plan) ? $plan->billing_period == 'yearly' : '' )>{{__('yearly')}}</option>
-                                                {{-- <option value="lifetime" @selected(isset($plan) ? $plan->billing_period == 'lifetime' : '' )>{{__('lifetime')}}</option> --}}
+                                                <option value="lifetime" @selected(isset($plan) ? $plan->billing_period == 'lifetime' : '' )>{{__('lifetime')}}</option>
                                             </select>
                                             <div class="nk-block-des text-danger">
                                                 <p class="billing_period_error error"></p>
@@ -86,11 +82,11 @@
 
                                 <div class="col-lg-3">
                                     <div class="mb-4">
-                                        <label for="contactUploadLimit" class="form-label">{{__('contacts_limit')}}<span
+                                        <label for="active_merchant" class="form-label">{{__('active_merchant')}}<span
                                                     class="text-danger">*</span></label>
-                                        <input type="number" class="form-control rounded-2" id="contactUploadLimit" name="contact_limit" value="{{ isset($plan) ?  $plan->contact_limit : ''}}" placeholder="{{__('contacts_limit')}}" >
+                                        <input type="number" class="form-control rounded-2" id="contactUploadLimit" name="active_merchant" value="{{ isset($plan) ?  $plan->active_merchant : ''}}" placeholder="{{__('active_merchant')}}" >
                                         <div class="nk-block-des text-danger">
-                                            <p class="contact_limit_error error"></p>
+                                            <p class="active_merchant_error error"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -98,12 +94,12 @@
 
                                 <div class="col-lg-3">
                                     <div class="mb-4">
-                                        <label for="campaigns_limit" class="form-label">{{__('campaigns_limit')}}<span
+                                        <label for="monthly_parcel" class="form-label">{{__('monthly_parcel')}}<span
                                                     class="text-danger">*</span></label>
                                         <div class="select-type-v2">
-                                            <input type="number" class="form-control rounded-2" id="campaigns_limit" name="campaigns_limit" value="{{isset($plan) ?  $plan->campaigns_limit : ''}}" placeholder="{{__('campaigns_limit')}}" >
+                                            <input type="number" class="form-control rounded-2" id="monthly_parcel" name="monthly_parcel" value="{{isset($plan) ?  $plan->monthly_parcel : ''}}" placeholder="{{__('monthly_parcel')}}" >
                                             <div class="nk-block-des text-danger">
-                                                <p class="campaigns_limit_error error"></p>
+                                                <p class="monthly_parcel_error error"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -114,23 +110,44 @@
 
                                 <div class="col-lg-4">
                                     <div class="mb-4">
-                                        <label for="conversation_limit" class="form-label">{{__('conversation_limit')}}<span
+                                        <label for="active_rider" class="form-label">{{__('active_rider')}}<span
                                                     class="text-danger">*</span></label>
-                                        <input type="number" class="form-control rounded-2" id="conversation_limit" placeholder="{{__('conversation_limit')}}" name="conversation_limit"
-                                               value="{{isset($plan) ? $plan->conversation_limit : ''}}">
+                                        <input type="number" class="form-control rounded-2" id="active_rider" placeholder="{{__('active_rider')}}" name="active_rider"
+                                               value="{{isset($plan) ? $plan->active_rider : ''}}">
                                         <div class="nk-block-des text-danger">
-                                            <p class="conversation_limit_error error"></p>
+                                            <p class="active_rider_error error"></p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4">
                                     <div class="mb-4">
-                                        <label for="team_limit" class="form-label">{{__('team_limit')}}<span
+                                        <label for="active_staff" class="form-label">{{__('active_staff')}}<span
                                                     class="text-danger">*</span></label>
-                                        <input type="number" class="form-control rounded-2" id="team_limit" name="team_limit" value="{{isset($plan) ? $plan->team_limit : ''}}" placeholder="{{__('team_limit')}}" >
+                                        <input type="number" class="form-control rounded-2" id="active_staff" name="active_staff" value="{{isset($plan) ? $plan->active_staff : ''}}" placeholder="{{__('active_staff')}}" >
                                         <div class="nk-block-des text-danger">
-                                            <p class="team_limit_error error"></p>
+                                            <p class="active_staff_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label for="rider_app" class="form-label">{{__('rider_app')}}<span
+                                                    class="text-danger">*</span></label>
+                                        <input type="number" class="form-control rounded-2" id="rider_app" name="rider_app" value="{{isset($plan) ? $plan->rider_app : ''}}" placeholder="{{__('rider_app')}}" >
+                                        <div class="nk-block-des text-danger">
+                                            <p class="rider_app_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label for="merchant_app" class="form-label">{{__('merchant_app')}}<span
+                                                    class="text-danger">*</span></label>
+                                        <input type="number" class="form-control rounded-2" id="merchant_app" name="merchant_app" value="{{isset($plan) ? $plan->merchant_app : ''}}" placeholder="{{__('merchant_app')}}" >
+                                        <div class="nk-block-des text-danger">
+                                            <p class="merchant_app_error error"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -145,22 +162,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-12 custom-control custom-checkbox contacts-list">
-                                    <div class="mb-4">
-                                        <label class="custom-control-label  pb-4"
-                                               for="telegram_access">
-                                            <input type="checkbox"
-                                                   class="custom-control-input read common-key pb-4"
-                                                   name="telegram_access"
-                                                   value="1"
-                                                   id="telegram_access" {{ isset($plan) && !$plan->telegram_access ? '' : 'checked' }}>
-                                            <span>{{__('telegram_access')}}</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <!-- End Course Upload Limit -->
-
 
                                 @if(setting('is_stripe_activated') && setting('stripe_secret') && setting('stripe_key'))
                                     <div class="col-lg-6">

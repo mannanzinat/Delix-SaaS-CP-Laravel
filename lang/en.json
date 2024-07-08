@@ -2591,5 +2591,22 @@
     "syncing":"Syncing",
     "expires_at":"Expires at",
     "whatsapp_setting_not_found":"WhatsApp setting not found.",
+
+
+    "update_server": "Update Server",
+    "provider": "Provider",
+    "ip": "IP",
+    "user_name": "User Name",
+    "select_provider": "Select Provider",
+    "aws": "AWS",
+    "vuttr": "Vuttr",
+    "digitalization": "Digitalization",
+    "allnet": "All Net",
+    "server_list": "Server List",
+    "server_per_page": "Server Per Page",
+    "add_server": "Add Server",
+    "cloud_server": "Cloud Server",
+    "domain": "Domain",
+    "active_merchant": "Active Merchant",
     "whatsapp_settings_synced_successfully":"WhatsApp settings synced successfully."
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AiWriterController;
 use App\Http\Controllers\Admin\AjaxController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\ServerController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomNotificationController;
@@ -61,6 +62,9 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
         Route::get('language/translations', [LanguageController::class, 'translationPage'])->name('language.translations.page');
         Route::resource('staffs', StaffController::class);
         Route::resource('clients', ClientController::class);
+        Route::resource('cloud-server', ServerController::class);
+
+
         Route::get('login-as/{id}', [AuthenticatedSessionController::class, 'login_as'])->name('login.as');
         Route::resource('pages', PageController::class)->except(['show', 'update']);
         Route::post('pages/update/{id}', [PageController::class, 'update'])->name('pages.update');
@@ -279,6 +283,7 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
     /* ajax request route without route permission for status */
     Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], function () {
         Route::post('onesignal-subscription', [AdminController::class, 'oneSignalSubscription'])->name('admin.onesignal');
+        Route::post('server-status', [ServerController::class, 'statusChange'])->name('server.status');
         Route::post('staffs-status', [StaffController::class, 'statusChange'])->name('staffs.status');
         Route::post('botReplay-status', [BotReplyController::class, 'statusChange'])->name('botReplay.status');
         Route::post('team-status', [TeamController::class, 'statusChange'])->name('team.status');

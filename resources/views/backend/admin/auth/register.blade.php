@@ -45,11 +45,25 @@
                 <div class="mb-30 ">
                   <label for="company_name" class="form-label">{{__('company_name')}}<span
                             class="text-danger">*</span></label>
-                  <input type="text" class="form-control rounded-2" id="first_name"
+                  <input type="text" class="form-control rounded-2" id="company_name"
                          value="{{ old('company_name')}}" name="company_name"
                          placeholder="{{ __('company_name') }}" required autofocus>
                   <x-input-error :messages="$errors->get('company_name')"
                                  class="mt-2 nk-block-des text-danger"/>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-4">
+                  <label for="domain"
+                       class="form-label">{{__('domain') }}<span
+                        class="text-danger">*</span></label>
+                  <input type="text" class="form-control rounded-2" id="domain"
+                       name="domain" value="{{ old('domain') }}" placeholder="{{ __('domain') }}" required>
+                  @if ($errors->has('domain'))
+                    <div class="nk-block-des text-danger">
+                      <p>{{ $errors->first('domain') }}</p>
+                    </div>
+                  @endif
                 </div>
               </div>
               <div class="col-lg-6">
@@ -154,15 +168,23 @@
 <script src="{{ static_asset('admin/js/toastr.min.js') }}"></script>
 {!! Toastr::message() !!}
 
-@if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
-  <script type="text/javascript">
-    var onloadCallback = function() {
-      grecaptcha.render('html_element', {
-        'sitekey' : '{{setting('recaptcha_site_key')}}',
-        'size' : 'md'
+  @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
+    <script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '{{setting('recaptcha_site_key')}}',
+          'size' : 'md'
+        });
+      };
+    </script>
+  @endif
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#company_name').on('input', function() {
+          var companyName = $(this).val();
+          $('#domain').val(companyName.replace(/\s+/g, '').toLowerCase() + '.delix.cloud');
+        });
       });
-    };
-  </script>
-@endif
+    </script>
 </body>
 </html>

@@ -53,10 +53,9 @@
                                         <div class="select-type-v2">
                                             <select id="planValidity" name="validity"
                                                     class="form-select form-select-lg mb-3 without_search">
-                                                <option value="day">{{__('daily')}}</option>
-                                                <option value="week">{{__('weekly')}}</option>
-                                                <option value="month">{{__('monthly')}}</option>
-                                                <option value="year">{{__('yearly')}}</option>
+                                                <option value="monthly">{{__('monthly')}}</option>
+                                                <option value="yearly">{{__('yearly')}}</option>
+                                                <option value="life_time">{{__('life_time')}}</option>
                                             </select>
                                             <div class="nk-block-des text-danger">
                                                 <p class="validity_error error"></p>
@@ -68,31 +67,57 @@
 
                                 <div class="col-lg-3">
                                     <div class="mb-4">
-                                        <label for="contactUploadLimit" class="form-label">{{__('contacts_limit')}}<span
+                                        <label for="active_merchant" class="form-label">{{__('active_merchant')}}<span
                                                     class="text-danger">*</span></label>
-                                        <input type="number" class="form-control rounded-2" id="contactUploadLimit"
-                                               name="contact_limit" placeholder="{{__('contacts_limit')}}">
+                                        <input type="number" class="form-control rounded-2" id="active_merchant"
+                                               name="active_merchant" placeholder="{{__('active_merchant')}}">
                                         <div class="nk-block-des text-danger">
-                                            <p class="contact_limit_error error"></p>
+                                            <p class="active_merchant_error error"></p>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Course Upload Limit -->
 
                                 <div class="col-lg-3">
                                     <div class="mb-4">
-                                        <label for="campaigns_limit" class="form-label">{{__('campaigns_limit')}}<span
+                                        <label for="monthly_parcel" class="form-label">{{__('monthly_parcel')}}<span
                                                     class="text-danger">*</span></label>
                                         <div class="select-type-v2">
-                                            <input type="number" class="form-control rounded-2" id="campaigns_limit"
-                                                   name="campaigns_limit" placeholder="{{__('campaigns_limit')}}">
+                                            <input type="number" class="form-control rounded-2" id="monthly_parcel"
+                                                   name="monthly_parcel" placeholder="{{__('monthly_parcel')}}">
                                             <div class="nk-block-des text-danger">
-                                                <p class="campaigns_limit_error error"></p>
+                                                <p class="monthly_parcel_error error"></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Course Bundle -->
+
+                                <div class="col-lg-3">
+                                    <div class="mb-4">
+                                        <label for="active_rider" class="form-label">{{__('active_rider')}}<span
+                                                    class="text-danger">*</span></label>
+                                        <div class="select-type-v2">
+                                            <input type="number" class="form-control rounded-2" id="active_rider"
+                                                   name="active_rider" placeholder="{{__('active_rider')}}">
+                                            <div class="nk-block-des text-danger">
+                                                <p class="active_rider_error error"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="mb-4">
+                                        <label for="active_staff" class="form-label">{{__('active_staff')}}<span
+                                                    class="text-danger">*</span></label>
+                                        <div class="select-type-v2">
+                                            <input type="number" class="form-control rounded-2" id="active_staff"
+                                                   name="active_staff" placeholder="{{__('active_staff')}}">
+                                            <div class="nk-block-des text-danger">
+                                                <p class="active_staff_error error"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="col-lg-3">
                                     <div class="mb-4">

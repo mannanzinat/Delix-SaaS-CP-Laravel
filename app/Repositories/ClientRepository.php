@@ -72,6 +72,7 @@ class ClientRepository
             $response2    = $this->saveImage($requestImage, '_client_');
         }
         $request['slug']                 = getSlug('clients', $request['company_name']);
+        $request['domain']               = $request['domain'];
         $request['webhook_verify_token'] = Str::random(40);
         $request['api_key']              = Str::random(40);
         $request['logo']                 = $response2['images'] ?? null;

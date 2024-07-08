@@ -110,10 +110,10 @@
 					</li>
 				@endcan
 
-				@can('payment_methods.index')
-					<li class="{{ menuActivation('admin/payment-gateway', 'active') }}">
-						<a href="{{ route('payment.gateway') }}">
-							<i class="las la-credit-card"></i>
+				@can('cloud_server.index')
+					<li class="{{ menuActivation('admin/cloud-server*', 'active') }}">
+						<a href="{{ route('cloud-server.index')  }}">
+							<i class="las la-server"></i>
 							<span>{{ __('cloud_server') }}</span>
 						</a>
 					</li>

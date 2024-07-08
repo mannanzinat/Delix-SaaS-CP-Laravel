@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('logo')->nullable();
             $table->string('slug');
             $table->bigInteger('country_id')->unsigned();
+            $table->string('domain')->nullable();
             $table->text('address')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_details')->nullable();
