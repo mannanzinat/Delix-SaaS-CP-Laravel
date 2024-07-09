@@ -63,7 +63,7 @@ class HomeController extends Controller
         $uid            =   Str::random(10);
         $domain_prefix  =   strtolower($uid);
         $domain         =   $domain_prefix.".delix.cloud";
-        $database_name =    strtolower("db".$uid."db");
+        $database_name  =    strtolower("db".$uid."db");
         $site_user      =   strtolower("delix". $uid);
         $site_password  =   Str::random(20);
         $server_ip = '178.128.107.213';
@@ -137,8 +137,6 @@ class HomeController extends Controller
 
                 // active SSL
                 $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
-
-                //$ssh->exec("rm -r /home/$domain_prefix/htdocs/$domain/public");
             else:
                 echo 'SSH login failed.';
             endif;
@@ -146,6 +144,7 @@ class HomeController extends Controller
         }catch (Exception $e){
             dd($e);
         }
+        echo "Deployed Website: <a href='https://$domain'>https://$domain</a>";
 
 
 //        $languages        = app('languages');
