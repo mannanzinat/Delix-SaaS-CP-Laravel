@@ -17,6 +17,8 @@ class ServerDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('status', function ($server) {
                 return view('backend.admin.cloud_server.status', compact('server'));
+            })->addColumn('default', function ($server) {
+                return view('backend.admin.cloud_server.default', compact('server'));
             })->addColumn('provider', function ($server) {
                 return $server->provider;
             })->addColumn('ip', function ($server) {
@@ -71,6 +73,7 @@ class ServerDataTable extends DataTable
             Column::computed('ip')->title(__('ip')),
             Column::computed('user_name')->title(__('user_name')),
             Column::computed('status')->title(__('status'))->searchable(false)->exportable(false)->printable(false),
+            Column::computed('default')->title(__('default'))->searchable(false)->exportable(false)->printable(false),
             Column::computed('action')->addClass('action-card')->addClass('text-end')->title(__('action'))->searchable(false)->exportable(false)->printable(false),
 
         ];

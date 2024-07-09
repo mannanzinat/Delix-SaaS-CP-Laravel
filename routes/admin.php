@@ -284,6 +284,7 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], function () {
         Route::post('onesignal-subscription', [AdminController::class, 'oneSignalSubscription'])->name('admin.onesignal');
         Route::post('server-status', [ServerController::class, 'statusChange'])->name('server.status');
+        Route::post('server-default-status', [ServerController::class, 'defaultChange'])->name('server.default.status');
         Route::post('staffs-status', [StaffController::class, 'statusChange'])->name('staffs.status');
         Route::post('botReplay-status', [BotReplyController::class, 'statusChange'])->name('botReplay.status');
         Route::post('team-status', [TeamController::class, 'statusChange'])->name('team.status');

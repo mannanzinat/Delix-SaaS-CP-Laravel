@@ -21,9 +21,9 @@
 														aria-label=".form-select-lg example" name="provider" required>
 													<option value="" selected>{{ __('select_provider') }}</option>
 													<option value="aws" selected>{{ __('aws') }}</option>
-													<option value="vuttr" selected>{{ __('vuttr') }}</option>
-													<option value="digitalization" selected>{{ __('digitalization') }}</option>
-													<option value="allnet" selected>{{ __('allnet') }}</option>
+													<option value="vultr" selected>{{ __('vultr') }}</option>
+													<option value="digitalocean" selected>{{ __('digitalocean') }}</option>
+													<option value="alphanet" selected>{{ __('alphanet') }}</option>
 												</select>
 												@if ($errors->has('provider'))
 													<div class="nk-block-des text-danger">

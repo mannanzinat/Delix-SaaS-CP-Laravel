@@ -36,6 +36,36 @@
 
 @push('js')
     {{ $dataTable->scripts() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(document).on('change','.default-change', function(e) {
+                let serverId = $(this).data('id');
+                let isChecked = $(this).is(':checked');
+                $.ajax({
+                    url: '/admin/server-default-status',
+                    type: 'POST',
+                    data: {
+                        id: serverId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 200) {
+                                $('.default-change').not('#customSwitch1-' + serverId).prop('checked', false);
+                                toastr.success(response.message);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                    },
+                    error: function () {
+                        console.log('AJAX request failed');
+                        toastr.error(response.message);
+                    }
+                });
+            });
+    
+        });
+    </script>
+    
 @endpush
 
 

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Server extends Model
 {
     use HasFactory;
-    protected $fillable = ['provider', 'status', 'ip', 'user_name', 'password'];
+    protected $fillable = ['provider', 'status', 'default', 'ip', 'user_name', 'password'];
 }

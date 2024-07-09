@@ -21,10 +21,10 @@
                                                 <select class="form-select form-select-lg rounded-0 mb-3 with_search"
                                                         aria-label=".form-select-lg example" name="provider" required>
                                                     <option value="">{{ __('select_provider') }}</option>
-                                                    <option value="aws" {{ $server ==  'aws' ? 'selected' : '' }}>{{ __('aws') }}</option>
-                                                    <option value="vuttr" {{ $server ==  'vuttr' ? 'selected' : '' }}>{{ __('vuttr') }}</option>
-                                                    <option value="digitalization" {{ $server ==  'digitalization' ? 'selected' : ''  }}>{{ __('digitalization') }}</option>
-                                                    <option value="allnet" {{ $server ==  'allnet' ? 'selected' : ''  }}>{{ __('allnet') }}</option>
+                                                    <option value="aws" {{ $server->provider == 'aws' ? 'selected' : '' }}>{{ __('aws') }}</option>
+                                                    <option value="vultr" {{ $server->provider  ==  'vultr' ? 'selected' : '' }}>{{ __('vultr') }}</option>
+                                                    <option value="digitalocean" {{ $server->provider  ==  'digitalocean' ? 'selected' : ''  }}>{{ __('digitalocean') }}</option>
+                                                    <option value="alphanet" {{ $server->provider  ==  'alphanet' ? 'selected' : ''  }}>{{ __('alphanet') }}</option>
                                                 </select>
                                                 @if ($errors->has('provider'))
                                                     <div class="nk-block-des text-danger">
