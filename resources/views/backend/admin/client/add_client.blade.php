@@ -54,13 +54,23 @@
 											@endif
 										</div>
 									</div>
-									<div class="col-lg-4">
+									{{-- <div class="col-lg-4">
 										<div class="mb-4">
-											<label for="domain"
-												   class="form-label">{{__('domain') }}<span
-														class="text-danger">*</span></label>
-											<input type="text" class="form-control rounded-2" id="domain"
-												   name="domain" value="{{ old('domain') }}" placeholder="{{ __('domain') }}" required>
+											<label for="domain" class="form-label">{{__('domain') }}<span class="text-danger">*</span></label>
+											<input type="text" class="form-control rounded-2" id="domain" name="domain" value="{{ old('domain') }}" placeholder="" required>
+											@if ($errors->has('domain'))
+												<div class="nk-block-des text-danger">
+													<p>{{ $errors->first('domain') }}</p>
+												</div>
+											@endif
+										</div>
+									</div> --}}
+
+									<div class="col-lg-4">
+										<label for="domain" class="form-label">{{__('domain') }}<span class="text-danger">*</span></label>
+										<div class="mb-4 input-group">
+											<input type="text" class="form-control rounded-2" aria-label="Recipient's username" aria-describedby="basic-addon2" id="domain"  name="domain" value="{{ old('domain') }}" placeholder="" required>
+											<span class="input-group-text" id="basic-addon1">delix.cloud</span>
 											@if ($errors->has('domain'))
 												<div class="nk-block-des text-danger">
 													<p>{{ $errors->first('domain') }}</p>
@@ -68,6 +78,7 @@
 											@endif
 										</div>
 									</div>
+
 									<div class="col-lg-4">
 										@include('backend.common.tel-input', [
 											'name' => 'phone_number',
@@ -219,13 +230,21 @@
 	<link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
 @endpush
 @push('js')
-	<script>
-		$(document).ready(function() {
-			$('#company_name').on('input', function() {
-				var companyName = $(this).val();
-				$('#domain').val(companyName.replace(/\s+/g, '').toLowerCase() + '.delix.cloud');
-			});
+<script>
+	$(document).ready(function() {
+		function updateDomainField() {
+			var companyName = $('#company_name').val();
+			var domainValue = companyName.replace(/\s+/g, '').toLowerCase();
+			$('#domain').val(domainValue);
+		}
+
+		$('#company_name').on('input', function() {
+			updateDomainField();
 		});
-	</script>
+
+		updateDomainField(); // Call this on page load to initialize the domain field
+	});
+
+</script>
 @endpush
 

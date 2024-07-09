@@ -43,10 +43,10 @@ class ServerRepository
             $request['password'] = $request['password']; 
 
             Server::create([
-                'provider' => $request['provider'],
-                'ip' => $request['ip'],
-                'user_name' => $request['user_name'],
-                'password' => $request['password'],
+                'provider'   => $request['provider'],
+                'ip'         => $request['ip'],
+                'user_name'  => $request['user_name'],
+                'password'   => $request['password'],
             ]);
 
             return response()->json(['message' => 'Server created successfully'], 200);

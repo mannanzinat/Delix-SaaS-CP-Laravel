@@ -130,10 +130,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="mb-4">
+                                        <label for="color" class="form-label">{{__('color')}}</label>
+                                        <input type="color" class="colorpicker form-control rounded-2" id="colorPicker" name="color" value="{{isset($plan) ? $plan->color : '#e0e8f9'}}" placeholder="{{__('color')}}" >
+                                        <div class="nk-block-des text-danger">
+                                            <p class="color_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <div class="col-lg-3 custom-control custom-checkbox">
-                                    <div class="mb-2 mt-4">
-                                        <label for="rider_app" class="custom-control-label  pb-4 pt-2">
+                                <div class="col-lg-12 custom-control custom-checkbox">
+                                    <div class="mb-2">
+                                        <label for="rider_app" class="custom-control-label  pt-2">
                                         <input type="checkbox" class="custom-control-input read common-key pb-4" name="rider_app" value="1" id="rider_app" {{ @$plan->rider_app==1 ? 'checked':"" }}>
                                         <span>{{__('rider_app')}}</span>
                                     </label>
@@ -142,9 +151,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 custom-control custom-checkbox">
-                                    <div class="mb-2 mt-4">
-                                        <label for="merchant_app" class="custom-control-label  pb-4 pt-2">
+                                <div class="col-lg-12 custom-control custom-checkbox">
+                                    <div class="mb-4">
+                                        <label for="merchant_app" class="custom-control-label pt-2">
                                         <input type="checkbox" class="custom-control-input read common-key pb-4" name="merchant_app" value="1" id="merchant_app" {{ @$plan->merchant_app==1 ? 'checked':"" }}>
                                         <span>{{__('merchant_app')}}</span>
                                     </label>
@@ -154,15 +163,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-9">
-                                    <div class="mb-4">
-                                        <label for="color" class="form-label">{{__('color')}}</label>
-                                        <input type="color" class="colorpicker form-control rounded-2" id="colorPicker" name="color" value="{{isset($plan) ? $plan->color : '#e0e8f9'}}" placeholder="{{__('color')}}" >
-                                        <div class="nk-block-des text-danger">
-                                            <p class="color_error error"></p>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 @if(setting('is_stripe_activated') && setting('stripe_secret') && setting('stripe_key'))
                                     <div class="col-lg-6">

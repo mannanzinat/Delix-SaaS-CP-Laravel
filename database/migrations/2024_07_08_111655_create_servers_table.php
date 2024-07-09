@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('user_name')->nullable();
             $table->string('password');
             $table->tinyInteger('status')->default(1)->comment('0 inactive, 1 active');
-            $table->tinyInteger('default')->default(1);
+            $table->tinyInteger('default')->default(0);
             $table->timestamps();
         });
     }
