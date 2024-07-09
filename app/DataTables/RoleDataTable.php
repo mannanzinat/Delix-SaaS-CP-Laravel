@@ -66,8 +66,10 @@ class RoleDataTable extends DataTable
             Column::computed('id')->data('DT_RowIndex')->title('#')->searchable(false)->width(10),
             Column::make('name')->title(__('role')),
             Column::make('permission')->title(__('permission')),
-            Column::computed('action')->title(__('action')),
-
+            Column::computed('action')->title(__('action'))
+            ->exportable(false)
+            ->printable(false)
+            ->searchable(false)->addClass('text-end')->width(10),
         ];
     }
 

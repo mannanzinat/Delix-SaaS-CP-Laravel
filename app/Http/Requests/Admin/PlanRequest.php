@@ -16,6 +16,14 @@ class PlanRequest extends FormRequest
         if ($this->is_free === null) {
             $this->merge(['is_free' => 0]);
         }
+
+        if ($this->rider_app === null) {
+            $this->merge(['rider_app' => 0]);
+        }
+
+        if ($this->merchant_app === null) {
+            $this->merge(['merchant_app' => 0]);
+        }
     }
 
     public function rules(): array
@@ -27,12 +35,17 @@ class PlanRequest extends FormRequest
             'description'               => 'required',
             'price'                     => 'required|numeric',
             'billing_period'            => 'required',
-            'contact_limit'             => 'required|numeric',
-            'campaigns_limit'           => 'required|numeric',
-            'conversation_limit'        => 'required|numeric',
-            'team_limit'                => 'required|numeric',
+            'active_merchant'           => 'required|numeric',
+            'monthly_parcel'            => 'required|numeric',
+            'active_rider'              => 'required|numeric',
+            'active_staff'              => 'required|numeric',
             'is_free'                   => 'nullable|boolean',
+            'rider_app'                 => 'nullable|boolean',
+            'merchant_app'              => 'nullable|boolean',
+
 
         ];
     }
+
+
 }

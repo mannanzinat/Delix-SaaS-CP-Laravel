@@ -15,68 +15,82 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->double('price')->default(0.00);
             $table->string('billing_period')->nullable();
-            $table->integer('contact_limit')->nullable();
-            $table->integer('ai_credit')->nullable();
-            $table->integer('campaigns_limit')->nullable();
-            $table->boolean('featured')->default(0)->comment('1=yes, 0=no');
-            $table->integer('conversation_limit')->nullable();
-            $table->integer('team_limit')->nullable();
+            $table->integer('active_merchant')->nullable();
+            $table->integer('monthly_parcel')->nullable();
+            $table->integer('active_rider')->nullable();
+            $table->boolean('is_free')->default(0)->comment('1=yes, 0=no');
+            $table->boolean('is_feature')->default(0)->comment('1=yes, 0=no');
+            $table->integer('active_staff')->nullable();
+            $table->boolean('rider_app')->default(0)->comment('1=yes, 0=no');
+            $table->boolean('merchant_app')->default(0)->comment('1=yes, 0=no');
             $table->string('color')->default('#E0E8F9');
-            $table->boolean('telegram_access')->default(0);
             $table->tinyInteger('status')->default(1)->comment('0 inactive, 1 active');
             $table->timestamps();
         });
+
 
         Plan::create([
             'name'               => 'Advance',
             'description'        => '',
             'price'              => 2,
             'billing_period'     => 'monthly',
-            'contact_limit'      => 1000,
-            'campaigns_limit'    => 10,
-            'conversation_limit' => 4000,
-            'team_limit'         => 2,
-            'telegram_access'    => 1,
+            'active_merchant'    => 1000,
+            'monthly_parcel'     => 10,
+            'active_rider'       => 4000,
+            'active_staff'       => 0,
+            'rider_app'          => 1,
+            'merchant_app'       => 1,
             'color'              => '#E0E8F9',
-
+            'is_free'            => 0,
+            'status'             => 1,
         ]);
 
         Plan::create([
-            'name'               => 'Pro',
+            'name'               => 'Enterprise',
             'description'        => '',
-            'price'              => 5,
+            'price'              => 2,
             'billing_period'     => 'monthly',
-            'contact_limit'      => 10000,
-            'campaigns_limit'    => 100,
-            'conversation_limit' => 40000,
-            'team_limit'         => 20,
-            'featured'           => 1,
+            'active_merchant'    => 1000,
+            'monthly_parcel'     => 10,
+            'active_rider'       => 4000,
+            'active_staff'       => 0,
+            'rider_app'          => 1,
+            'merchant_app'       => 1,
             'color'              => '#E0E8F9',
+            'is_free'            => 0,
+            'status'             => 1,
         ]);
 
         Plan::create([
-            'name'               => 'Advance Pro',
+            'name'               => 'Enterprise',
             'description'        => '',
-            'price'              => 25,
-            'billing_period'     => 'yearly',
-            'contact_limit'      => 10000,
-            'campaigns_limit'    => 100,
-            'conversation_limit' => 40000,
-            'team_limit'         => 20,
+            'price'              => 2,
+            'billing_period'     => 'monthly',
+            'active_merchant'    => 1000,
+            'monthly_parcel'     => 10,
+            'active_rider'       => 4000,
+            'active_staff'       => 0,
+            'rider_app'          => 1,
+            'merchant_app'       => 1,
             'color'              => '#E0E8F9',
+            'is_free'            => 0,
+            'status'             => 1,
         ]);
 
         Plan::create([
-            'name'               => 'Premium',
+            'name'               => 'Enterprise',
             'description'        => '',
-            'price'              => 45,
-            'billing_period'     => 'yearly',
-            'contact_limit'      => 10000,
-            'campaigns_limit'    => 100,
-            'conversation_limit' => 40000,
-            'team_limit'         => 20,
-            'telegram_access'    => 1,
+            'price'              => 2,
+            'billing_period'     => 'monthly',
+            'active_merchant'    => 1000,
+            'monthly_parcel'     => 10,
+            'active_rider'       => 4000,
+            'active_staff'       => 0,
+            'rider_app'          => 1,
+            'merchant_app'       => 1,
             'color'              => '#E0E8F9',
+            'is_free'            => 0,
+            'status'             => 1,
         ]);
 
     }

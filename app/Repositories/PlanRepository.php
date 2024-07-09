@@ -21,10 +21,23 @@ class PlanRepository
         $request['color'] = $request['color'] ?? '#E0E8F9';
          // Check if 'is_free' is set and handle accordingly
         if ($request['is_free'] && $request['is_free'] == 1) {
-            $request['price'] = 0;
+            $request['price']   = 0;
             $request['is_free'] = 1;
         } else {
             $request['is_free'] = 0;
+        }
+        if ($request['rider_app'] && $request['rider_app'] == 1) {
+            $request['price']   = 0;
+            $request['rider_app'] = 1;
+        } else {
+            $request['rider_app'] = 0;
+        }
+
+        if ($request['merchant_app'] && $request['merchant_app'] == 1) {
+            $request['price']   = 0;
+            $request['merchant_app'] = 1;
+        } else {
+            $request['merchant_app'] = 0;
         }
         $package          = Plan::create($request);
         $request['id']    = $package->id;
@@ -37,6 +50,7 @@ class PlanRepository
 
     public function update($request, $id)
     {
+
         $request['price'] = priceFormatUpdate($request['price'], setting('default_currency'));
         $request['color'] = $request['color'] ?? '#E0E8F9';
         $package          = Plan::findOrfail($id);
@@ -50,6 +64,18 @@ class PlanRepository
             $request['is_free'] = 1;
         } else {
             $request['is_free'] = 0;
+        }
+
+        if ($request['rider_app'] && $request['rider_app'] == 1) {
+            $request['rider_app'] = 1;
+        } else {
+            $request['rider_app'] = 0;
+        }
+
+        if ($request['merchant_app'] && $request['merchant_app'] == 1) {
+            $request['merchant_app'] = 1;
+        } else {
+            $request['merchant_app'] = 0;
         }
     
         $package->update($request);

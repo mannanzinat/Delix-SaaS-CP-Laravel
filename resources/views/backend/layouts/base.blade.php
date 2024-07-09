@@ -89,6 +89,27 @@
     <link rel="stylesheet" href="{{ static_asset('admin/css/app.css') }}?v=1.0.0">
     <link rel="stylesheet" href="{{ static_asset('admin/css/responsive.min.css') }}">
     @stack('css')
+    @if(app()->getLocale() =='bn')
+        <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+        <style>
+            :root {
+                --body-fonts: 'SolaimanLipi', Arial, sans-serif !important;
+                --heading-font: 'SolaimanLipi', Arial, sans-serif !important;
+            }
+            /*html * ,.secondary-font, .heading-font {*/
+            /*    font-family: 'SolaimanLipi', Arial, sans-serif !important;*/
+            /*    !*font-weight: normal !important;*!*/
+            /*}*/
+        </style>
+    @else
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --body-fonts: 'jost', sans-serif !important;
+                --heading-font: 'jost', sans-serif !important;
+            }
+        </style>
+    @endif
     <style>
         .user-info-panel .badge {
             font-size: 12px;

@@ -180,8 +180,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mt-30">
-                                <button type="button" class="btn btn-primary" id="add-menu-item">Add More</button>
-                                <button type="submit" class="btn btn-primary">{{ __('update') }}</button>
+                                <button type="button" class="btn sg-btn-primary" id="add-menu-item">Add More</button>
+                                <button type="submit" class="btn sg-btn-primary">{{ __('update') }}</button>
                                 @include('backend.common.loading-btn', ['class' => 'btn btn-primary'])
                             </div>
                         </form>

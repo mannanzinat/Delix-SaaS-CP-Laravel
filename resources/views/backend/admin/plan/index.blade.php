@@ -58,32 +58,40 @@
 
 											<ul>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('contacts_limit')}}</p>
-													<span>{{ $plan->contact_limit }}</span>
+													<p>{{__('active_merchant')}}</p>
+													<span>{{ $plan->active_merchant }}</span>
 												</li>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('campaigns_limit') }}</p>
-													<span>{{ $plan->campaigns_limit }}</span>
+													<p>{{__('monthly_parcel') }}</p>
+													<span>{{ $plan->monthly_parcel }}</span>
 												</li>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('team_limit')}}</p>
-													<span>{{ $plan->team_limit }}</span>
+													<p>{{__('active_rider')}}</p>
+													<span>{{ $plan->active_rider }}</span>
 												</li>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('conversation_limit')}}</p>
-													<span>{{ $plan->conversation_limit }}</span>
+													<p>{{__('active_staff')}}</p>
+													<span>{{ $plan->active_staff }}</span>
 												</li>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('featured') }}</p>
-													@if($plan->featured == 1)
+													<p>{{__('rider_app') }}</p>
+													@if($plan->rider_app == 1)
 														<span>{{__('yes')}}</span>
 													@else
 														<span>{{__('no')}}</span>
 													@endif
 												</li>
 												<li class="d-flex align-items-center justify-content-between py-3 px-30">
-													<p>{{__('telegram_access') }}</p>
-													@if($plan->telegram_access == 1)
+													<p>{{__('merchant_app') }}</p>
+													@if($plan->merchant_app == 1)
+														<span>{{__('yes')}}</span>
+													@else
+														<span>{{__('no')}}</span>
+													@endif
+												</li>
+												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+													<p>{{__('featured') }}</p>
+													@if($plan->featured == 1)
 														<span>{{__('yes')}}</span>
 													@else
 														<span>{{__('no')}}</span>

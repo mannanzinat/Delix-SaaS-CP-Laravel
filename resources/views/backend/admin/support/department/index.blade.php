@@ -5,21 +5,20 @@
 		<div class="container-fluid">
 			<div class="row justify-content-center">
 				<div class="col col-lg-8 col-md-8">
-					<h3 class="section-title">{{__('department') }}</h3>
-					<div class="bg-white rounded-20 p-20 p-sm-30">
+					<div class=" d-flex justify-content-between align-items-center">
+						<h3 class="section-title">{{__('department') }}</h3>
+						@can('departments.create')
+							<div class="oftions-content-right mb-12">
+								<a href="#" data-bs-toggle="modal" data-bs-target="#department"
+								class="d-flex align-items-center btn sg-btn-primary gap-2">
+									<i class="las la-plus"></i>
+									<span>{{__('add_new_department') }}</span>
+								</a>
+							</div>
+						@endcan
+					</div>
+					<div class="bg-white redious-border p-20 p-sm-30 pt-sm-30">
 						<div class="row">
-							@can('departments.create')
-								<div class="col-lg-12">
-									<div class="oftions-content-right mb-12">
-										<a href="#" data-bs-toggle="modal" data-bs-target="#department"
-										   class="d-flex align-items-center btn sg-btn-primary gap-2">
-											<i class="las la-plus"></i>
-											<span>{{__('add_new_department') }}</span>
-										</a>
-									</div>
-								</div>
-							@endcan
-
 							<div class="col-lg-12">
 								<div class="default-list-table table-responsive">
 									<table class="table">
@@ -68,35 +67,35 @@
 										</tbody>
 									</table>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div class="pagination_container">
-						@if($departments->total() > 0)
-							<div class="pagination pt-20">
-								<div class="container-fluid">
-									<div class="row align-items-center justify-content-between">
+								<div class="pagination_container">
+									@if($departments->total() > 0)
+										<div class="pagination pt-20">
+											<div class="container-fluid">
+												<div class="row align-items-center justify-content-between">
 
-										<div class="col-lg-6 col-sm-6">
-											<div class="pagination-content-left">
-												{{ __('showing') }} {{ $departments->firstItem() }} {{ __('to') }} {{ $departments->lastItem() }} {{ __('of') }} {{ $departments->total() }}
+													<div class="col-lg-6 col-sm-6">
+														<div class="pagination-content-left">
+															{{ __('showing') }} {{ $departments->firstItem() }} {{ __('to') }} {{ $departments->lastItem() }} {{ __('of') }} {{ $departments->total() }}
+														</div>
+													</div>
+
+													<div class="col-lg-6 col-sm-6">
+														<div class="pagination-content-right d-sm-flex justify-content-end">
+															<nav aria-label="Page navigation example">
+																<ul class="pagination">
+																	{{ $departments->links('vendor.pagination.bootstrap-4') }}
+																</ul>
+															</nav>
+														</div>
+													</div>
+
+												</div>
 											</div>
 										</div>
-
-										<div class="col-lg-6 col-sm-6">
-											<div class="pagination-content-right d-sm-flex justify-content-end">
-												<nav aria-label="Page navigation example">
-													<ul class="pagination">
-														{{ $departments->links('vendor.pagination.bootstrap-4') }}
-													</ul>
-												</nav>
-											</div>
-										</div>
-
-									</div>
+									@endif
 								</div>
 							</div>
-						@endif
+						</div>
 					</div>
 				</div>
 			</div>
@@ -113,3 +112,32 @@
 	</div>
 @endsection
 @include('backend.common.delete-script')
+
+{{-- <section class="oftions">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="header-top d-flex justify-content-between align-items-center">
+					<h3 class="section-title">{{__('manage_staff') }}</h3>
+					@can('staffs.create')
+					<div class="oftions-content-right mb-12">
+						<a href="{{ route('staffs.create') }}" class="d-flex align-items-center btn sg-btn-primary gap-2">
+							<i class="las la-plus"></i>
+							<span>{{__('add_staff') }}</span>
+						</a>
+					</div>
+					@endcan
+				</div>
+				<div class="bg-white redious-border p-20 p-sm-30 pt-sm-30">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="default-list-table table-responsive yajra-dataTable">
+								{{ $dataTable->table() }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section> --}}

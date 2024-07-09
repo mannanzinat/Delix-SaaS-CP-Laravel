@@ -21,6 +21,27 @@
     <link rel="stylesheet" href="{{ static_asset('admin/css/toastr.min.css') }}">
 
     <link rel="stylesheet" href="{{ static_asset('admin/css/auth.css') }}">
+    @if(app()->getLocale() =='bn')
+        <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+        <style>
+            :root {
+                --body-fonts: 'SolaimanLipi', Arial, sans-serif !important;
+                --heading-font: 'SolaimanLipi', Arial, sans-serif !important;
+            }
+            /*html * ,.secondary-font, .heading-font {*/
+            /*    font-family: 'SolaimanLipi', Arial, sans-serif !important;*/
+            /*    !*font-weight: normal !important;*!*/
+            /*}*/
+        </style>
+    @else
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --body-fonts: 'jost', sans-serif !important;
+                --heading-font: 'jost', sans-serif !important;
+            }
+        </style>
+    @endif
   </head>
   <body>
     <section class="signup-section">
@@ -33,9 +54,9 @@
               <img src="{{ static_asset('admin/img/shape/circle-block.svg') }}" alt="Rect Shape" class="bg-circle-block-shape">
 
               <div class="login-form bg-white rounded-20">
-                <div class="logo d-flex justify-content-center items-center mb-5">
+                <div class="logo d-flex justify-content-center items-center mb-3">
                   <a  href="{{url('/')}}">
-                    <img style="max-height: 35px" src="{{ setting('light_logo') && @is_file_exists(setting('light_logo')['original_image']) ? get_media(setting('light_logo')['original_image']) : getFileLink('80x80',[]) }}" alt="Corporate Logo">
+                    <img src="{{ setting('light_logo') && @is_file_exists(setting('light_logo')['original_image']) ? get_media(setting('light_logo')['original_image']) : getFileLink('80x80',[]) }}" alt="Corporate Logo">
                   </a>
                 </div>
                 <h3>{{__('login_to_your_account')}}</h3>

@@ -10,7 +10,7 @@ class Plan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'billing_period','is_free', 'contact_limit', 'color', 'campaigns_limit', 'featured', 'conversation_limit', 'team_limit', 'telegram_access', 'status'];
+    protected $fillable = ['name', 'description', 'price', 'billing_period','is_free', 'active_merchant', 'color', 'monthly_parcel', 'active_rider', 'active_staff', 'rider_app', 'merchant_app', 'status'];
 
     public function subscriptions(): HasMany
     {

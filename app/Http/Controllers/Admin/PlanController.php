@@ -70,7 +70,6 @@ class PlanController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             if (config('app.debug')) {
-                dd($e->getMessage());            
             }
             return response()->json(['error' => __('something_went_wrong_please_try_again')]);
         }

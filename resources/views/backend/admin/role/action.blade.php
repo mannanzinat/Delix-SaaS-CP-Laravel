@@ -1,4 +1,4 @@
-<ul class="d-flex gap-30 justify-content-center ">
+<ul class="d-flex gap-30 justify-content-end ">
     @if(hasPermission('roles.edit'))
         <li><a href="{{ route('roles.edit', $role->id) }}" title="{{__('edit')}}"><i class="las la-edit"></i></a></li>
     @endif
