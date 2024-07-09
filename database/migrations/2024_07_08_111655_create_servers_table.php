@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('servers', function (Blueprint $table) {
             $table->id();
-            $table->enum('provider', ['aws', 'vuttr', 'digitalization', 'allnet']);
+            $table->enum('provider', ['aws', 'vultr', 'digitalocean', 'alphanet']);
             $table->string('ip')->nullable();
             $table->string('user_name')->nullable();
             $table->string('password');
             $table->tinyInteger('status')->default(1)->comment('0 inactive, 1 active');
+            $table->tinyInteger('default')->default(0);
             $table->timestamps();
         });
     }

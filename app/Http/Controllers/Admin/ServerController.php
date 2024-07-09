@@ -28,12 +28,9 @@ class ServerController extends Controller
     public function index(ServerDataTable $dataTable)
     {
         try {
-
             return $dataTable->render('backend.admin.cloud_server.all_server');
-
         } catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
-
             return back();
         }
     }
@@ -57,17 +54,19 @@ class ServerController extends Controller
         }
         DB::beginTransaction();
         try {
-            $this->repo->store($request->all());
-            DB::commit();
-            Toastr::success(__('create_successful'));
-            return redirect()->route('cloud-server.index');
+
+            $result = $this->repo->store($request->all());
+            if($result){
+                DB::commit();
+                Toastr::success(__('create_successful'));
+                return redirect()->route('cloud-server.index');
+            }
+
         } catch (Exception $e) {
             DB::rollback();
-            if (config('app.debug')) {
-                dd($e->getMessage());            
-            }
-            Toastr::error('something_went_wrong_please_try_again');
-            return back()->withInput();
+            Toastr::error('invalid_credential');
+            return redirect()->route('cloud-server.index');
+
         }
     }
 
@@ -87,26 +86,27 @@ class ServerController extends Controller
 
     public function update(ServerUpdateRequest $request, $id)
     {
-
         if (isDemoMode()) {
             Toastr::error(__('this_function_is_disabled_in_demo_server'));
-            return back();
+            return response()->json(['error' => __('this_function_is_disabled_in_demo_server')], 422);
         }
-        DB::beginTransaction();
-        try { 
-            $this->repo->update($request->all(), $id);
 
-            DB::commit();
-            Toastr::success(__('update_successful'));
-            DB::commit();
-            return redirect()->route('cloud-server.index');
-        } catch (Exception $e) {
-            DB::rollback();
-            if (config('app.debug')) {
-                dd($e->getMessage());            
+        DB::beginTransaction();
+
+        try {
+            $updateResult = $this->repo->update($request->all(), $id);
+
+            if ($updateResult) {
+                DB::commit();
+                Toastr::success(__('update_successful'));
+                return redirect()->route('cloud-server.index');
+            }else{
+                Toastr::error(__('invalid_credential'));
+                return redirect()->route('cloud-server.index');
+
             }
-            Toastr::error($e->getMessage());
-            return back()->withInput();
+        } catch (\Exception $e) {
+            DB::rollback();
         }
     }
 
@@ -175,6 +175,34 @@ class ServerController extends Controller
             return response()->json($data);
         }
     }
+
+    public function defaultChange(Request $request): \Illuminate\Http\JsonResponse
+    {
+        if (isDemoMode()) {
+            return response()->json([
+                'status'  => 'danger',
+                'message' => __('this_function_is_disabled_in_demo_server'),
+                'title'   => 'error',
+            ]);
+        }
+
+        try {
+            $this->repo->defaultChange($request->all());
+
+            return response()->json([
+                'status'  => 200,
+                'message' => __('update_successful'),
+                'title'   => 'success',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status'  => 400,
+                'message' => __('something_went_wrong_please_try_again'),
+                'title'   => 'error',
+            ]);
+        }
+    }
+
 
 
 }
