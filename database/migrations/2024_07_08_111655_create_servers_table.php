@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Server;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +24,14 @@ return new class extends Migration
             $table->tinyInteger('default')->default(0);
             $table->timestamps();
         });
+        $data = [
+            'provider' =>'digitalocean',
+            'ip' =>'178.128.107.213',
+            'user_name' =>'root',
+            'password' => 'manarA@2050a',
+            'default' => 1
+        ];
+        Server::insert($data);
     }
 
     /**

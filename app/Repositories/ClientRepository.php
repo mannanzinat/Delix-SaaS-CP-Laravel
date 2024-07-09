@@ -63,6 +63,7 @@ class ClientRepository
 
     public function store($request)
     {
+
         $response                        = [];
         if (arrayCheck('images', $request)) {
             $requestImage = $request['images'];
@@ -104,42 +105,24 @@ class ClientRepository
         $request['user_id']              = $user->id;
         $request['client_id']            = $client->id;
         $request['slug']                 = getSlug('clients', $client->company_name);
-        // $ssh = new SSH2('178.128.107.213');
-        // if ($ssh->login('root', 'manarA@2050a')) {
-        //     $output = $ssh->exec("clpctl site:add:php --domainName=spagreen.delix.cloud --phpVersion=8.2 --vhostTemplate='Laravel 11' --siteUser='spagreen658635855' --siteUserPassword='Dhaka@2050'");
-        //     echo $output;
-        // } else {
-        //     echo 'SSH login failed.';
-        // }
 
-        // return ClientStaff::create($request);
+        $server             = Server::where('default', 1)->first();
+        $server_ip          =   $server->ip;
+        $server_username    =   $server->user_name;
+        $server_password    =   $server->password;
 
-        $server         = Server::where('default', 1)->first();
+        $uid                =   strtolower(Str::random(10));
+        $domain_prefix      =   strtolower($request['domain']);
+        $domain             =   $domain_prefix.".delix.cloud";
+        $database_name      =   strtolower("db".$uid."db");
+        $site_user          =   strtolower("delix-". $domain_prefix);
+        $site_password      =   Str::random(20);
 
-        $domain        = $request['domain'];
-
-        $uid            =   Str::random(10);
-        // $domain_prefix  =   strtolower($uid);
-        $domain         =   $domain.".delix.cloud";
-        $database_name  =    strtolower("db".$uid."db");
-        $site_user      =   strtolower("delix". $server->user_name);
-        $site_password  =   Str::random(20);
-        $server_ip      = $server->ip;
-        $zoneID         = "1ea19630bbad09fbd8c69f5d7a703168";
-        $apiKey         = "21e4220da546e136cc107911a3a8f69eb0c66";
-        // update dns
         try {
+            // update dns
+            $zoneID             = "1ea19630bbad09fbd8c69f5d7a703168";
+            $apiKey             = "21e4220da546e136cc107911a3a8f69eb0c66";
             $curl = curl_init();
-            $cf_data = [
-                "content"       => $server_ip,
-                "name"          => $domain,
-                "proxied"       => false,
-                "type"          => "A",
-                "comment"       => "Domain verification record",
-                "id"            => "8d6ff21ce5ab60dec3c66238f82c1714",
-                "ttl"           => 3600,
-
-            ];
             curl_setopt_array($curl, [
                 CURLOPT_URL                 => "https://api.cloudflare.com/client/v4/zones/$zoneID/dns_records",
                 CURLOPT_RETURNTRANSFER      => true,
@@ -149,7 +132,16 @@ class ClientRepository
                 CURLOPT_HTTP_VERSION        => CURL_HTTP_VERSION_1_1,
                 CURLOPT_SSL_VERIFYPEER      => false,
                 CURLOPT_CUSTOMREQUEST       => "POST",
-                CURLOPT_POSTFIELDS          => json_encode($cf_data),
+                CURLOPT_POSTFIELDS          => json_encode([
+                    "content"       => $server_ip,
+                    "name"          => $domain,
+                    "proxied"       => false,
+                    "type"          => "A",
+                    "comment"       => "Domain verification record",
+                    "id"            => "8d6ff21ce5ab60dec3c66238f82c1714",
+                    "ttl"           => 3600,
+
+                ]),
                 CURLOPT_HTTPHEADER          => [
                     "Content-Type: application/json",
                     "X-Auth-Email: mannanzinat@gmail.com",
@@ -164,15 +156,10 @@ class ClientRepository
 
             if ($err) {
                 echo "cURL Error #:" . $err;
-            } else {
-                echo "Cloudflare DNS updated";
             }
-        }catch(Exception $e){
-        }
 
-        $ssh = new SSH2($server_ip);
-        try {
-            if ($ssh->login('root', $server->password)):
+            $ssh = new SSH2($server_ip);
+            if ($ssh->login($server_username, $server_password)):
                 // add website to CloudPanel
                 $ssh->exec("clpctl site:add:php --domainName=$domain --phpVersion=8.2 --vhostTemplate='Generic' --siteUser='$site_user' --siteUserPassword='$site_password'");
 
@@ -193,10 +180,11 @@ class ClientRepository
                 $ssh->exec("sed -i 's/my_db_password/$site_password/g' /home/$site_user/htdocs/$domain/.env");
 
                 // active SSL
-                $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
+                //$ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
 
                 //$ssh->exec("rm -r /home/$domain_prefix/htdocs/$domain/public");
             else:
+
                 echo 'SSH login failed.';
             endif;
 

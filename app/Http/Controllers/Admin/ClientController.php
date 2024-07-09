@@ -70,20 +70,13 @@ class ClientController extends Controller
             Toastr::error(__('this_function_is_disabled_in_demo_server'));
             return back();
         }
-        DB::beginTransaction();
-        try {
-            $this->repo->store($request->all());
-            DB::commit();
+        if($this->repo->store($request->all())):
             Toastr::success(__('create_successful'));
             return redirect()->route('clients.index');
-        } catch (Exception $e) {
-            DB::rollback();
-            if (config('app.debug')) {
-                dd($e->getMessage());            
-            }
+        else:
             Toastr::error('something_went_wrong_please_try_again');
             return back()->withInput();
-        }
+        endif;
     }
 
     public function edit($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
