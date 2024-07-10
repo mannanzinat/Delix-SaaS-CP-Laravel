@@ -66,10 +66,13 @@ class ClientRepository
     public function store($request)
     {
         try {
-            $result = $this->serverUpdate($request['domain']);
-            if (!$result['success']) {
-                return ['success' => false, 'message' => $result['message']];
-            }
+            $result = $this->dnsUpdate($request['domain']);
+            if (!$result['success']):
+                $result = $this->deployScript($request['domain']);
+                if (!$result['success']):
+                    return ['success' => false, 'message' => $result['message']];
+                endif;
+            endif;
 
             $response = [];
             if (arrayCheck('images', $request)) {

@@ -8,22 +8,19 @@ use Illuminate\Support\Str;
 
 trait ServerTrait
 {
-    public function serverUpdate($sub_domain)
+    public function dnsUpdate($sub_domain)
     {
-        $server               = Server::where('default', 1)->first();
+        $server             = Server::where('default', 1)->first();
 
         if (!$server) {
             return ['success' => false, 'message' => 'No default server found'];
         }
 
         $domain             = $sub_domain . ".delix.cloud";
-        $uid                = Str::random(10);
-        $database_name      = strtolower("db" . $uid . "db");
-        $site_user          = strtolower("delix" . $uid);
-        $site_password      = Str::random(20);
+        $uid                = strtolower(Str::random(4));
         $server_ip          = $server->ip;
-                $zoneID = "1ea19630bbad09fbd8c69f5d7a703168";
-                $apiKey = "21e4220da546e136cc107911a3a8f69eb0c66";
+        $zoneID             = "1ea19630bbad09fbd8c69f5d7a703168";
+        $apiKey             = "21e4220da546e136cc107911a3a8f69eb0c66";
 
         // Update DNS
         try {
@@ -71,6 +68,23 @@ trait ServerTrait
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
         }
+        return ['success' => false, 'message' => 'Something Went wrong'];
+    }
+
+    public function deployScript($sub_domain)
+    {
+        $server               = Server::where('default', 1)->first();
+
+        if (!$server) {
+            return ['success' => false, 'message' => 'No default server found'];
+        }
+
+        $domain             = $sub_domain . ".delix.cloud";
+        $uid                = strtolower(Str::random(4));
+        $database_name      = strtolower("db" . $uid . "db");
+        $site_user          = strtolower("delix-$sub_domain" . $uid);
+        $site_password      = Str::random(20);
+        $server_ip          = $server->ip;
 
         $ssh = new SSH2($server_ip);
 
@@ -104,7 +118,6 @@ trait ServerTrait
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
         }
-
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 }
