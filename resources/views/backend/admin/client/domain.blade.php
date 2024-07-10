@@ -1,3 +1,3 @@
 <td>
-    <a href="http://{{ $client->domain }}.delix.cloud">{{ 'https://'.$client->domain.'.delix.cloud'}}</a>
+    <a href="http://{{ $client->domain }}.delix.cloud" target="_blank">{{ 'https://'.$client->domain.'.delix.cloud'}}</a>
 </td>

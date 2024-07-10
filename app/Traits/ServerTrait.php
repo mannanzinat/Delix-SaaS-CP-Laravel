@@ -71,8 +71,9 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function deployScript($sub_domain)
+    public function deployScript($sub_domain,$ssl_active=false)
     {
+        ini_set('max_execution_time',300);
         $server               = Server::where('default', 1)->first();
 
         if (!$server) {
@@ -109,7 +110,9 @@ trait ServerTrait
                 $ssh->exec("sed -i 's/my_db_password/$site_password/g' /home/$site_user/htdocs/$domain/.env");
 
                 // Activate SSL
-                $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
+                if($ssl_active):
+                    $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
+                endif;
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
             }

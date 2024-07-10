@@ -113,19 +113,26 @@ class ClientRepository
             $clientStaff                            = ClientStaff::create($request);
 
 
-            if($request['create_domain']):
+            if($request['create_domain'] =='1'):
                 $result = $this->dnsUpdate($request['domain']);
                 if (!$result['success']):
                     return ['success' => false, 'message' => $result['message']];
                 else:
-                    $result                             = $this->deployScript($request['domain']);
-                    $server                             = Server::where('default', 1)->first();
                     $domain                             = new Domain;
+                    $domain->script_deployed            = 0;
+                    $domain->ssl_active                 = 0;
+                    $server                             = Server::where('default', 1)->first();
                     $domain->client_id                  = $client->id;
-                    $domain->server_id                  = $server->id; 
+                    $domain->server_id                  = $server->id;
                     $domain->sub_domain                 = $request['domain'];
-                    $domain->ssl_active                 = $request['ssl_active'];
-                    $domain->script_deployed            = $request['script_deployed'];; 
+
+                    if($request['script_deployed'] =='1'):
+                        if($request['ssl_active'] =='1'):
+                            $domain->ssl_active                 = 1;
+                        endif;
+                        $result                             = $this->deployScript($request['domain'],($domain->ssl_active == 1) ? true:false);
+                        $domain->script_deployed            = 1;
+                    endif;
                     $domain->save();
 
                     if (!$result['success']):
