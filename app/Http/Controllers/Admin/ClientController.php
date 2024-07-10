@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\User;
+use App\Models\Domain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\ClientDataTable;
@@ -53,9 +54,12 @@ class ClientController extends Controller
     public function create()
     {
         try {
-            $countries = $this->country->all();
+            $countries  = $this->country->all();
+            $domain     = Domain::all();
             $data      = [
                 'countries' => $countries,
+                'domains'   => $domain,
+
             ];
             return view('backend.admin.client.add_client', $data);
         } catch (Exception $e) {

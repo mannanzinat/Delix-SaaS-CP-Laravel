@@ -14,19 +14,18 @@ class ClientDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addIndexColumn()->addColumn('phone', function ($client) {
-                return isDemoMode() ? '+***********' : countryCode(@$client->user->phone_country_id).@$client->user->phone;
-            })
-            ->addIndexColumn()->addColumn('name', function ($client) {
-                return $client->company_name;
-            })
-            ->addIndexColumn()->addColumn('email', function ($client) {
-                return isDemoMode() ? '****@****.***' : @$client->user->email;
-            })
-            ->addColumn('plan', function ($client) {
+
+            ->addIndexColumn()->addColumn('client_info', function ($client) {
+                // return $client->company_name;
+                return view('backend.admin.client.client_info', compact('client'));
+
+            })->addColumn('plan', function ($client) {
                 return view('backend.admin.client.plan', compact('client'));
-            })
-            ->addColumn('status', function ($client) {
+            })->addColumn('domain', function ($client) {
+                return view('backend.admin.client.domain', compact('client'));
+            })->addColumn('domain_status', function ($client) {
+                return view('backend.admin.client.domain_status', compact('client'));
+            })->addColumn('status', function ($client) {
                 return view('backend.admin.client.status', compact('client'));
             })->addColumn('action', function ($client) {
                 return view('backend.admin.client.action', compact('client'));
@@ -82,10 +81,10 @@ class ClientDataTable extends DataTable
         return [
             Column::computed('id')->data('DT_RowIndex')->title('#')->searchable(false)->width(10),
             Column::computed('logo')->title(__('logo')),
-            Column::computed('name')->title(__('name')),
-            Column::make('email')->title(__('email')),
-            Column::computed('phone')->title(__('phone')),
+            Column::computed('client_info')->title(__('client_info')),
+            Column::computed('domain')->title(__('domain')),
             Column::make('plan')->title(__('plan')),
+            Column::computed('domain_status')->title(__('domain_status'))->searchable(false)->exportable(false)->printable(false),
             Column::computed('status')->title(__('status'))->searchable(false)->exportable(false)->printable(false),
             Column::computed('action')->addClass('action-card')->title(__('action'))->searchable(false)->exportable(false)->printable(false),
         ];

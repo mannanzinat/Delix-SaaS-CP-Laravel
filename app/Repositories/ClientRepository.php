@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\ClientSetting;
 use App\Models\ClientStaff;
 use App\Models\Contact;
+use App\Models\Domain;
 use App\Models\ContactsList;
 use App\Models\Conversation;
 use App\Models\GroupSubscriber;
@@ -66,58 +67,72 @@ class ClientRepository
     public function store($request)
     {
         try {
-            $result = $this->dnsUpdate($request['domain']);
-            if (!$result['success']):
-                $result = $this->deployScript($request['domain']);
-                if (!$result['success']):
-                    return ['success' => false, 'message' => $result['message']];
-                endif;
-            endif;
 
             $response = [];
             if (arrayCheck('images', $request)) {
-                $requestImage       = $request['images'];
-                $response           = $this->saveImage($requestImage, '_user_');
+                $requestImage                       = $request['images'];
+                $response                           = $this->saveImage($requestImage, '_user_');
             }
-            $response2              = [];
+            $response2                              = [];
             if (arrayCheck('logo', $request)) {
-                $requestImage       = $request['logo'];
-                $response2          = $this->saveImage($requestImage, '_client_');
+                $requestImage                       = $request['logo'];
+                $response2                          = $this->saveImage($requestImage, '_client_');
             }
-            $request['slug']                    = getSlug('clients', $request['company_name']);
-            $request['domain']                  = $request['domain'];
-            $request['webhook_verify_token']    = Str::random(40);
-            $request['api_key']                 = Str::random(40);
-            $request['logo']                    = $response2['images'] ?? null;
-            $request['country_id']              = $request['country_id'] ?? null;
-            $client                             = Client::create($request);
+            $request['slug']                        = getSlug('clients', $request['company_name']);
+            $request['webhook_verify_token']        = Str::random(40);
+            $request['api_key']                     = Str::random(40);
+            $request['logo']                        = $response2['images'] ?? null;
+            $request['country_id']                  = $request['country_id'] ?? null;
+            $client                                 = Client::create($request);
 
             // User
-            $role                               = DB::table('roles')->where('slug', 'Client-staff')->select('id', 'permissions')->first();
-            $permissions                        = json_decode($role->permissions, true);
-            $request['permissions']             = $permissions;
+            $role                                   = DB::table('roles')->where('slug', 'Client-staff')->select('id', 'permissions')->first();
+            $permissions                            = json_decode($role->permissions, true);
+            $request['permissions']                 = $permissions;
 
-            $request['first_name']              = $request['first_name'];
-            $request['last_name']               = $request['last_name'];
-            $request['role_id']                 = $role->id;
-            $request['email']                   = $request['email'];
-            $request['user_type']               = 'client-staff';
-            $request['phone']                   = $request['phone_number'];
-            $request['client_id']               = $client->id;
-            $request['is_primary']              = 1;
-            $request['email_verified_at']       = now();
+            $request['first_name']                  = $request['first_name'];
+            $request['last_name']                   = $request['last_name'];
+            $request['role_id']                     = $role->id;
+            $request['email']                       = $request['email'];
+            $request['user_type']                   = 'client-staff';
+            $request['phone']                       = $request['phone_number'];
+            $request['client_id']                   = $client->id;
+            $request['is_primary']                  = 1;
+            $request['email_verified_at']           = now();
             if (arrayCheck('password', $request)) {
-                $request['password']            = bcrypt($request['password']);
+                $request['password']                = bcrypt($request['password']);
             }
-            $request['images']                  = $response['images'] ?? null;
-            $user                               = User::create($request);
+            $request['images']                      = $response['images'] ?? null;
+            $user                                   = User::create($request);
 
             // ClientStaff
-            $request['user_id']                 = $user->id;
-            $request['client_id']               = $client->id;
-            $request['slug']                    = getSlug('clients', $client->company_name);
+            $request['user_id']                     = $user->id;
+            $request['client_id']                   = $client->id;
+            $request['slug']                        = getSlug('clients', $client->company_name);
 
-            $clientStaff                        = ClientStaff::create($request);
+            $clientStaff                            = ClientStaff::create($request);
+
+
+            if($request['create_domain']):
+                $result = $this->dnsUpdate($request['domain']);
+                if (!$result['success']):
+                    return ['success' => false, 'message' => $result['message']];
+                else:
+                    $result                             = $this->deployScript($request['domain']);
+                    $server                             = Server::where('default', 1)->first();
+                    $domain                             = new Domain;
+                    $domain->client_id                  = $client->id;
+                    $domain->server_id                  = $server->id; 
+                    $domain->sub_domain                 = $request['domain'];
+                    $domain->ssl_active                 = $request['ssl_active'];
+                    $domain->script_deployed            = $request['script_deployed'];; 
+                    $domain->save();
+
+                    if (!$result['success']):
+                        return ['success' => false, 'message' => $result['message']];
+                    endif;
+                endif;
+            endif;
             return ['success' => true, 'message' => 'Client staff created successfully', 'data' => $clientStaff];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];

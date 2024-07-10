@@ -1,4 +1,4 @@
-<ul class="d-flex gap-30 justify-content-end align-items-center">
+<ul class="d-flex gap-2 justify-content-end align-items-center">
 	@can('client.edit')
 		<li>
 			<a href="{{ route('clients.edit', @$client->id) }}"

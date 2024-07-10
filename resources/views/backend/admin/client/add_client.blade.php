@@ -54,31 +54,18 @@
 											@endif
 										</div>
 									</div>
-									{{-- <div class="col-lg-4">
-										<div class="mb-4">
-											<label for="domain" class="form-label">{{__('domain') }}<span class="text-danger">*</span></label>
-											<input type="text" class="form-control rounded-2" id="domain" name="domain" value="{{ old('domain') }}" placeholder="" required>
-											@if ($errors->has('domain'))
-												<div class="nk-block-des text-danger">
-													<p>{{ $errors->first('domain') }}</p>
-												</div>
-											@endif
-										</div>
-									</div> --}}
-
-									<div class="col-lg-4">
-										<label for="domain" class="form-label">{{__('domain') }}<span class="text-danger">*</span></label>
-										<div class="mb-4 input-group">
-											<input type="text" class="form-control rounded-2" aria-label="Recipient's username" aria-describedby="basic-addon2" id="domain"  name="domain" value="{{ old('domain') }}" placeholder="" required>
+									<div class="col-lg-4" id="subdomain_field">
+										<label for="subdomain" class="form-label">{{ __('sub_domain') }}<span class="text-danger">*</span></label>
+										<div class="mb-4 input-group" id="the-basics">
+											<input type="text" class="typeahead form-control rounded-2 sub_domain" aria-label="Recipient's username" aria-describedby="basic-addon2" id="subdomain" name="domain" value="{{ old('subdomain') }}" placeholder="" required>
 											<span class="input-group-text" id="basic-addon1">delix.cloud</span>
-											@if ($errors->has('domain'))
-												<div class="nk-block-des text-danger">
-													<p>{{ $errors->first('domain') }}</p>
-												</div>
+											@if ($errors->has('subdomain'))
+											<div class="nk-block-des text-danger">
+												<p>{{ $errors->first('subdomain') }}</p>
+											</div>
 											@endif
 										</div>
 									</div>
-
 									<div class="col-lg-4">
 										@include('backend.common.tel-input', [
 											'name' => 'phone_number',
@@ -208,6 +195,40 @@
 										</div>
 									</div>
 
+									<div class="col-lg-12 custom-control custom-checkbox">
+										<div>
+											<label for="create_domain" class="custom-control-label pt-2 pb-4">
+												<input type="checkbox" class="custom-control-input read common-key pb-4" name="create_domain" value="1" id="create_domain">
+												<span>{{__('create_domain')}}</span>
+											</label>
+											<div class="nk-block-des text-danger">
+												<p class="create_domain_error error"></p>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-12 custom-control custom-checkbox" id="deployed_script_container" style="display:none;">
+										<div>
+											<label for="deployed_script" class="custom-control-label pt-2 pb-4">
+												<input type="checkbox" class="custom-control-input read common-key pb-4" name="script_deployed" value="1" id="deployed_script">
+												<span>{{__('deployed_script')}}</span>
+											</label>
+											<div class="nk-block-des text-danger">
+												<p class="deployed_script_error error"></p>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-12 custom-control custom-checkbox" id="ssl_active_container" style="display:none;">
+										<div>
+											<label for="ssl_active" class="custom-control-label pt-2 pb-4">
+												<input type="checkbox" class="custom-control-input read common-key pb-4" name="ssl_active" value="1" id="ssl_active">
+												<span>{{__('ssl_active')}}</span>
+											</label>
+											<div class="nk-block-des text-danger">
+												<p class="ssl_active_error error"></p>
+											</div>
+										</div>
+									</div>
+
 									<div class="d-flex justify-content-between align-items-center mt-30">
 										<button type="submit" class="btn sg-btn-primary">{{ __('submit') }}</button>
 										@include('backend.common.loading-btn',['class' => 'btn sg-btn-primary'])
@@ -224,26 +245,58 @@
 @endsection
 @push('js')
 	<script src="{{ static_asset('admin/js/countries.js') }}"></script>
+	{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 
 @endpush
 @push('css_asset')
 	<link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
 @endpush
+
 @push('js')
 <script>
-	$(document).ready(function() {
-		function updateDomainField() {
-			var companyName = $('#company_name').val();
-			var domainValue = companyName.replace(/\s+/g, '').toLowerCase();
-			$('#domain').val(domainValue);
-		}
-
-		$('#company_name').on('input', function() {
-			updateDomainField();
+	$(document).ready(function(){
+		// Handle checkbox change for domain creation
+		$('#create_domain').change(function(){
+			if($(this).is(':checked')){
+				$('#deployed_script_container, #ssl_active_container').show();
+				$('#deployed_script, #ssl_active').prop('checked', true);
+			} else {
+				$('#deployed_script_container, #ssl_active_container').hide();
+				$('#deployed_script, #ssl_active').prop('checked', false);
+			}
 		});
 
-		updateDomainField(); // Call this on page load to initialize the domain field
+		// Typeahead implementation
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches = [];
+				var substrRegex = new RegExp(q, 'i');
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+						matches.push(str);
+					}
+				});
+				cb(matches);
+			};
+		};
+
+		var domain = {!! json_encode($domains) !!};
+
+
+		$('#the-basics .typeahead').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 1
+		},
+		{
+			name: 'domain',
+			source: substringMatcher(domain)
+		});
 	});
+	</script>
+
+
 
 </script>
 @endpush

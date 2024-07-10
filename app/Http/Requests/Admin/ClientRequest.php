@@ -22,6 +22,21 @@ class ClientRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
+     protected function prepareForValidation()
+     {
+         if ($this->ssl_active === null) {
+             $this->merge(['ssl_active' => 0]);
+         }
+
+         if ($this->script_deployed === null) {
+             $this->merge(['script_deployed' => 0]);
+         }
+         if ($this->create_domain === null) {
+            $this->merge(['create_domain' => 0]);
+        }
+
+     }
     public function rules()
     {
         // Retrieve the selected country ID from the request
@@ -33,6 +48,7 @@ class ClientRequest extends FormRequest
             'first_name'   => 'required',
             'last_name'    => 'required',
             'address'      => 'required',
+            'create_domain' => 'nullable',
             // 'phone_number' => 'required|unique:users,phone',
             /*'phone_number' => [
                 'required',

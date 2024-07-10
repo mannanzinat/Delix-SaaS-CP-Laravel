@@ -12,9 +12,9 @@ trait ServerTrait
     {
         $server             = Server::where('default', 1)->first();
 
-        if (!$server) {
+        if (!$server):
             return ['success' => false, 'message' => 'No default server found'];
-        }
+        endif;
 
         $domain             = $sub_domain . ".delix.cloud";
         $uid                = strtolower(Str::random(4));
@@ -68,7 +68,7 @@ trait ServerTrait
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
         }
-        return ['success' => false, 'message' => 'Something Went wrong'];
+        return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
     public function deployScript($sub_domain)
@@ -86,8 +86,7 @@ trait ServerTrait
         $site_password      = Str::random(20);
         $server_ip          = $server->ip;
 
-        $ssh = new SSH2($server_ip);
-
+        $ssh                = new SSH2($server_ip);
         try {
             if ($ssh->login('root', $server->password)) {
                 // Add website to CloudPanel
