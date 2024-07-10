@@ -106,7 +106,7 @@ class ClientRepository
         $request['client_id']            = $client->id;
         $request['slug']                 = getSlug('clients', $client->company_name);
 
-        $server             = Server::where('default', 1)->first();
+        $server             =   Server::where('default', 1)->first();
         $server_ip          =   $server->ip;
         $server_username    =   $server->user_name;
         $server_password    =   $server->password;
