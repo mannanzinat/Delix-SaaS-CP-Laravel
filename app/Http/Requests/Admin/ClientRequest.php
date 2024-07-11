@@ -44,10 +44,11 @@ class ClientRequest extends FormRequest
         // Fetch the corresponding country code from the database
         $countryCode = Country::where('id', $countryId)->value('iso2');
         $rules       = [
-            'country_id'   => 'required|exists:countries,id',
-            'first_name'   => 'required',
-            'last_name'    => 'required',
-            'address'      => 'required',
+            'country_id'    => 'required|exists:countries,id',
+            'first_name'    => 'required',
+            'last_name'     => 'required',
+            'address'       => 'required',
+            'sub_domain'    => 'required|unique:domains,sub_domain',
             'create_domain' => 'nullable',
             // 'phone_number' => 'required|unique:users,phone',
             /*'phone_number' => [

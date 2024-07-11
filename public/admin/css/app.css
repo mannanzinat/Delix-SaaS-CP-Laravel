@@ -5934,6 +5934,36 @@ textarea.form-control-lg {
   border-radius: var(--bs-tooltip-border-radius);
 }
 
+.custom-checkbox.checkbox-column {
+  margin-top: 20px;
+}
+.checkbox-column label span {
+padding-left: 0;
+  padding-top: 23px;
+  white-space: nowrap;
+}
+.checkbox-column input[type=checkbox] + span::after {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.checkbox-column input[type=checkbox]:checked + span::before {
+  left: 50%;
+  top: 3px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+span.twitter-typeahead {
+  flex: 1;
+}
+.tt-menu {
+  background: #fff;
+  box-shadow: 0px 0px 10px #48484854;
+  padding: 5px 8px;
+  border-radius: 4px;
+  width: 100%;
+}
+
 .popover {
   --bs-popover-zindex: 1070;
   --bs-popover-max-width: 276px;

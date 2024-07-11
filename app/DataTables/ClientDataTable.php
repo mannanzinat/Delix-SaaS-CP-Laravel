@@ -36,18 +36,15 @@ class ClientDataTable extends DataTable
 
     public function query(): QueryBuilder
     {
-
-        $model = Client::with('user');
-
-        return $model
+        return Client::with('user', 'domains')
             ->when($this->request->search['value'] ?? false, function ($query, $search) {
                 $query->where('company_name', 'like', "%$search%")
                     ->orWhere('email', 'like', "%$search%")
                     ->orWhere('phone', 'like', "%$search%");
             })
-            ->latest()
-            ->newQuery();
+            ->latest();
     }
+
 
     public function html(): HtmlBuilder
     {
@@ -84,7 +81,7 @@ class ClientDataTable extends DataTable
             Column::computed('client_info')->title(__('client_info')),
             Column::computed('domain')->title(__('domain')),
             Column::make('plan')->title(__('plan')),
-            Column::computed('domain_status')->title(__('domain_status'))->searchable(false)->exportable(false)->printable(false),
+            Column::computed('domain_status')->addClass('text-center')->title(__('domain_status'))->searchable(false)->exportable(false)->printable(false),
             Column::computed('status')->title(__('status'))->searchable(false)->exportable(false)->printable(false),
             Column::computed('action')->addClass('action-card')->title(__('action'))->searchable(false)->exportable(false)->printable(false),
         ];

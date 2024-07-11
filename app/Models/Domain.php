@@ -18,4 +18,10 @@ class Domain extends Model
         'dns_active',
         'script_deployed',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
 }

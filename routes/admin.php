@@ -84,6 +84,10 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
         Route::group(['prefix' => 'clients'], function () {
             Route::delete('/{id}/delete', [ClientController::class, 'delete'])->name('team.delete');
             Route::get('/{client_id}/overview', [ClientController::class, 'overview'])->name('team.overview');
+            Route::post('/update-active-domain-status', [ClientController::class, 'domainStatus'])->name('domain.status');
+            Route::post('/update-deployed-script-status', [ClientController::class, 'deployedScriptStatus'])->name('deployed.script.status');
+            Route::post('/update-ssl-active-status', [ClientController::class, 'sslStatus'])->name('ssl.status');
+
         });
         Route::group(['as' => 'users.'], function () {
             Route::get('users/verified/{verify}', [UserController::class, 'instructorVerified'])->name('verified');

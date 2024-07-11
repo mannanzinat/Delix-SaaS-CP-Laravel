@@ -114,7 +114,7 @@ class ClientRepository
 
 
             if($request['create_domain'] =='1'):
-                $result = $this->dnsUpdate($request['domain']);
+                $result = $this->dnsUpdate($request['sub_domain']);
                 if (!$result['success']):
                     return ['success' => false, 'message' => $result['message']];
                 else:
@@ -124,13 +124,13 @@ class ClientRepository
                     $server                             = Server::where('default', 1)->first();
                     $domain->client_id                  = $client->id;
                     $domain->server_id                  = $server->id;
-                    $domain->sub_domain                 = $request['domain'];
+                    $domain->sub_domain                 = $request['sub_domain'];
 
                     if($request['script_deployed'] =='1'):
                         if($request['ssl_active'] =='1'):
                             $domain->ssl_active                 = 1;
                         endif;
-                        $result                             = $this->deployScript($request['domain'],($domain->ssl_active == 1) ? true:false);
+                        $result                             = $this->deployScript($request['sub_domain'],($domain->ssl_active == 1) ? true:false);
                         $domain->script_deployed            = 1;
                     endif;
                     $domain->save();

@@ -76,6 +76,11 @@ class Client extends Model
         return $this->belongsTo(Timezone::class, 'timezone');
     }
 
+    public function domains()
+    {
+        return $this->hasOne(Domain::class);
+    }
+
     public function activeSubscription(): HasOne
     {
         return $this->hasOne(Subscription::class, 'client_id')->where('purchase_date', '<=', now())

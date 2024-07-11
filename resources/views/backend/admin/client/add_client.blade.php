@@ -55,16 +55,17 @@
 										</div>
 									</div>
 									<div class="col-lg-4" id="subdomain_field">
-										<label for="subdomain" class="form-label">{{ __('sub_domain') }}<span class="text-danger">*</span></label>
-										<div class="mb-4 input-group" id="the-basics">
-											<input type="text" class="typeahead form-control rounded-2 sub_domain" aria-label="Recipient's username" aria-describedby="basic-addon2" id="subdomain" name="domain" value="{{ old('subdomain') }}" placeholder="" required>
+										<label for="sub_domain" class="form-label">{{ __('sub_domain') }}<span class="text-danger">*</span></label>
+										<div class=" input-group" id="the-basics">
+											<input type="text" class="typeahead form-control rounded-2 sub_domain" aria-label="Recipient's username" aria-describedby="basic-addon2" id="subdomain" name="sub_domain" value="{{ old('sub_domain') }}" placeholder="">
 											<span class="input-group-text" id="basic-addon1">delix.cloud</span>
-											@if ($errors->has('subdomain'))
-											<div class="nk-block-des text-danger">
-												<p>{{ $errors->first('subdomain') }}</p>
-											</div>
-											@endif
+											
 										</div>
+										@if ($errors->has('sub_domain'))
+										<div class="nk-block-des text-danger">
+											<p>{{ $errors->first('sub_domain') }}</p>
+										</div>
+										@endif
 									</div>
 									<div class="col-lg-4">
 										@include('backend.common.tel-input', [
@@ -254,9 +255,10 @@
 @endpush
 
 @push('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+
 <script>
 	$(document).ready(function(){
-		// Handle checkbox change for domain creation
 		$('#create_domain').change(function(){
 			if($(this).is(':checked')){
 				$('#deployed_script_container, #ssl_active_container').show();
@@ -266,8 +268,9 @@
 				$('#deployed_script, #ssl_active').prop('checked', false);
 			}
 		});
+	});
 
-		// Typeahead implementation
+	$(document).ready(function(){
 		var substringMatcher = function(strs) {
 			return function findMatches(q, cb) {
 				var matches = [];
@@ -280,9 +283,7 @@
 				cb(matches);
 			};
 		};
-
 		var domain = {!! json_encode($domains) !!};
-
 
 		$('#the-basics .typeahead').typeahead({
 			hint: true,
@@ -294,10 +295,6 @@
 			source: substringMatcher(domain)
 		});
 	});
-	</script>
-
-
-
 </script>
 @endpush
 

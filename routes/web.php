@@ -15,7 +15,7 @@ Route::any('env-editor/key', function () {
 })->where('anything', '.*');
 Route::post('subscribe/store', [HomeController::class, 'subscribeStore'])->name('subscribe.store');
 
-Route::group(['prefix' => localeRoutePrefix(), 'middleware' => 'isInstalled'], function () {
+Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('check.landing.page');
     Route::get('language/{lang}', [HomeController::class, 'changeLanguage'])->name('lang');
     Route::get('cache-clear', [HomeController::class, 'cacheClear'])->name('cache.clear');

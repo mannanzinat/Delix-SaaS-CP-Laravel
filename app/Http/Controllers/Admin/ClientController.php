@@ -54,11 +54,13 @@ class ClientController extends Controller
     public function create()
     {
         try {
-            $countries  = $this->country->all();
-            $domain     = Domain::all();
+            $countries    = $this->country->all();
+            $domains      = Domain::all();
+            $sub_domains  = $domains->pluck('sub_domain');
+
             $data      = [
                 'countries' => $countries,
-                'domains'   => $domain,
+                'domains'   => $sub_domains,
 
             ];
             return view('backend.admin.client.add_client', $data);
@@ -230,5 +232,33 @@ class ClientController extends Controller
         $clientStaff = User::where('client_id', $clientId)->pluck('first_name', 'id')->toArray();
 
         return response()->json($clientStaff);
+    }
+
+    public function domainStatus(Request $request)
+    {
+
+        dd($request->all());
+        $client = Client::find($request->client_id);
+
+        if ($client && isset($client->domains)) {
+            $field = $request->field;
+            $value = $request->value;
+            $client->domains->$field = $value;
+            $client->domains->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Active domain status updated successfully.']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Client or domain not found.'], 404);
+    }
+
+    public function deployedScriptStatus(Request $request)
+    {
+
+    }
+
+    public function sslStatus(Request $request)
+    {
+
     }
 }
