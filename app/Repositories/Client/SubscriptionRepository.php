@@ -10,13 +10,16 @@ use App\Repositories\EmailTemplateRepository;
 use App\Repositories\PlanRepository;
 use App\Traits\SendMailTrait;
 use App\Traits\SendNotification;
+use App\Traits\ServerTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+
 
 class SubscriptionRepository
 {
     use SendMailTrait;
     use SendNotification;
+    use ServerTrait;
 
     protected $emailTemplate;
 
@@ -133,7 +136,7 @@ class SubscriptionRepository
             $payment_details = json_encode(['payment_type' => 'offline']);
             $status          = 1;
         }
-        $client       = Client::where('id', $request->client_id)->first();
+        $client       = Client::with('domains')->where('id', $request->client_id)->first();
         $is_recurring = 0;
         $expire_date  = now();
 
@@ -180,6 +183,8 @@ class SubscriptionRepository
 
         $log          = SubscriptionTransactionLog::create(['description' => 'Admin has purchased '.$plan->name.' package for you',
             'client_id'                                                   => $client->id]);
+
+        $this->updateClientPackageLimitation($client);
 
         return Subscription::create($data);
     }

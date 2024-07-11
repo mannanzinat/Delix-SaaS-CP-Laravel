@@ -122,6 +122,31 @@ trait ServerTrait
         }
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
+
+    public function updateClientPackageLimitation($sub_domain,$ssl_active=false)
+    {
+        ini_set('max_execution_time',300);
+        $server               = Server::where('default', 1)->first();
+
+        if (!$server) {
+            return ['success' => false, 'message' => 'No default server found'];
+        }
+        $server_ip          = $server->ip;
+
+        $ssh                = new SSH2($server_ip);
+        try {
+            if ($ssh->login('root', $server->password)) {
+                // Update database username and database name
+                $ssh->exec("sed 's/ACTIVE_MERCHANT=.*/ACTIVE_MERCHANT=100/g' /home/delix-45555555ghfhfghfghxfpj/htdocs/45555555ghfhfghfgh.delix.cloud/.env");
+            } else {
+                return ['success' => false, 'message' => 'SSH login failed'];
+            }
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
+        }
+        return ['success' => true, 'message' => 'Operation succeeded'];
+    }
 }
 
 
