@@ -362,49 +362,6 @@ class SystemSettingController extends Controller
         }
     }
 
-    public function chatMessenger(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
-        Gate::authorize('chat.messenger');
-
-        return view('backend.admin.system_setting.chat_messenger');
-    }
-
-    public function saveMessengerSetting(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-    {
-        if (isDemoMode()) {
-            $data = [
-                'status' => 'danger',
-                'error'  => __('this_function_is_disabled_in_demo_server'),
-                'title'  => 'error',
-            ];
-
-            return response()->json($data);
-        }
-
-        $request->validate([
-            'facebook_page_id'         => 'required_if:fb,==,1',
-            'facebook_messenger_color' => 'required_if:fb,==,1',
-            'tawk_property_id'         => 'required_if:tawk,==,1',
-            'tawk_widget_id'           => 'required_if:tawk,==,1',
-        ]);
-
-        try {
-            $this->setting->update($request);
-
-            Toastr::success(__('update_successful'));
-            $data = [
-                'success' => __('update_successful'),
-            ];
-
-            return response()->json($data);
-        } catch (\Exception $e) {
-            $data = [
-                'error' => __('something_went_wrong_please_try_again'),
-            ];
-
-            return response()->json($data);
-        }
-    }
 
     public function paymentGateways(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {

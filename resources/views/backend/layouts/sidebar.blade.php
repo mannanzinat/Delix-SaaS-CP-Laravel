@@ -253,11 +253,6 @@
 								<li><a class="{{ menuActivation('admin/storage-setting', 'active') }}"
 								       href="{{ route('storage.setting') }}">{{ __('storage_setting') }}</a></li>
 							@endcan
-							@can('chat.messenger')
-								<li><a class="{{ menuActivation('admin/chat-messenger', 'active') }}"
-								       href="{{ route('chat.messenger') }}">{{ __('chat_messenger') }}</a></li>
-							@endcan
-
 							@can('miscellaneous.setting')
 								<li><a class="{{ menuActivation('admin/miscellaneous-setting', 'active') }}"
 								       href="{{ route('miscellaneous.setting') }}">{{ __('miscellaneous') }}</a></li>
@@ -273,26 +268,7 @@
 						</ul>
 					</li>
 				@endcan
-				@can('addon.index')
-					<li class="{{ menuActivation(['admin/addon'], 'active') }}">
-						<a href="#addons" class="dropdown-icon" data-bs-toggle="collapse"
-						   aria-expanded="{{ menuActivation(['admin/addon'], 'true', 'false') }}"
-						   aria-controls="addons">
-							<i class="las la-puzzle-piece"></i>
-							<span>{{ __('addon') }}</span>
-						</a>
-						<ul class="sub-menu collapse {{ menuActivation(['admin/addon'], 'show') }}"
-							id="addons" data-bs-parent="#accordionSidebar">
-								{{-- <li><a class="{{ menuActivation([], 'active') }}"
-									   href="{{ route('addon.index') }}">{{ __('available_addons') }}</a>
-								</li> --}}
-								<li>
-									<a class="{{ menuActivation('admin/addon', 'active') }}"
-									   href="{{ route('addon.index') }}">{{ __('installed_addons') }}</a>
-								</li>
-						</ul>
-					</li>
-				@endcan
+
 				@can('system.update' || 'server.info')
 					<li class="{{ menuActivation(['admin/server-info', 'admin/system-info', 'admin/extension-library', 'admin/file-system-permission', 'admin/system-update'], 'active') }}">
 						<a href="#utility" class="dropdown-icon" data-bs-toggle="collapse"

@@ -117,9 +117,7 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
         //storage setting
         Route::get('storage-setting', [SystemSettingController::class, 'storageSetting'])->name('storage.setting');
         Route::post('storage-setting', [SystemSettingController::class, 'saveStorageSetting'])->name('storage.setting');
-        //chat setting
-        Route::get('chat-messenger', [SystemSettingController::class, 'chatMessenger'])->name('chat.messenger');
-        Route::post('chat-messenger', [SystemSettingController::class, 'saveMessengerSetting'])->name('chat.messenger');
+
         //payment methods
         Route::get('payment-gateway', [SystemSettingController::class, 'paymentGateways'])->name('payment.gateway');
         Route::post('payment-gateway', [SystemSettingController::class, 'savePGSetting'])->name('payment.gateway');
