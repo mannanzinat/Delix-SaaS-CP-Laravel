@@ -137,25 +137,17 @@ class SubscriptionRepository
         $is_recurring = 0;
         $expire_date  = now();
 
-        if ($plan->billing_period == 'daily') {
-            $expire_date  = now()->addDay(7);
-            $is_recurring = 0;
-        }if ($plan->billing_period == 'weekly') {
-            $expire_date  = now()->addDay(7);
-            $is_recurring = 0;
-        } elseif ($plan->billing_period == 'monthly') {
-            $expire_date  = now()->addMonths();
-            $is_recurring = 0;
-        } elseif ($plan->billing_period == 'quarterly') {
-            $expire_date  = now()->addMonths(3);
-            $is_recurring = 0;
-        } elseif ($plan->billing_period == 'half_yearly') {
-            $expire_date  = now()->addMonths(6);
-            $is_recurring = 0;
+        if ($plan->billing_period == 'monthly') {
+            $expire_date          = now()->addMonths();
+            $is_recurring         = 0;
         } elseif ($plan->billing_period == 'yearly') {
-            $expire_date  = now()->addYears();
-            $is_recurring = 0;
+            $expire_date          = now()->addYears();
+            $is_recurring         = 0;
+        } elseif ($plan->billing_period == 'lifetime') {
+            $expire_date          = null;
+            $is_recurring         = 0;
         }
+
         $subscription = Subscription::where('client_id', $client->id)->where('status', 1)->first();
         if ($subscription) {
             $subscription->status = 2;
@@ -171,18 +163,21 @@ class SubscriptionRepository
             'expire_date'            => $expire_date,
             'price'                  => $request->amount,
             'package_type'           => $plan->billing_period,
-            'contact_limit'          => $plan->contact_limit,
-            'campaign_limit'         => $plan->campaigns_limit,
-            'campaign_remaining'     => $plan->campaigns_limit,
-            'conversation_limit'     => $plan->conversation_limit,
-            'conversation_remaining' => $plan->conversation_limit,
-            'team_limit'             => $plan->team_limit,
-            'telegram_access'        => (bool) $plan->telegram_access,
+            'active_merchant'        => $plan->active_merchant,
+            'monthly_parcel'         => $plan->monthly_parcel,
+            'active_rider'           => $plan->active_rider,
+            'active_staff'           => $plan->active_staff,
+            'custom_domain'          => $plan->custom_domain,
+            'branded_website'        => $plan->branded_website,
+            'white_level'            => $plan->white_level,
+            'merchant_app'           => $plan->merchant_app,
+            'rider_app'              => $plan->rider_app,
             'trx_id'                 => $trx_id,
             'payment_method'         => $payment_method,
             'payment_details'        => $payment_details,
             'client'                 => Client::find($client->id),
         ];
+
         $log          = SubscriptionTransactionLog::create(['description' => 'Admin has purchased '.$plan->name.' package for you',
             'client_id'                                                   => $client->id]);
 
@@ -230,12 +225,11 @@ class SubscriptionRepository
     public function updateSubscriptionLimits($subscriptionId, $newLimits)
     {
         $subscription = Subscription::findOrFail($subscriptionId);
-        $subscription->contact_limit          += intval($newLimits['new_contacts_limit']);
-        $subscription->campaign_remaining     += intval($newLimits['new_campaigns_limit']);
-        $subscription->campaign_limit         += intval($newLimits['new_campaigns_limit']);
-        $subscription->conversation_remaining += intval($newLimits['new_conversation_limit']);
-        $subscription->conversation_limit     += intval($newLimits['new_conversation_limit']);
-        $subscription->team_limit             += intval($newLimits['new_team_limit']);
+        $subscription->active_merchant      += intval($newLimits['new_active_merchant']);
+        $subscription->monthly_parcel       += intval($newLimits['new_monthly_parcel']);
+        $subscription->active_rider         += intval($newLimits['new_active_rider']);
+        $subscription->active_staff         += intval($newLimits['new_active_staff']);
+
 
         $log          = SubscriptionTransactionLog::create(['description' => 'Admin update some credit in your Subscription',
             'client_id'                                                   => $subscription->client_id]);
@@ -428,14 +422,12 @@ class SubscriptionRepository
         $subscription                  = Subscription::find($id);
 
         $date                          = '';
-        if ($data['interval'] == 'day') {
-            $date = Carbon::parse($subscription->expire_date)->addDays($data['time']);
-        } elseif ($data['interval'] == 'week') {
-            $date = Carbon::parse($subscription->expire_date)->addWeeks($data['time']);
-        } elseif ($data['interval'] == 'month') {
+        if ($data['interval'] == 'month') {
             $date = Carbon::parse($subscription->expire_date)->addMonths($data['time']);
-        } elseif ($data['interval'] == 'year') {
+        } elseif ($data['interval'] == 'yearly') {
             $date = Carbon::parse($subscription->expire_date)->addYears($data['time']);
+        } elseif ($data['interval'] == 'life_time') {
+            $date = '';
         }
 
         $payment_details               = $subscription->payment_details;

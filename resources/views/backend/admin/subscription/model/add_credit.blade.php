@@ -10,29 +10,29 @@
 						<input type="hidden" name="subscription_id" id="subscription_id">
 						<div class="col-lg-12">
 							<div class="mb-4">
-								<label for="new_contacts_limit" class="form-label">{{ __('contacts_limit') }}</label>
-								<input type="number" class="form-control rounded-2" id="new_contacts_limit" name="new_contacts_limit">
+								<label for="new_active_merchant" class="form-label">{{ __('active_merchant') }}</label>
+								<input type="number" class="form-control rounded-2" id="new_active_merchant" name="new_active_merchant">
 								<div class="invalid-feedback"></div>
 							</div>
 						</div>
 						<div class="col-lg-12">
 							<div class="mb-4">
-								<label for="new_campaigns_limit" class="form-label">{{ __('campaigns_limit') }}</label>
-								<input type="number" class="form-control rounded-2" id="new_campaigns_limit" name="new_campaigns_limit">
+								<label for="new_monthly_parcel" class="form-label">{{ __('monthly_parcel') }}</label>
+								<input type="number" class="form-control rounded-2" id="new_monthly_parcel" name="new_monthly_parcel">
 								<div class="invalid-feedback"></div>
 							</div>
 						</div>
 						<div class="col-lg-12">
 							<div class="mb-4">
-								<label for="new_conversation_limit" class="form-label">{{ __('conversation_limit') }}</label>
-								<input type="number" class="form-control rounded-2" id="new_conversation_limit" name="new_conversation_limit">
+								<label for="new_active_rider" class="form-label">{{ __('active_rider') }}</label>
+								<input type="number" class="form-control rounded-2" id="new_active_rider" name="new_active_rider">
 								<div class="invalid-feedback"></div>
 							</div>
 						</div>
 						<div class="col-lg-12">
 							<div class="mb-4">
-								<label for="new_team_limit" class="form-label">{{ __('team_limit') }}</label>
-								<input type="number" class="form-control rounded-2" id="new_team_limit" name="new_team_limit">
+								<label for="new_active_staff" class="form-label">{{ __('active_staff') }}</label>
+								<input type="number" class="form-control rounded-2" id="new_active_staff" name="new_active_staff">
 								<div class="invalid-feedback"></div>
 							</div>
 						</div>

@@ -1,3 +1,5 @@
+@if(@$client->domains)
 <td>
-    <a href="http://{{ $client->domain }}.delix.cloud" target="_blank">{{ 'https://'.$client->domain.'.delix.cloud'}}</a>
+    <a href="https://{{ @$client->domains->sub_domain }}.delix.cloud" target="_blank">{{ 'https://'.@$client->domains->sub_domain.'.delix.cloud'}}</a>
 </td>
+@endif

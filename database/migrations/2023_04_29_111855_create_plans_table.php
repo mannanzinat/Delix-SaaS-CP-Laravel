@@ -21,6 +21,9 @@ return new class extends Migration
             $table->boolean('is_free')->default(0)->comment('1=yes, 0=no');
             $table->boolean('is_feature')->default(0)->comment('1=yes, 0=no');
             $table->integer('active_staff')->nullable();
+            $table->boolean('custom_domain')->default(0)->comment('1=yes, 0=no');
+            $table->boolean('branded_website')->default(0)->comment('1=yes, 0=no');
+            $table->boolean('white_level')->default(0)->comment('1=yes, 0=no');
             $table->boolean('rider_app')->default(0)->comment('1=yes, 0=no');
             $table->boolean('merchant_app')->default(0)->comment('1=yes, 0=no');
             $table->string('color')->default('#E0E8F9');
@@ -38,6 +41,9 @@ return new class extends Migration
             'monthly_parcel'     => 10,
             'active_rider'       => 4000,
             'active_staff'       => 0,
+            'custom_domain'      => 1,
+            'branded_website'    => 1,
+            'white_level'        => 1,
             'rider_app'          => 1,
             'merchant_app'       => 1,
             'color'              => '#E0E8F9',
@@ -54,6 +60,9 @@ return new class extends Migration
             'monthly_parcel'     => 10,
             'active_rider'       => 4000,
             'active_staff'       => 0,
+            'custom_domain'      => 1,
+            'branded_website'    => 1,
+            'white_level'        => 1,
             'rider_app'          => 1,
             'merchant_app'       => 1,
             'color'              => '#E0E8F9',
@@ -70,6 +79,9 @@ return new class extends Migration
             'monthly_parcel'     => 10,
             'active_rider'       => 4000,
             'active_staff'       => 0,
+            'custom_domain'      => 1,
+            'branded_website'    => 1,
+            'white_level'        => 1,
             'rider_app'          => 1,
             'merchant_app'       => 1,
             'color'              => '#E0E8F9',
@@ -86,6 +98,9 @@ return new class extends Migration
             'monthly_parcel'     => 10,
             'active_rider'       => 4000,
             'active_staff'       => 0,
+            'custom_domain'      => 1,
+            'branded_website'    => 1,
+            'white_level'        => 1,
             'rider_app'          => 1,
             'merchant_app'       => 1,
             'color'              => '#E0E8F9',

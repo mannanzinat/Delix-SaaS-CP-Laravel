@@ -118,10 +118,10 @@ class SubscriptionController extends Controller
         try {
             $subscriptionId = $request->subscription_id;
             $newLimits      = [
-                'new_contacts_limit'     => $request->new_contacts_limit,
-                'new_campaigns_limit'    => $request->new_campaigns_limit,
-                'new_conversation_limit' => $request->new_conversation_limit,
-                'new_team_limit'         => $request->new_team_limit,
+                'new_active_merchant'       => $request->new_active_merchant,
+                'new_monthly_parcel'        => $request->new_monthly_parcel,
+                'new_active_rider'          => $request->new_active_rider,
+                'new_active_staff'          => $request->new_active_staff,
             ];
 
             $this->subscriptionRepository->updateSubscriptionLimits($subscriptionId, $newLimits);
@@ -154,6 +154,7 @@ class SubscriptionController extends Controller
 
     public function addSubscription(SubscriptionRequest $request)
     {
+
         if (isDemoMode()) {
             return response()->json([
                 'status' => 'danger',

@@ -87,7 +87,6 @@
             </div>
         </div>
     </section>
-    {{-- <button class="btn testpurpose">submit</button> --}}
 @endsection
 @include('backend.common.change-status-script')
 @include('backend.common.delete-script')

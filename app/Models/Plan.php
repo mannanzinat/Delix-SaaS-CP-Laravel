@@ -10,7 +10,7 @@ class Plan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'billing_period','is_free', 'active_merchant', 'color', 'monthly_parcel', 'active_rider', 'active_staff', 'rider_app', 'merchant_app', 'status'];
+    protected $fillable = ['name', 'description', 'price', 'billing_period','is_free', 'active_merchant', 'color', 'monthly_parcel', 'active_rider', 'active_staff', 'custom_domain', 'branded_website', 'white_level', 'rider_app', 'merchant_app', 'status'];
 
     public function subscriptions(): HasMany
     {
@@ -21,7 +21,6 @@ class Plan extends Model
     {
         return $query->where('status', 1);
     }
-
 
     public static function boot()
     {

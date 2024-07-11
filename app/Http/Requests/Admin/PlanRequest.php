@@ -24,7 +24,20 @@ class PlanRequest extends FormRequest
         if ($this->merchant_app === null) {
             $this->merge(['merchant_app' => 0]);
         }
+
+        if ($this->custom_domain === null) {
+            $this->merge(['custom_domain' => 0]);
+        }
+
+        if ($this->branded_website === null) {
+            $this->merge(['branded_website' => 0]);
+        }
+
+        if ($this->white_level === null) {
+            $this->merge(['white_level' => 0]);
+        }
     }
+
 
     public function rules(): array
 

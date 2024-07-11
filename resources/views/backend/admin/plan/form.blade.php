@@ -140,7 +140,42 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-12 custom-control custom-checkbox">
+                                <div class="col-lg-3 custom-control custom-checkbox">
+                                    <div class="mb-2">
+                                        <label for="custom_domain" class="custom-control-label  pt-2">
+                                        <input type="checkbox" class="custom-control-input read common-key pb-4" name="custom_domain" value="1" id="custom_domain" {{ @$plan->custom_domain==1 ? 'checked':"" }}>
+                                        <span>{{__('custom_domain')}}</span>
+                                    </label>
+                                        <div class="nk-block-des text-danger">
+                                            <p class="custom_domain_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 custom-control custom-checkbox">
+                                    <div class="mb-4">
+                                        <label for="branded_website" class="custom-control-label pt-2">
+                                        <input type="checkbox" class="custom-control-input read common-key pb-4" name="branded_website" value="1" id="branded_website" {{ @$plan->branded_website==1 ? 'checked':"" }}>
+                                        <span>{{__('branded_website')}}</span>
+                                    </label>
+                                        <div class="nk-block-des text-danger">
+                                            <p class="branded_website_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 custom-control custom-checkbox">
+                                    <div class="mb-4">
+                                        <label for="white_level" class="custom-control-label pt-2">
+                                        <input type="checkbox" class="custom-control-input read common-key pb-4" name="white_level" value="1" id="white_level" {{ @$plan->white_level==1 ? 'checked':"" }}>
+                                        <span>{{__('white_level')}}</span>
+                                    </label>
+                                        <div class="nk-block-des text-danger">
+                                            <p class="white_level_error error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 custom-control custom-checkbox">
                                     <div class="mb-2">
                                         <label for="rider_app" class="custom-control-label  pt-2">
                                         <input type="checkbox" class="custom-control-input read common-key pb-4" name="rider_app" value="1" id="rider_app" {{ @$plan->rider_app==1 ? 'checked':"" }}>

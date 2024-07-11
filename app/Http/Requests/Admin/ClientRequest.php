@@ -62,6 +62,7 @@ class ClientRequest extends FormRequest
             'logo'         => 'mimes:jpg,JPG,JPEG,jpeg,png,PNG,webp,WEBP|max:5120',
         ];
 
+
         return $rules;
     }
 

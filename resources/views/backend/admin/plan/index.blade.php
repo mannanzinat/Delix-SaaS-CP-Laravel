@@ -57,23 +57,47 @@
 											<h2 class="package-pirce text-center">{{ get_price($plan->price)}}</h2>
 
 											<ul>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('active_merchant')}}</p>
 													<span>{{ $plan->active_merchant }}</span>
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('monthly_parcel') }}</p>
 													<span>{{ $plan->monthly_parcel }}</span>
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('active_rider')}}</p>
 													<span>{{ $plan->active_rider }}</span>
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('active_staff')}}</p>
 													<span>{{ $plan->active_staff }}</span>
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
+													<p>{{__('custom_domain') }}</p>
+													@if($plan->custom_domain == 1)
+														<span>{{__('yes')}}</span>
+													@else
+														<span>{{__('no')}}</span>
+													@endif
+												</li>
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
+													<p>{{__('branded_website') }}</p>
+													@if($plan->branded_website == 1)
+														<span>{{__('yes')}}</span>
+													@else
+														<span>{{__('no')}}</span>
+													@endif
+												</li>
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
+													<p>{{__('white_level') }}</p>
+													@if($plan->white_level == 1)
+														<span>{{__('yes')}}</span>
+													@else
+														<span>{{__('no')}}</span>
+													@endif
+												</li>
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('rider_app') }}</p>
 													@if($plan->rider_app == 1)
 														<span>{{__('yes')}}</span>
@@ -81,7 +105,7 @@
 														<span>{{__('no')}}</span>
 													@endif
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('merchant_app') }}</p>
 													@if($plan->merchant_app == 1)
 														<span>{{__('yes')}}</span>
@@ -89,7 +113,7 @@
 														<span>{{__('no')}}</span>
 													@endif
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 px-30">
 													<p>{{__('featured') }}</p>
 													@if($plan->featured == 1)
 														<span>{{__('yes')}}</span>
@@ -97,7 +121,7 @@
 														<span>{{__('no')}}</span>
 													@endif
 												</li>
-												<li class="d-flex align-items-center justify-content-between py-3 px-30">
+												<li class="d-flex align-items-center justify-content-between py-2 mb-2 px-30">
 													<p>{{__('billing_period')}}</p>
 													<span>{{ __($plan->billing_period) }}</span>
 												</li>

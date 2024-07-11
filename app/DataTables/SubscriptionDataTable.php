@@ -99,8 +99,11 @@ class SubscriptionDataTable extends DataTable
 
         if (@$subscription->plan->billing_period == 'monthly') {
             $expiry_date = $created_at->copy()->addMonthsNoOverflow(1);
-        } else {
+        }elseif (@$subscription->plan->billing_period == 'yearly') {
             $expiry_date = $created_at->copy()->addYear();
+        }else{
+            $expiry_date = '';
+
         }
 
         if ($current_date->gte($expiry_date)) {

@@ -7,7 +7,7 @@
                    id="active_domain-{{ $client->id }}" 
                    data-client-id="{{ $client->id }}" 
                    data-field="custom_domain_active"
-                   {{ @$client->domains->custom_domain_active ? 'checked' : '' }}>
+                   {{ @$client->domains->sub_domain ? 'checked' : '' }}>
             <span>{{ __('active_domain') }}</span>
         </label>
     </div>

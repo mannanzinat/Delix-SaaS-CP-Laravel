@@ -2626,5 +2626,7 @@
     "sub_domain": "Sub Domain",
     "dns_active": "DNS Active",
     "custom_domain_active": "Custom Domain",
+    "branded_website": "Branded Website",
+    "white_level": "White Level",
     "whatsapp_settings_synced_successfully":"WhatsApp settings synced successfully."
 }

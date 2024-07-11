@@ -14555,10 +14555,10 @@ table.dataTable.collapsed td.child ul li .dtr-data {
   flex: 1;
 }
 
-
+/* 
 .default-list-table.yajra-dataTable .table .badge {
   padding-left: 0;
-}
+} */
 
 table.dataTable.collapsed > tbody > tr[role=row] > td:first-child,
 table.dataTable.collapsed > tbody > tr[role=row] > th:first-child {
