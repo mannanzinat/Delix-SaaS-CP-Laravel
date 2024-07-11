@@ -123,10 +123,17 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function updateClientPackageLimitation($sub_domain,$ssl_active=false)
+    public function updateClientPackageLimitation($client,$subscription_package)
     {
+        //dd($client);
+        $domain_name        = $client->domains->sub_domain.'.delix.cloud';
+        $site_user          = $client->domains->site_user;
+        $site_user          = "delix-sfsdfewrefgdergtetertk7or";
+        if($client->domains->custom_domain_active == 1):
+            $domain_name = $client->domains->custom_domain;
+        endif;
         ini_set('max_execution_time',300);
-        $server               = Server::where('default', 1)->first();
+        $server               = Server::find($client->domains->server_id);
 
         if (!$server) {
             return ['success' => false, 'message' => 'No default server found'];
@@ -137,7 +144,7 @@ trait ServerTrait
         try {
             if ($ssh->login('root', $server->password)) {
                 // Update database username and database name
-                $ssh->exec("sed 's/ACTIVE_MERCHANT=.*/ACTIVE_MERCHANT=100/g' /home/delix-45555555ghfhfghfghxfpj/htdocs/45555555ghfhfghfgh.delix.cloud/.env");
+                dd($ssh->exec("sed -i 's/ACTIVE_MERCHANT=.*/ACTIVE_MERCHANT=9999/g' /home/$site_user/htdocs/$domain_name/.env"));
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
             }

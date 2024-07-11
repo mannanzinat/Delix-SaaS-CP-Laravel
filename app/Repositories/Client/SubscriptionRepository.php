@@ -184,7 +184,7 @@ class SubscriptionRepository
         $log          = SubscriptionTransactionLog::create(['description' => 'Admin has purchased '.$plan->name.' package for you',
             'client_id'                                                   => $client->id]);
 
-        $this->updateClientPackageLimitation($client);
+        $this->updateClientPackageLimitation($client,$data);
 
         return Subscription::create($data);
     }

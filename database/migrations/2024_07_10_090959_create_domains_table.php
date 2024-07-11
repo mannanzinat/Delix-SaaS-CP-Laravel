@@ -18,7 +18,15 @@ return new class extends Migration
             $table->bigInteger('client_id')->unsigned()->nullable();
             $table->bigInteger('server_id')->unsigned()->nullable();
             $table->string('sub_domain')->nullable();
+            $table->string('sub_domain_user')->nullable();
+            $table->string('sub_domain_password')->nullable();
+            $table->string('sub_domain_db_user')->nullable();
+            $table->string('sub_domain_db_password')->nullable();
             $table->string('custom_domain')->nullable();
+            $table->string('custom_domain_user')->nullable();
+            $table->string('custom_domain_password')->nullable();
+            $table->string('custom_domain_db_user')->nullable();
+            $table->string('custom_domain_db_password')->nullable();
             $table->tinyInteger('custom_domain_active')->default(0)->comment('0 inactive, 1 active');
             $table->tinyInteger('ssl_active')->default(0)->comment('0 inactive, 1 active');
             $table->tinyInteger('dns_active')->default(0)->comment('0 inactive, 1 active');
