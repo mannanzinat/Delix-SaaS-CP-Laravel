@@ -125,13 +125,36 @@ class ClientRepository
                     $domain->client_id                  = $client->id;
                     $domain->server_id                  = $server->id;
                     $domain->sub_domain                 = $request['sub_domain'];
+                    $uid                                = strtolower(Str::random(4));
+                    $domain->sub_domain_user            = strtolower("delix-".$request['sub_domain']. $uid);
+                    $domain->sub_domain_password        = Str::random(20);
+                    $domain->sub_domain_db_name         = strtolower("db" . $uid . "db");
+                    $domain->sub_domain_db_user         = strtolower("db" . $uid . "db");
+                    $domain->sub_domain_db_password     = Str::random(20);
+                    $uid                                = strtolower(Str::random(4));
+                    $domain->custom_domain              = "";
+                    $domain->custom_domain_user         = strtolower("delix-".$request['sub_domain']. $uid);
+                    $domain->custom_domain_password     = Str::random(20);
+                    $domain->custom_domain_db_name      = strtolower("db" . $uid . "db");
+                    $domain->custom_domain_db_user      = strtolower("db" . $uid . "db");
+                    $domain->custom_domain_db_password  = Str::random(20);
 
                     if($request['script_deployed'] =='1'):
                         if($request['ssl_active'] =='1'):
                             $domain->ssl_active                 = 1;
                         endif;
-                        $result                             = $this->deployScript($request['sub_domain'],($domain->ssl_active == 1) ? true:false);
-                        $domain->script_deployed            = 1;
+                        $domain_info['server_id']               = $server->id;
+                        $domain_info['domain_name']             = $domain->sub_domain.'.delix.cloud';
+                        $domain_info['site_user']               = $domain->sub_domain_user;
+                        $domain_info['site_password']           = $domain->sub_domain_password;
+                        $domain_info['database_name']           = $domain->sub_domain_db_name;
+                        $domain_info['database_user']           = $domain->sub_domain_user;
+                        $domain_info['database_password']       = $domain->sub_domain_password;
+                        $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
+                        $result                                 = $this->deployScript($domain_info);
+                        if ($result['success']):
+                            $domain->script_deployed            = 1;
+                        endif;
                     endif;
                     $domain->save();
 

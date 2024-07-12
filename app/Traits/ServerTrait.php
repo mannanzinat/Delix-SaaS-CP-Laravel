@@ -71,47 +71,48 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function deployScript($sub_domain,$ssl_active=false)
+    public function deployScript($domain=array())
     {
         ini_set('max_execution_time',300);
-        $server               = Server::where('default', 1)->first();
+        $server               = Server::find($domain["server_id"]);
 
         if (!$server) {
             return ['success' => false, 'message' => 'No default server found'];
         }
 
-        $domain             = $sub_domain . ".delix.cloud";
-        $uid                = strtolower(Str::random(4));
-        $database_name      = strtolower("db" . $uid . "db");
-        $site_user          = strtolower("delix-$sub_domain" . $uid);
-        $site_password      = Str::random(20);
-        $server_ip          = $server->ip;
+        $domain_name        = $domain["domain_name"];
+        $site_user          = $domain["site_user"];
+        $site_password      = $domain["site_password"];
+        $database_name      = $domain["database_name"];
+        $database_password  = $domain["database_password"];
+        $ssl_active         = $domain["ssl_active"];
 
+        $server_ip          = $server->ip;
         $ssh                = new SSH2($server_ip);
         try {
             if ($ssh->login('root', $server->password)) {
                 // Add website to CloudPanel
-                $ssh->exec("clpctl site:add:php --domainName=$domain --phpVersion=8.2 --vhostTemplate='Generic' --siteUser='$site_user' --siteUserPassword='$site_password'");
+                $ssh->exec("clpctl site:add:php --domainName=$domain_name --phpVersion=8.2 --vhostTemplate='Generic' --siteUser='$site_user' --siteUserPassword='$site_password'");
 
-                $ssh->exec("rm -r /home/$site_user/htdocs/$domain");
+                $ssh->exec("rm -r /home/$site_user/htdocs/$domain_name");
                 // Unzip script
-                $ssh->exec("unzip /home/delixfile.zip -d /home/$site_user/htdocs/$domain");
+                $ssh->exec("unzip /home/delixfile.zip -d /home/$site_user/htdocs/$domain_name");
                 // Set storage folder permission
-                $ssh->exec("chmod -R 777 /home/$site_user/htdocs/$domain/storage");
+                $ssh->exec("chmod -R 777 /home/$site_user/htdocs/$domain_name/storage");
 
                 // Add database
-                $ssh->exec("clpctl db:add --domainName=$domain --databaseName=$database_name --databaseUserName=$database_name --databaseUserPassword='$site_password'");
+                $ssh->exec("clpctl db:add --domainName=$domain_name --databaseName=$database_name --databaseUserName=$database_name --databaseUserPassword='$database_password'");
                 // Import default database
                 $ssh->exec("clpctl db:import --databaseName=$database_name --file=/home/delixdb.sql");
 
                 // Update database username and database name
-                $ssh->exec("sed -i 's/my_db_name/$database_name/g' /home/$site_user/htdocs/$domain/.env");
-                $ssh->exec("sed -i 's/my_db_username/$database_name/g' /home/$site_user/htdocs/$domain/.env");
-                $ssh->exec("sed -i 's/my_db_password/$site_password/g' /home/$site_user/htdocs/$domain/.env");
+                $ssh->exec("sed -i 's/my_db_name/$database_name/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/my_db_username/$database_name/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/my_db_password/$site_password/g' /home/$site_user/htdocs/$domain_name/.env");
 
                 // Activate SSL
                 if($ssl_active):
-                    $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain");
+                    $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain_name");
                 endif;
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];

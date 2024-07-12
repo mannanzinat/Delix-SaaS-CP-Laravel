@@ -20,11 +20,13 @@ return new class extends Migration
             $table->string('sub_domain')->nullable();
             $table->string('sub_domain_user')->nullable();
             $table->string('sub_domain_password')->nullable();
+            $table->string('sub_domain_db_name')->nullable();
             $table->string('sub_domain_db_user')->nullable();
             $table->string('sub_domain_db_password')->nullable();
             $table->string('custom_domain')->nullable();
             $table->string('custom_domain_user')->nullable();
             $table->string('custom_domain_password')->nullable();
+            $table->string('custom_domain_db_name')->nullable();
             $table->string('custom_domain_db_user')->nullable();
             $table->string('custom_domain_db_password')->nullable();
             $table->tinyInteger('custom_domain_active')->default(0)->comment('0 inactive, 1 active');
