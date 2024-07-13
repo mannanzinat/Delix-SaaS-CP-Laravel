@@ -130,10 +130,11 @@ class ClientRepository
                         if($request['ssl_active'] =='1'):
                             $domain->ssl_active                 = 1;
                         endif;
-                        $result                             = $this->deployScript($request['sub_domain'],($domain->ssl_active == 1) ? true:false);
-                        $domain->script_deployed            = 1;
+                        $domain->script_deployed                = 1;
+                        $domain->save();
+                        $result                                 = $this->deployScript($request['sub_domain'],($domain->ssl_active == 1) ? true:false, $client->id);
+                        return ['success' => true, 'message' => 'Client staff created successfully', 'data' => $clientStaff];
                     endif;
-                    $domain->save();
 
                     if (!$result['success']):
                         return ['success' => false, 'message' => $result['message']];

@@ -13,7 +13,7 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name','ai_secret_key', 'domain', 'last_name', 'company_name', 'logo', 'timezone', 'slug', 'country_id', 'address', 'status', 'webhook_verify_token', 'api_key', 'stripe_customer_id', 'paddle_customer_id',
+        'first_name','ai_secret_key', 'remote_admin_login_key', 'domain', 'last_name', 'company_name', 'logo', 'timezone', 'slug', 'country_id', 'address', 'status', 'webhook_verify_token', 'api_key', 'stripe_customer_id', 'paddle_customer_id',
     ];
 
     protected $casts    = [

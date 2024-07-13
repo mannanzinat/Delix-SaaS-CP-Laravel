@@ -7,7 +7,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<h3 class="section-title">{{__('add_client') }}</h3>
-						<form id="clientForm" action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data" class="form">
+						<form action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data">
 							@csrf
 							<div class="bg-white redious-border p-20 p-sm-30">
 								<h6 class="sub-title">{{__('client_information')  }}</h6>
@@ -83,7 +83,7 @@
 											<label for="email"
 												   class="form-label">{{__('email_address') }}<span
 														class="text-danger">*</span></label>
-											<input type="email" class="form-control rounded-2" id="email"
+											<input type="email" class="form-control rounded-2 @error('email') is-invalid @enderror" id="email"
 												   name="email" value="{{ old('email') }}"
 												   autocomplete="off" placeholder="{{ __('email') }}" required>
 											@if ($errors->has('email'))
@@ -253,17 +253,30 @@
 	@push('js')
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-	<script>
-		$(document).ready(function(){
-			$('#create_domain').change(function(){
-				if($(this).is(':checked')){
-					$('#deployed_script_container, #ssl_active_container').show();
-					$('#deployed_script, #ssl_active').prop('checked', true);
-				} else {
-					$('#deployed_script_container, #ssl_active_container').hide();
-					$('#deployed_script, #ssl_active').prop('checked', false);
-				}
+		<script>
+			$(document).ready(function() {
+				$("#clientForm").validate({
+					errorPlacement: function(error, element) {
+						error.addClass('text-danger');
+						error.insertAfter(element);
+					},
+					highlight: function(element, errorClass, validClass) {
+						$(element).addClass('is-invalid');
+					},
+					unhighlight: function(element, errorClass, validClass) {
+						$(element).removeClass('is-invalid');
+					}
+				});
+
+				$('#create_domain').change(function() {
+					if($(this).is(':checked')) {
+						$('#deployed_script_container, #ssl_active_container').show();
+						$('#deployed_script, #ssl_active').prop('checked', true);
+					} else {
+						$('#deployed_script_container, #ssl_active_container').hide();
+						$('#deployed_script, #ssl_active').prop('checked', false);
+					}
+				});
 			});
-		});
-	</script>
+		</script>
 	@endpush

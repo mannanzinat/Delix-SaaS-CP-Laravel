@@ -17,6 +17,11 @@ class Domain extends Model
         'ssl_active',
         'dns_active',
         'script_deployed',
+        'database_name',
+        'database_password',
+        'site_name',
+        'site_password',
+
     ];
 
     public function client()

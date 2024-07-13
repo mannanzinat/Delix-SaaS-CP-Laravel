@@ -7,7 +7,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<h3 class="section-title">{{__('add_server') }}</h3>
-						<form action="{{ route('cloud-server.store') }}" method="post" enctype="multipart/form-data">
+						<form action="{{ route('cloud-server.store') }}" method="post" class="form" enctype="multipart/form-data">
 							@csrf
 							<div class="bg-white redious-border p-20 p-sm-30">
 								<h6 class="sub-title">{{__('server_information')  }}</h6>

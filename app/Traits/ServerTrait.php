@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use phpseclib3\Net\SSH2;
 use App\Models\Server;
+use App\Models\Domain;
 use Illuminate\Support\Str;
 
 trait ServerTrait
@@ -71,7 +72,7 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function deployScript($sub_domain,$ssl_active=false)
+    public function deployScript($sub_domain, $ssl_active=false, $client_id=null)
     {
         ini_set('max_execution_time',300);
         $server               = Server::where('default', 1)->first();
@@ -80,14 +81,26 @@ trait ServerTrait
             return ['success' => false, 'message' => 'No default server found'];
         }
 
-        $domain             = $sub_domain . ".delix.cloud";
-        $uid                = strtolower(Str::random(4));
-        $database_name      = strtolower("db" . $uid . "db");
-        $site_user          = strtolower("delix-$sub_domain" . $uid);
-        $site_password      = Str::random(20);
-        $server_ip          = $server->ip;
+        $domain                             = $sub_domain . ".delix.cloud";
+        $uid                                = strtolower(Str::random(4));
+        $database_name                      = strtolower("db" . $uid . "db");
+        $site_user                          = strtolower("delix-$sub_domain" . $uid);
+        $site_password                      = Str::random(20);
+        $server_ip                          = $server->ip;
 
-        $ssh                = new SSH2($server_ip);
+        //domain info update
+        if($client_id){
+            $domain                         = Domain::where('client_id', $client_id)->first();
+            $domain->database_name          = $database_name;
+            $domain->database_password      = $site_password;
+            $domain->site_name              = $site_user;
+            $domain->site_password          = $site_password;
+            $domain->save();
+        }
+
+
+
+        $ssh                                = new SSH2($server_ip);
         try {
             if ($ssh->login('root', $server->password)) {
                 // Add website to CloudPanel

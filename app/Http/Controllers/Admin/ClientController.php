@@ -80,7 +80,6 @@ class ClientController extends Controller
         DB::beginTransaction();
         try {
             $result         = $this->repo->store($request->all());
-
             if (!$result['success']) {
                 DB::rollback();
                 Toastr::error($result['message']);
@@ -237,7 +236,6 @@ class ClientController extends Controller
     public function domainStatus(Request $request)
     {
 
-        dd($request->all());
         $client = Client::find($request->client_id);
 
         if ($client && isset($client->domains)) {
