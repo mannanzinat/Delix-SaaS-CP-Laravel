@@ -112,7 +112,7 @@ trait ServerTrait
 
                 // Activate SSL
                 if($ssl_active):
-                    $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain_name");
+                    //$ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain_name");
                 endif;
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
@@ -124,28 +124,32 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function updateClientPackageLimitation($client,$subscription_package)
+    public function updateClientPackageLimitation($domain=array(),$plan)
     {
-        //dd($client);
-        $domain_name        = $client->domains->sub_domain.'.delix.cloud';
-        $site_user          = $client->domains->site_user;
-        $site_user          = "delix-sfsdfewrefgdergtetertk7or";
-        if($client->domains->custom_domain_active == 1):
-            $domain_name = $client->domains->custom_domain;
-        endif;
         ini_set('max_execution_time',300);
-        $server               = Server::find($client->domains->server_id);
+        $server               = Server::find($domain["server_id"]);
 
         if (!$server) {
             return ['success' => false, 'message' => 'No default server found'];
         }
+        $domain_name        = $domain["domain_name"];
+        $site_user          = $domain["site_user"];
         $server_ip          = $server->ip;
 
         $ssh                = new SSH2($server_ip);
         try {
             if ($ssh->login('root', $server->password)) {
                 // Update database username and database name
-                dd($ssh->exec("sed -i 's/ACTIVE_MERCHANT=.*/ACTIVE_MERCHANT=9999/g' /home/$site_user/htdocs/$domain_name/.env"));
+                $ssh->exec("sed -i 's/ACTIVE_MERCHANT=.*/ACTIVE_MERCHANT=$plan->active_merchant/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/MONTHLY_PARCEL=.*/MONTHLY_PARCEL=$plan->monthly_parcel/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/ACTIVE_RIDER=.*/ACTIVE_RIDER=$plan->active_rider/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/ACTIVE_STAFF=.*/ACTIVE_STAFF=$plan->active_staff/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/CUSTOM_DOMAIN=.*/CUSTOM_DOMAIN=$plan->custom_domain/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/BRANDED_WEBSITE=.*/BRANDED_WEBSITE=$plan->branded_website/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/WHITE_LEVEL=.*/WHITE_LEVEL=$plan->white_level/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/MERCHANT_APP=.*/MERCHANT_APP=$plan->merchant_app/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/RIDER_APP=.*/RIDER_APP=$plan->rider_app/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/IS_FREE=.*/IS_FREE=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
             }

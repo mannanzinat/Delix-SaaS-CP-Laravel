@@ -180,13 +180,22 @@ class SubscriptionRepository
             'payment_details'        => $payment_details,
             'client'                 => Client::find($client->id),
         ];
+        $result = Subscription::create($data);
 
-        $log          = SubscriptionTransactionLog::create(['description' => 'Admin has purchased '.$plan->name.' package for you',
-            'client_id'                                                   => $client->id]);
+        $log          = SubscriptionTransactionLog::create(['description' => 'Admin has purchased '.$plan->name.' package for you','client_id'=> $client->id]);
 
-        $this->updateClientPackageLimitation($client,$data);
+        $domain_info['server_id']               = $client->domains->server_id;
+        if($client->domains->custom_domain_active == 1):
+            $domain_info['domain_name']             = $client->domains->custom_domain;
+            $domain_info['site_user']               = $client->domains->custom_domain_user;
+        else:
+            $domain_info['domain_name']             = $client->domains->sub_domain.'.delix.cloud';
+            $domain_info['site_user']               = $client->domains->sub_domain_user;
+        endif;
 
-        return Subscription::create($data);
+        $this->updateClientPackageLimitation($domain_info,$plan);
+
+        return $result;
     }
 
     public function subscribeListStatus($request, $id)
