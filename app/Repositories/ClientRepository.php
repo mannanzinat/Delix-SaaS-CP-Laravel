@@ -150,6 +150,9 @@ class ClientRepository
                         $domain_info['database_name']           = $domain->sub_domain_db_name;
                         $domain_info['database_user']           = $domain->sub_domain_user;
                         $domain_info['database_password']       = $domain->sub_domain_password;
+                        $domain_info['admin_key']               = strtolower(Str::random(24));
+                        $domain_info['client_key']              = strtolower(Str::random(24));
+                        $domain_info['database_password']       = $domain->sub_domain_password;
                         $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
                         $result                                 = $this->deployScript($domain_info);
                         if ($result['success']):

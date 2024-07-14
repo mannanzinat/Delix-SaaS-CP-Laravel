@@ -150,6 +150,8 @@ trait ServerTrait
                 $ssh->exec("sed -i 's/MERCHANT_APP=.*/MERCHANT_APP=$plan->merchant_app/g' /home/$site_user/htdocs/$domain_name/.env");
                 $ssh->exec("sed -i 's/RIDER_APP=.*/RIDER_APP=$plan->rider_app/g' /home/$site_user/htdocs/$domain_name/.env");
                 $ssh->exec("sed -i 's/IS_FREE=.*/IS_FREE=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/ADMIN_KEY=.*/ADMIN_KEY=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/CLIENT_KEY=.*/CLIENT_KEY=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
             }
