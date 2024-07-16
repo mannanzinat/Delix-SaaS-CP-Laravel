@@ -1,0 +1,375 @@
+/*********************************
+/* Pricing Section Start
+*********************************/
+.pricing__section {
+    padding-top: 145px;
+
+    @include respond (phone) {
+        padding: 120px 0 50px !important;
+    }
+}
+
+
+.pricing__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    justify-content: center;
+    grid-column: 3;
+    align-items: center;
+    
+    @include respond (tabland) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include respond (phone) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.pricing__item {
+	padding: 36px 24px 25px;
+	border: 1px solid #1118270F;
+	background: $white;
+	border-radius: $radius + 2;
+	transition: $transition;
+	text-align: left;
+
+	.pricing {
+		&__header {
+			border-bottom: 1px solid #1118270F;
+            padding-bottom: 24px;
+			.title {
+				font-size: 20px;
+				line-height: 24px;
+                font-weight: $semibold;
+				margin-bottom: 16px;
+				transition: $transition;
+                text-transform: uppercase;
+			}
+			p,
+			.desc {
+				font-size: 20px;
+				line-height: 24px;
+                font-weight: $semibold;
+                color: $primary;
+                margin-bottom: 0;
+
+                @include respond(tabport) {
+                    font-size: 16px;
+                    line-height: 20px;
+                }
+			}
+		}
+		
+		&__tag {
+			font-family: $default;
+			display: inline-flex;
+			align-items: center;
+			position: relative;
+			gap: 12px;
+			margin-bottom: 24px;
+			font-size: 48px;
+            line-height: 57px;
+			font-weight: $bold;
+			transition: $transition;
+
+            @include respond(tabport) {
+                font-size: 32px;
+                line-height: 40px;
+                margin-bottom: 13px;
+            }
+
+            del {
+                font-size: 32px;
+                line-height: 38px;
+                color: $content;
+                font-weight: $medium;
+
+                @include respond(tabport) {
+                    font-size: 20px;
+                    line-height: 28px;
+                }
+            }
+		}
+		
+		&__features {
+			text-align: start;
+            padding-top: 24px;
+
+			li {
+				display: flex;
+				// align-items: center;
+				gap: 12px;
+				margin-bottom: 20px;
+				font-family: $inter;
+				font-size: 18px;
+				line-height: 21px;
+                color: $heading2;
+				font-weight: $regular;
+				transition: $transition;
+
+                @include respond(tabport) {
+                    font-size: 16px;
+                }
+
+                span {
+                    flex: 1;
+                }
+
+                small {
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: $content;
+                    display: block;
+                    margin-top: 8px;
+                }
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+
+                &.disable {
+                    i {
+                        color: #A9A9A9;
+                        border-color: #A9A9A9;
+                    }
+                }
+
+				i {
+					font-size: 12px;
+					height: 20px;
+					width: 20px;
+                    border: 1px solid $primary;
+                    border-radius: 50%;
+					color: $primary;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					transition: $transition;
+
+                    @include respond(tabport) {
+                        height: 18px;
+                        width: 18px;
+                    }
+				}
+			}
+		}
+        &__btn {
+			margin-top: 36px;
+
+			.btn {
+				border-radius: 6px;
+                font-weight: $semibold;
+                background: #00224D0A;
+                border-color: #1118270F;
+                color: $heading;
+			}
+		}
+	}
+	&.active,
+	&:hover {
+		border-color: rgba($primary, 0.2);
+        background: $secondary;
+
+        .btn {
+            background: $primary;
+            border-color: $primary;
+            color: $white;
+        }
+	}
+}
+
+/*********************************
+/* Pricing Section End
+*********************************/
+
+
+
+/*********************************
+/* Tabs Start
+*********************************/
+.custom__tabs {
+    .nav {
+        border: 1px solid #1118270F;
+        padding: 10px;
+        border-radius: 8px;
+        display: inline-flex;
+        margin-bottom: 46px;
+        flex-wrap: nowrap;
+        .nav-link {
+            font-family: $default;
+            font-size: 16px;
+            font-weight: $semibold;
+            line-height: 19.2px;
+            padding: 11px 15px;
+            background: transparent;
+            color: $heading;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            min-width: 100px;
+            width: 100%;
+
+            @include respond (phone-xm) {
+                min-width: 90px;
+            }
+
+            &.active {
+                background: $primary;
+                border: 1px solid $primary;
+                color: $white;
+            }
+        }
+    }
+}
+
+
+/*********************************
+/* Tabs End
+*********************************/
+
+
+/*********************************
+/* Pricing Data Table Start
+*********************************/
+
+.dataTable {
+    .table {
+        white-space: nowrap;
+        border-collapse: initial;
+        border: 1px solid #1118270F;
+        border-radius: 10px;
+        border-spacing: 0;
+        tr {
+            &:last-child {
+                th,td {
+                    border-bottom: none;
+                }
+            }
+            &:first-of-type {
+                td {
+                    &:hover {
+                        background: $secondary;
+                    
+                        .btn {
+                            background: $primary;
+                            border-color: $primary;
+                            color: $white;
+                        }
+                    }
+
+                }
+            }
+            
+        }
+        th {
+            font-size: 18px !important;
+            font-weight: $semibold !important;
+            border: none;
+            
+            .table__title {
+                text-align: left;
+            }
+        }
+        th,td {
+            padding: 16px;
+            font-family: $default;
+            font-size: 16px;
+            font-weight: $medium;
+            line-height: 28px;
+            color: $heading2;
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid #1118270F;
+            border-right: 1px solid #1118270F;
+
+            p {
+                color: $heading2 !important;
+            }
+
+            .btn {
+                border-radius: 8px;
+            }
+
+            &:last-child {
+                border-right: none;
+            }
+
+
+            
+            p {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.pricing__footer {
+    font-family: $default;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 6px;
+    transition: $transition;
+
+    .price {
+        font-size: 26px;
+        font-weight: $bold;
+        line-height: 28px;
+        color: $heading2;
+    }
+    .title {
+        font-size: 18px;
+        font-weight: $semibold;
+        line-height: 28px;
+        color: $primary;
+    }
+    .offer {
+        font-family: $inter;
+        font-size: 14px;
+        font-weight: $regular;
+        line-height: 28px;
+        color: $heading2;
+    }
+    .btn {
+        padding: 10.5px 25px;
+        margin-top: 18px;
+    }
+}
+
+
+
+.feature__accordion {
+    .accordion {
+        .accordion-button {
+            border: 1px solid rgba($primary, 0.2);
+            border-radius: 8px !important;
+            padding: 20px 50px 20px 20px !important;
+            background: transparent !important;
+
+            &:not(.collapsed) {
+                background: $white;
+                border-radius: 8px;
+            }
+            &:focus {
+                border: 1px solid rgba($primary, 0.2) !important;
+                border-color: rgba($primary, 0.2) !important;
+            }
+
+            &::after {
+                content: "\f078";
+                font-size: 16px;
+            }
+            &:not(.collapsed)::after {
+                content: "\f077";
+            }
+        }
+        .accordion-body {
+            margin-top: 16px;
+            padding: 0;
+            background: transparent;
+        }
+    }
+}
+/*********************************
+/* Pricing Data Table End
+*********************************/

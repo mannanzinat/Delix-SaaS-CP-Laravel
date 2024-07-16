@@ -1,0 +1,183 @@
+/*********************************
+/* Management Section Start
+*********************************/
+.management__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 60px;
+
+    @include respond (tabland) {
+        flex-direction: column !important;
+    }
+
+    .management {
+        &__inner {
+            max-width: 50%;
+            width: 100%;
+
+            @include respond (tabland) {
+                max-width: 100%;
+            }
+        }
+
+        &__thumb {
+            max-width: 519px;
+            
+
+            img {
+                width: 100%;
+            }
+        }
+        &__content {
+            margin-bottom: 32px;
+            .subtitle {
+                font-family: $default;
+                font-size: 20px;
+                font-weight: $medium;
+                line-height: 24px;
+                color: $primary;
+                margin-bottom: 10px;
+            }
+        
+            .title {
+                font-family: $default;
+                font-size: 36px;
+                font-weight: $semibold;
+                line-height: 43px;
+                color: $heading;
+                text-transform: capitalize;
+                margin-bottom: 0;
+
+        
+                span {
+                    color: $primary;
+                }
+
+                @include respond (tabland) {
+                    font-size: 32px;
+                }
+                @include respond (phone-sm) {
+                    font-size: 27px;
+                    line-height: 38px;
+                }
+        
+                @include respond(phone-mid) {
+                    font-size: 26px;
+                    line-height: 34px;
+                }
+            }
+            p,
+            .desc {
+                font-family: $inter;
+                font-size: 16px;
+                line-height: 28px;
+                font-weight: $medium;
+                color: $content;
+                margin: 18px auto 0;
+        
+                @include respond(phone-sm) {
+                    margin: 15px 0 0;
+                }
+            }
+        }
+    }
+}
+
+.managementCard {
+	background: $white;
+	padding: 16px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba($heading2, 0.06);
+	transition: $transition;
+	display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+
+
+	&__icon {
+		height: 60px;
+		width: 60px;
+		border-radius: 50%;
+		background: rgba($heading, 0.04);
+        border: 1px solid rgba($heading2, 0.06);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: $transition;
+		// box-shadow: 0px 3px 10px #d8d8d87d;
+
+
+		img {
+			width: auto;
+			height: auto;
+			display: block;
+            transition: $transition;
+		}
+	}
+
+	&__content {
+        flex: 1;
+		.title {
+			font-size: 20px;
+			line-height: 24px;
+			font-weight: $semibold;
+			color: $heading;
+			margin-bottom: 8px;
+			display: block;
+
+			@include respond (phone-sm) {
+				font-size: 18px;
+			}
+		}
+		p,
+		.desc {
+			font-family: $inter;
+			font-size: 15px;
+			line-height: 23px;
+			color: $content;
+			margin-bottom: 0;
+		}
+	}
+	&:hover {
+		border-color: rgba($primary, 0.2);
+		background: $secondary;
+		.managementCard {
+			&__icon {
+				background: $primary;
+
+				img {
+					filter: brightness(0) invert(1) ;
+                    transform: rotate(-90deg);
+				}
+			}
+		}
+	}
+}
+
+.more__btn {
+    margin-top: 26px;
+    .btn {
+        background-color: rgba($heading, 0.04);
+        color: $heading;
+        border: 1px solid rgba($heading2, 0.06);
+        max-width: 257px;
+        width: 100%;
+        font-weight: $semibold;
+
+        &:hover {
+            color: $white;
+            background-color: $primary;
+            border-color: $primary;
+        }
+    }
+}
+
+/*********************************
+/* Management Section End
+*********************************/

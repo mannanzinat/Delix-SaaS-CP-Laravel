@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CronController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PriceController;
+
 use App\Http\Controllers\Client\FlowBuilderController;
 
 Route::any('env-editor', function () {
@@ -17,6 +19,8 @@ Route::post('subscribe/store', [HomeController::class, 'subscribeStore'])->name(
 
 Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('check.landing.page');
+    Route::get('/price', [PriceController::class, 'index'])->name('price');
+
     Route::get('language/{lang}', [HomeController::class, 'changeLanguage'])->name('lang');
     Route::get('cache-clear', [HomeController::class, 'cacheClear'])->name('cache.clear');
     Route::get('page/{link}', [HomeController::class, 'page']);

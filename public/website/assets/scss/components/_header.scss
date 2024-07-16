@@ -1,0 +1,452 @@
+/*********************************
+/* Header Start
+*********************************/
+.header {
+	position: fixed;
+	top: 0px;
+	z-index: 999;
+	width: 100%;
+	background: $secondary;
+	transition: $transition;
+
+	.nav {
+		background-color: transparent;
+		padding: 0px;
+		margin: 0 auto;
+	}
+
+	&__wrapper {
+		@include flexbox($a: center, $jc: space-between);
+		position: relative;
+		transition: all 200ms ease-in-out;
+
+		@include respond(tabland) {
+			padding: 10px 0;
+		}
+
+		.header {
+			&__logo a {
+				img {
+					width: auto;
+					height: auto;
+					display: block;
+					max-width: 160px;
+
+					@include respond(phone-xm) {
+						max-width: 140px;
+					}
+				}
+			}
+			&__menu {
+				@include respond(tabland) {
+					display: none;
+				}
+				.main__menu {
+					@include flexbox($a: center, $jc: inherit);
+					gap: 26px;
+
+					li {
+						position: relative;
+						list-style: none;
+						&.has__dropdown {
+							a {
+								position: relative;
+
+								&::after {
+									content: "\f078";
+									font-family: "Font Awesome 5 Free";
+									font-weight: 900;
+									font-size: 12px;
+									color: $heading;
+									margin-left: 8px;
+									transition: $transition;
+								}
+							}
+						}
+
+						a {
+							font-family: $inter;
+							font-size: 16px;
+							line-height: 85px;
+							font-weight: $regular;
+							color: $heading;
+							display: inline-block;
+							padding: 0;
+							text-transform: capitalize;
+							transition: $transition;
+							position: relative;
+
+							&:hover,
+							&.active {
+								color: $primary;
+							}
+						}
+						&:hover,
+						&.active {
+							a {
+								color: $primary;
+
+								&::after {
+									color: $primary;
+								}
+							}
+						}
+						
+						.sub-menu,
+						.sub__menu {
+							position: absolute;
+							left: 0;
+							top: 110%;
+							width: 220px;
+							background: $white;
+							box-shadow: 0 2px 29px rgba(0, 0, 0, 0.05);
+							border-radius: $radius;
+							opacity: 0;
+							z-index: 99;
+							visibility: hidden;
+							transition: $transition;
+							border-top: 2px solid $primary;
+
+							li {
+								padding: 0 22px;
+
+								a {
+									font-size: 16px;
+									line-height: 28px;
+									font-family: $default;
+									font-weight: $medium;
+									color: $heading;
+									width: 100%;
+									padding: 16px 0;
+									display: block;
+									position: relative;
+									z-index: 1;
+									border-bottom: 1px solid #eaeaea;
+									text-transform: capitalize;
+									white-space: nowrap;
+
+									&::before {
+										content: "";
+										position: absolute;
+										left: 0px;
+										top: 50%;
+										transform: translateY(-50%);
+										height: 10px;
+										width: 10px;
+										border-radius: 2px;
+										background: $primary;
+										opacity: 0;
+										visibility: hidden;
+										transition: $transition;
+									}
+
+									&::after {
+										display: none;
+									}
+									&:hover,
+									&.active {
+										padding-left: 20px;
+										color: $primary;
+
+										&::before {
+											opacity: 1;
+											visibility: visible;
+										}
+									}
+								}
+								&:last-child a {
+									border: none;
+								}
+							}
+							&.mega__menu {
+								max-width: 780px;
+								width: 100% !important;
+								left: 50% !important;
+								transform: translateX(-50%);
+								border: 1px solid rgba($primary, 0.2);
+								padding: 24px;
+
+								a {
+									&::after {
+										display: none;
+									}
+								}
+							}
+						}
+						&:hover {
+							.sub-menu,
+							.sub__menu {
+								opacity: 1;
+								visibility: visible;
+								top: 100%;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	&__meta {
+		@include flexbox($a: center, $jc: inherit);
+		flex-wrap: nowrap;
+		gap: 15px;
+
+		.meta__list {
+			@include flexbox($a: center, $jc: inherit);
+			gap: 20px;
+			list-style: none;
+
+			@include respond(phone) {
+				// display: none;
+			}
+		}
+
+		.header__btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 12px;
+			.btn {
+				padding: 9px 27px;
+
+				span {
+					background: rgba($white, 0.2);
+					border: 1px solid rgba($white, 0.3);
+					border-radius: 4px;
+					padding: 3px 14px;
+					font-size: 14px;
+					line-height: 17px;
+				}
+
+				&-outline {
+					border: 1px solid #1118270F;
+					color: $heading;
+					border-radius: 6px;
+
+					&:focus,
+					&:hover {
+						background: transparent;
+						border-color: $primary;
+						color: $heading;
+					}
+				}
+				&-primary {
+					padding: 6px 12px;
+					border-radius: 6px;
+					font-weight: $medium;
+
+					&:hover {
+						background: $primary;
+						color: $white;
+						span {
+							// background: $primary;
+							// border-color: $primary;
+							color: $heading;
+						}
+					}
+				}
+
+				&:last-of-type {
+					@include respond(tabland) {
+						display: none;
+					}
+				}
+			}
+			@include respond(phone-sm) {
+				display: none;
+			}
+		}
+
+		.header__toggle {
+			height: 43px;
+			width: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid $heading;
+			color: $heading;
+			font-size: 26px;
+			border-radius: 4px;
+			cursor: pointer;
+			display: none;
+			transition: $transition;
+
+			@include respond(tabland) {
+				display: flex;
+			}
+			@include respond(phone-sm) {
+				height: 40px;
+				width: 50px;
+			}
+
+			&:hover {
+				background: $primary;
+				border-color: $primary;
+				color: $white;
+			}
+		}
+	}
+}
+.nav-bg {
+	background: $white;
+	box-shadow: 0 22px 20px rgba(0, 0, 0, 0.05);
+	top: 0;
+}
+
+/*********************************
+/* FlyOut Menu Start
+*********************************/
+.flyoutMenu {
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100vh;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.75);
+	z-index: 9999;
+	opacity: 0;
+	visibility: hidden;
+	transition: $transition;
+
+	&.active {
+		opacity: 1;
+		visibility: visible;
+		right: 0;
+
+		.flyout__flip {
+			left: 0;
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+	.flyout {
+		&__flip {
+			@include flexbox($a: inherit, $jc: space-between);
+			flex-direction: column;
+			flex-wrap: nowrap;
+			position: absolute;
+			top: 0;
+			left: -200px;
+			// right: 0;
+			background: $white;
+			width: 360px;
+			height: 100%;
+			box-shadow: 0px 14px 40px 0px #73737326;
+			// padding: 0px 25px;
+			z-index: 99999;
+			overflow-y: auto;
+			opacity: 0;
+			visibility: hidden;
+			transition: $transition;
+
+			@include respond(phone-sm) {
+				width: 370px;
+			}
+			@include respond(phone-xm) {
+				width: 310px;
+			}
+		}
+		&__inner {
+			.menu__header-top {
+				@include flexbox($a: center, $jc: space-between);
+				padding: 15px;
+				border-bottom: 1px solid #f0f0f0;
+
+				.closest__btn {
+					cursor: pointer;
+					color: $heading;
+					font-size: 25px;
+					height: 40px;
+					width: 40px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+				.brand__logo {
+					max-width: 120px;
+				}
+			}
+		}
+		&-main__menu {
+			margin-top: 16px;
+			li {
+				position: relative;
+				list-style: none;
+				padding: 10px 15px;
+				border-bottom: 1px solid #f0f0f0;
+
+				a {
+					font-family: $default;
+					font-size: 16px;
+					font-weight: $semibold;
+					color: $heading;
+					display: block;
+					line-height: 24px;
+					padding: 0px;
+					text-transform: capitalize;
+					transition: $transition;
+					position: relative;
+					&:hover,
+					&.active {
+						color: $primary;
+						&::after {
+							color: $primary !important;
+						}
+					}
+				}
+				&:last-child a {
+					margin-right: 0;
+				}
+				&.has__dropdown {
+					.nav__link {
+						&::after {
+							content: "\f078";
+							font-family: "Font Awesome 5 Free";
+							font-weight: 900;
+							font-size: 11px;
+							color: $heading;
+							transition: $transition;
+							position: absolute;
+							right: 0;
+							top: 50%;
+							transform: translateY(-50%);
+						}
+					}
+				}
+				.sub-menu,
+				.sub__menu {
+					position: relative;
+					background: $secondary;
+					z-index: 99;
+					padding: 10px 0 10px 16px;
+					margin-top: 8px;
+					display: none;
+
+					li {
+						padding: 0;
+						border: none;
+
+						a {
+							font-family: $default;
+							padding: 7px 0;
+							font-size: 15px;
+							line-height: 20px;
+							font-weight: $semibold;
+							color: $heading;
+							width: 100%;
+							display: block;
+							position: relative;
+							z-index: 1;
+
+							&:hover {
+								color: $primary;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/*********************************
+/* FlyOut Menu End
+*********************************/

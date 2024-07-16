@@ -1,0 +1,143 @@
+/*********************************
+/* Testimonial Start
+*********************************/
+
+.testimonial__container {
+    column-count: 2;
+    gap: 24px;
+
+    @include respond (tabport) {
+        column-count: 1;
+    }
+}
+
+.testimonial {
+    &__item {
+        background: transparent;
+        padding: 32px 16px;
+        border-radius: 10px;
+        border: 1px solid rgba($heading2, 0.06);
+        margin-bottom: 24px;
+        break-inside: avoid;
+        transition: $transition;
+
+        &:hover {
+            background: $white;
+            border: 1px solid rgba($primary, 0.2);
+        }
+    }
+    &__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 24px;
+
+        @include respond (phone-xm) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .avatar__info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+
+            .avatar {
+                height: 80px;
+                width: 80px;
+                border-radius: 50%;
+
+                @include respond (tabland) {
+                    height: 60px;
+                    width: 60px;
+                }
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    display: inline-block;
+                    border-radius: 50%;
+                }
+            }
+            .content {
+                flex: 1;
+                .author__name {
+                    font-family: $default;
+                    font-size: 20px;
+                    font-weight: $semibold;
+                    line-height: 24px;
+                    color: $heading;
+                    margin-bottom: 8px;
+
+                    @include respond (tabland) {
+                        font-size: 18px;
+                        line-height: 20px;
+                        margin-bottom: 0;
+                    }
+                }
+                .designation {
+                    font-family: $inter;
+                    font-size: 16px;
+                    font-weight: $medium;
+                    line-height: 28px;
+                    color: $content;
+                    text-transform: capitalize;
+
+                    @include respond (tabland) {
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+                }
+                .country {
+                    font-size: 13px;
+                    font-weight: $regular;
+                    line-height: 20px;
+                    color: $heading2;
+                    display: block;
+
+                }
+            }
+        }
+        .rating {
+            font-family: $inter;
+            font-size: 16px;
+            font-weight: $regular;
+            line-height: 28px;
+            color: $content;
+            text-transform: capitalize;
+
+            @include respond (phone-xm) {
+                display: flex;
+                align-items: center;
+            }
+
+            span {
+                display: block;
+                margin-bottom: 4px;
+                text-align: end;
+
+                @include respond (tabland) {
+                    text-align: left;
+                }
+                @include respond (phone-xm) {
+                    margin-bottom: 0;
+                    margin-right: 8px;
+                }
+            }
+
+            i {
+                font-size: 14px;
+                color: $yellow;
+            }
+        }
+    }
+    &__content {
+        margin-bottom: 0;
+    }
+}
+
+/*********************************
+/* Testimonial End
+*********************************/

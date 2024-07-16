@@ -1,0 +1,102 @@
+/*********************************
+/* Accordion Start
+*********************************/
+.accordion__wrapper {
+    max-width: 880px;
+    margin: auto;
+}
+.accordion__item {
+    border: none;
+    border-radius: $radius;
+    margin-bottom: 30px;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+    .accordion__header {
+        .accordion-button {
+            font-family: $default;
+            font-size: 20px;
+            line-height: 24px;
+            font-weight: $semibold;
+            color: $heading;
+            padding: 20px 50px 16px 20px;
+            background: transparent;
+
+            @include respond (phone) {
+                font-size: 18px;
+            }
+            @include respond (phone-sm) {
+                font-size: 16px;
+                line-height: 20px;
+                // padding: 20px 16px;
+                // padding-bottom: 16px;
+                // padding-right: 50px;
+            }
+
+            &:focus {
+                border: none;
+                box-shadow: none;
+            }
+            &:not(.collapsed) {
+                background: $secondary;
+                box-shadow: none;
+                outline: none;
+                color: $heading;
+                border-radius: 8px 8px 0 0;
+
+                &::after {
+                    content: "\f062";
+                }
+            }
+            &::after {
+                background: none;
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                height: auto;
+                width: auto;
+                content: "\f063";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+            }
+            // &.collapsed {
+            //     color: $heading;
+            //     .properties-item-v2 {
+            //         ul {
+            //             li,
+            //             p,
+            //             i {
+            //                 color: $heading;
+            //             }
+            //         }
+            //     }
+            // }
+        }
+    }
+    .accordion-body {
+        padding: 0 20px 20px;
+        background: $secondary;
+        border-radius: 0 0 8px 8px;
+
+        .accordion__content {
+            p {
+                font-family: $inter;
+                font-size: 16px;
+                line-height: 28px;
+                font-weight: $regular;
+                color: $content;
+                margin-bottom: 0;
+
+                @include respond (phone-sm) {
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+}
+/*********************************
+/* Accordion End
+*********************************/
