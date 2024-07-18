@@ -9,31 +9,39 @@ trait SendMailTrait
 {
     protected function sendMail($to, $view, $data, $sender = null): bool
     {
-        $engine    = env('MAIL_MAILER');
+        try {
+            $engine             = env('MAIL_MAILER');
 
-        if ($sender) {
-            $from = $sender;
-        } else {
-            if ($engine == 'smtp') {
-                $from = env('MAIL_FROM_ADDRESS');
-            } else {
-                $from = env('SENDER_MAIL');
+            $from               = $sender ?? ($engine == 'smtp' ? env('MAIL_FROM_ADDRESS') : env('SENDER_MAIL'));
+
+            $attribute = [
+                'from'      => $from,
+                'content'   => $data,
+                'view'      => $view,
+            ];
+
+            $emails = is_array($to) ? array_filter($to) : [$to];
+
+            \Log::info('Sending email', [
+                'to'   => $emails,
+                'from' => $from,
+                'view' => $view,
+                'data' => $data,
+            ]);
+
+            if (!isset($attribute['content']) || !is_array($attribute['content'])) {
+                throw new \Exception('Email content is not properly set.');
             }
-        } 
-        $attribute = [
-            'from'    => $from,
-            'content' => $data,
-            'view'    => $view,
-        ];
 
-        if (is_array($to)) {
-            $emails = array_filter($to);
-        } else {
-            $emails = $to;
+            if (!isset($data['confirmation_link']) || !isset($data['user'])) {
+                throw new \Exception('Required email content keys are missing.');
+            }
+
+            Mail::to($emails)->send(new SendSmtpMail($attribute));
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
         }
-
-        Mail::to($emails)->send(new SendSmtpMail($attribute));
-
-        return true;
     }
 }

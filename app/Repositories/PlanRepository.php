@@ -201,18 +201,12 @@ class PlanRepository
         if ($billing_period == 'all') {
             return Plan::where('status', '1')->orderBy('price','ASC')->get();
         } else {
-            if ($billing_period == 'daily') {
-                return Plan::where('status', '1')->where('billing_period', 'daily')->get();
-            } elseif ($billing_period == 'weekly') {
-                return Plan::where('status', '1')->where('billing_period', 'weekly')->get();
-            } elseif ($billing_period == 'monthly') {
+            if ($billing_period == 'monthly') {
                 return Plan::where('status', '1')->where('billing_period', 'monthly')->get();
-            } elseif ($billing_period == 'quarterly') {
-                return Plan::where('status', '1')->where('billing_period', 'quarterly')->get();
-            } elseif ($billing_period == 'half_yearly') {
-                return Plan::where('status', '1')->where('billing_period', 'half_yearly')->get();
             } elseif ($billing_period == 'yearly') {
                 return Plan::where('status', '1')->where('billing_period', 'yearly')->get();
+            }elseif ($billing_period == 'lifetime') {
+                return Plan::where('status', '1')->where('billing_period', 'lifetime')->get();
             } else {
                 return Plan::where('status', '1')->orderBy('price','ASC')->get();
             }

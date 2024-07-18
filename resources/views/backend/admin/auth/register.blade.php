@@ -1,212 +1,185 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+@extends('website.layouts.master')
+@section('content')
+    <section class="signup__section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="signUp__wrapper">
+                        <div class="signUp__content">
+                            <h2 class="title"><span>Sign Up</span> For Free.</h2>
+                            <h4 class="subtitle">Create an account and experience how Delix works.</h4>
+                            <p class="desc">Set up your Delix checkout, add your SaaS, software, or online content, and configure your subscriptions easily.</p>
+                        </div>
+                        <div class="process__content">
+                            <p class="desc">Integrate with your existing website in minutes, and you're ready to go.</p>
+                            <ul class="process__list">
+                                <li>
+                                    <div class="icon"><img src="{{ asset('website') }}/assets/images/signup/icon-01.png" alt="icon" /></div>
+                                    Emphasizes that the process of integrating the service with an existing
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="{{ asset('website') }}/assets/images/signup/icon-02.png" alt="icon" /></div>
+                                    Suggests that the service is designed to work smoothly with any existing website, highlighting its compatibility
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="{{ asset('website') }}/assets/images/signup/icon-03.png" alt="icon" /></div>
+                                    Sell globally with localized currencies and payments
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="{{ asset('website') }}/assets/images/signup/icon-04.png" alt="icon" /></div>
+                                    Manage complex subscription models
+                                </li>
+                                <li>
+                                    <div class="icon"><img src="{{ asset('website') }}/assets/images/signup/icon-05.png" alt="icon" /></div>
+                                    Stop worrying about VAT and tax jurisdictions
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="company__partner">
+                            <p class="desc">You’re in good company</p>
 
-  <title>{{__('signup')}}</title>
-  <!--====== LineAwesome ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/line-awesome.min.css') }}">
-  <!--====== Dropzone CSS ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
-  <!--====== Summernote CSS ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/summernote-lite.min.css') }}">
-  <!--====== Choices CSS ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/choices.min.css') }}">
-  <!--====== AppCSS ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/app.css') }}">
-  <!--====== ResponsiveCSS ======-->
-  <link rel="stylesheet" href="{{ static_asset('admin/css/responsive.css') }}">
-  <link rel="stylesheet" href="{{ static_asset('admin/css/toastr.min.css') }}">
-  @if(app()->getLocale() =='bn')
-      <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
-      <style>
-          :root {
-              --body-fonts: 'SolaimanLipi', Arial, sans-serif !important;
-              --heading-font: 'SolaimanLipi', Arial, sans-serif !important;
-          }
-          /*html * ,.secondary-font, .heading-font {*/
-          /*    font-family: 'SolaimanLipi', Arial, sans-serif !important;*/
-          /*    !*font-weight: normal !important;*!*/
-          /*}*/
-      </style>
-  @else
-      <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
-      <style>
-          :root {
-              --body-fonts: 'jost', sans-serif !important;
-              --heading-font: 'jost', sans-serif !important;
-          }
-      </style>
-  @endif
-</head>
-<body>
-<section class="signup-section">
-  <div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100">
-      <div class="col-lg-8 col-md-8 col-sm-10 position-relative">
-
-        <img src="{{ static_asset('admin/img/shape/rect.svg') }}" alt="Rect Shape" class="bg-rect-shape">
-        <img src="{{ static_asset('admin/img/shape/circle.svg') }}" alt="Rect Shape" class="bg-circle-shape">
-        <img src="{{ static_asset('admin/img/shape/circle-block.svg') }}" alt="Rect Shape" class="bg-circle-block-shape">
-
-        <div class="login-form bg-white rounded-20">
-          <div class="logo d-flex justify-content-center items-center mb-3">
-            <a  href="{{url('/')}}">
-              <img src="{{ setting('light_logo') && @is_file_exists(setting('light_logo')['original_image']) ? get_media(setting('light_logo')['original_image']) : getFileLink('80x80',[]) }}" alt="Corporate Logo">
-            </a>
-          </div>
-          <h3>{{__('sign_up')}}</h3>
-
-          <form method="POST" action="{{ route('signup.store') }}">
-            @csrf
-            <div class="row gx-20">
-              <div class="col-lg-6">
-                <div class="mb-30 ">
-                  <label for="company_name" class="form-label">{{__('company_name')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="text" class="form-control rounded-2" id="company_name"
-                         value="{{ old('company_name')}}" name="company_name"
-                         placeholder="{{ __('company_name') }}" required autofocus>
-                  <x-input-error :messages="$errors->get('company_name')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-30 ">
-                  <label for="first_name" class="form-label">{{__('first_name')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="text" class="form-control rounded-2" id="first_name"
-                         value="{{ old('first_name')}}" name="first_name"
-                         placeholder="{{ __('first_name') }}" required autofocus>
-                  <x-input-error :messages="$errors->get('first_name')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-30 ">
-                  <label for="last_name" class="form-label">{{__('last_name')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="text" class="form-control rounded-2" id="last_name"
-                         value="{{ old('last_name')}}" name="last_name"
-                         placeholder="{{ __('last_name') }}"
-                         required autofocus>
-                  <x-input-error :messages="$errors->get('last_name')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-30">
-                  <label for="email" class="form-label">{{__('email')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="email" class="form-control rounded-2" id="first_name"
-                         value="{{ old('email')}}"
-                         name="email" placeholder="{{ __('email') }}" required autofocus>
-                  <x-input-error :messages="$errors->get('email')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-30">
-                  <label for="password" class="form-label">{{__('password')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="password" class="form-control rounded-2" id="password"
-                         placeholder="{{ __('password') }}" name="password" required
-                         autofocus>
-                  <x-input-error :messages="$errors->get('password')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-30">
-                  <label for="password_confirmation"
-                         class="form-label">{{__('confirm_password')}}<span
-                            class="text-danger">*</span></label>
-                  <input type="password" class="form-control rounded-2"
-                         id="password_confirmation"
-                         name="password_confirmation"
-                         placeholder="{{ __('re_enter_password') }}" required
-                         autofocus>
-                  <x-input-error :messages="$errors->get('password_confirmation')"
-                                 class="mt-2 nk-block-des text-danger"/>
-                </div>
-              </div>
-
-              <div class="col-lg-12">
-                <div class="mb-4">
-                  <label for="domain"
-                       class="form-label">{{__('domain') }}<span
-                        class="text-danger">*</span></label>
-                  <input type="text" class="form-control rounded-2" id="domain"
-                       name="domain" value="{{ old('domain') }}" placeholder="{{ __('domain') }}" required>
-                  @if ($errors->has('domain'))
-                    <div class="nk-block-des text-danger">
-                      <p>{{ $errors->first('domain') }}</p>
+                            <div class="partner__wrapper">
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-01.png" alt="partner" />
+                                </div>
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-02.png" alt="partner" />
+                                </div>
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-03.png" alt="partner" />
+                                </div>
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-04.png" alt="partner" />
+                                </div>
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-05.png" alt="partner" />
+                                </div>
+                                <div class="partner__item">
+                                    <img src="{{ asset('website') }}/assets/images/signup/partner-06.png" alt="partner" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  @endif
                 </div>
-              </div>
-
-              @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
-                <div class="mb-30">
-                  <div id="html_element" class="g-recaptcha" data-sitekey="{{setting('recaptcha_site_key')}}"></div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="form__wrapper">
+                        <form id="signupForm" action="{{ route('signup.store') }}" method="post">
+                            @csrf
+                            <div class="form-group">
+                                <label for="company_name">{{ __('company_name') }}</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter Your Company Name" value="{{ old('company_name') }}" />
+                                @error('company_name')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="flex__input">
+                                <div class="form-group">
+                                    <label for="first_name">{{ __('first_name') }}</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Your First Name" value="{{ old('first_name') }}" />
+                                    @error('first_name')
+                                        <div class="alert__txt">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name">{{ __('last_name') }}</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Your Last Name" value="{{ old('last_name') }}" />
+                                    @error('last_name')
+                                        <div class="alert__txt">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">{{ __('email') }}</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="info@spareen.com" value="{{ old('email') }}" />
+                                @error('email')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="password">{{ __('password') }}</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" />
+                                @error('password')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="domain">{{ __('domain') }}</label>
+                                <input type="text" class="form-control domain" id="domain" name="domain" placeholder="Write Here" value="{{ old('domain') }}" />
+                                <small>.delix.cloud</small>
+                                @error('domain')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="hear_about_delix">Where did you hear about Delix?</label>
+                                <select class="form__dropdown form-control" data-width="100%" data-minimum-results-for-search="Infinity" name="hear_about_delix">
+                                    <option value="google_ads" {{ old('hear_about_delix') == 'google_ads' ? 'selected' : '' }}>{{ __('google_ads') }}</option>
+                                    <option value="facebook" {{ old('hear_about_delix') == 'facebook' ? 'selected' : '' }}>{{ __('facebook') }}</option>
+                                    <option value="youtube" {{ old('hear_about_delix') == 'youtube' ? 'selected' : '' }}>{{ __('youtube') }}</option>
+                                    <option value="email" {{ old('hear_about_delix') == 'email' ? 'selected' : '' }}>{{ __('email') }}</option>
+                                    <option value="friend" {{ old('hear_about_delix') == 'friend' ? 'selected' : '' }}>{{ __('friend') }}</option>
+                                </select>
+                                @error('hear_about_delix')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="custom__checkbox">
+                                <input type="checkbox" class="form-check-input" id="policyCheck" name="policyCheck" {{ old('policyCheck') ? 'checked' : '' }} />
+                                <label class="form-check-label" for="policyCheck">I agree Privacy Policy & Terms</label>
+                                @error('policyCheck')
+                                    <div class="alert__txt">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="btn__submit">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                        <p class="account text-center">
+                            Already have an account?
+                            <a href="login.html">Login</a>
+                            in instead
+                        </p>
+                        <div class="devider text-center">or</div>
+                        <div class="instant__login text-center">
+                            You Can Sign up Using
+                            <div class="login__icon">
+                                <a href="#">
+                                    <img src="{{ asset('website') }}/assets/images/login-whatsapp.png" alt="whatsapps" />
+                                </a>
+                                <a href="#">
+                                    <img src="{{ asset('website') }}/assets/images/login-email.png" alt="email" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              @endif
-
-              <div class="row justify-content-center">
-                <div class="col-lg-6 mb-30">
-                  <div class="text-center">
-                    <button type="submit"
-                            class="btn btn-lg sg-btn-primary">{{__('sign_up')}}</button>
-                  </div>
-                </div>
-                <span class="text-center d-block">{{__('already_have_an_account')}}?
-                  <a href="{{ route('login') }}" class="sg-text-primary">{{__('login')}}</a> | <a href="{{ url('/') }}" class="sg-text-primary">{{__('back_to_website')}}</a>
-                </span>
-              </div>
             </div>
-          </form>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- JS Files -->
-<!--====== jQuery ======-->
-<script src="{{ static_asset('admin/js/jquery.min.js') }}"></script>
-<!--====== Bootstrap & Popper JS ======-->
-<script src="{{ static_asset('admin/js/bootstrap.bundle.min.js') }}"></script>
-<!--====== NiceScroll ======-->
-<script src="{{ static_asset('admin/js/jquery.nicescroll.min.js') }}"></script>
-<!--====== Bootstrap-Select JS ======-->
-<script src="{{ static_asset('admin/js/choices.min.js') }}"></script>
-<!--====== Summernote JS ======-->
-<script src="{{ static_asset('admin/js/summernote-lite.min.js') }}"></script>
-<!--====== Dropzone JS ======-->
-
-<!--====== ReCAPTCHA ======-->
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-<script src="{{ static_asset('admin/js/toastr.min.js') }}"></script>
-{!! Toastr::message() !!}
-
-  @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
-    <script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-          'sitekey' : '{{setting('recaptcha_site_key')}}',
-          'size' : 'md'
+    </section>
+@endsection
+@push('js')
+    <script>
+        $(document).ready(function() {
+            $('#signupForm').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        toastr.success('Submitted successfully.');
+                        $('.submit__btn .loader').addClass('d-none');
+                        $('.contact-form')[0].reset();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Submission failed:', error);
+                        toastr.error('Submission failed. Please try again later.');
+                        $('.submit__btn .loader').addClass('d-none');
+                    }
+                });
+            });
         });
-      };
     </script>
-  @endif
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('#company_name').on('input', function() {
-          var companyName = $(this).val();
-          $('#domain').val(companyName.replace(/\s+/g, '').toLowerCase() + '.delix.cloud');
-        });
-      });
-    </script>
-</body>
-</html>
+@endpush
+ 
+

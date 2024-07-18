@@ -103,7 +103,6 @@
         }
     </style>
 </head>
-{{--@dd($data)--}}
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f5f6fa;">
 <center style="width: 100%; background-color: #f5f6fa;">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f5f6fa">
@@ -117,7 +116,6 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <img style="max-height: 32px" src="{{ setting('light_logo') && @is_file_exists(setting('light_logo')['original_image']) ? get_media(setting('light_logo')['original_image']) : getFileLink('80x80',[]) }}" alt="Corporate Logo">
                                     </td>
                                 </tr>
                                 </tbody>
@@ -128,7 +126,6 @@
                         <td style="padding: 0 30px 20px">
                             <p style="margin-bottom: 25px; color: ;">{!! $body !!}</p>
                     </tr>
-
                     </tbody>
                     @if(!blank(setting('mail_signature') || setting('mail_signature') != ''))
                         <tr>

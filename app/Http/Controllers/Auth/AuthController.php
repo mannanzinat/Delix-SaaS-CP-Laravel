@@ -80,7 +80,6 @@ class AuthController extends Controller
                     $this->sendmail($request->email, 'emails.template_mail', $data);
                 }
 
-
                 Toastr::success(__('receive__mail_password_hints'));
 
                 return redirect()->back();
@@ -208,14 +207,14 @@ class AuthController extends Controller
             return back();
         }
         try {
-            $response = $this->userRepository->userVerified($id);
-            Toastr::success(__($response['message']));
+            $response       = $this->userRepository->userVerified($id);
 
-            return redirect()->back();
+            return redirect()->route('user.verify', $id);
+
         } catch (\Exception $e) {
             Toastr::error($e->getMessage());
 
-            return redirect()->back();
+            return redirect()->back();  
         }
     }
 
@@ -291,5 +290,11 @@ class AuthController extends Controller
 
             return redirect()->back();
         }
+    }
+
+    public function verify($id)
+    {
+        $user = User::where('id', $id)->first();
+        return view('backend.admin.auth.verify', compact('user'));
     }
 }

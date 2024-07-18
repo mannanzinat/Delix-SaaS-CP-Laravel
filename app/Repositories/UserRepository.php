@@ -158,6 +158,8 @@ class UserRepository
             'template_title'  => 'Welcome Email',
         ];
 
+        // dd($data);
+
         if (! empty($staff->email_verified_at)) {
             $staff->email_verified_at = null;
             $staff->save();
@@ -168,6 +170,7 @@ class UserRepository
 
             return $data;
         } else {
+
             $staff->email_verified_at = date('Y-m-d H:i:s');
             $this->sendmail($staff->email, 'emails.template_mail', $data);
             $staff->save();

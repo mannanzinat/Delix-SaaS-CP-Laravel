@@ -204,7 +204,7 @@
                 <div class="header__meta">
                     <div class="meta__list">
                         <div class="header__btn">
-                            <a href="signup.html" class="btn btn-outline">login</a>
+                            <a href="{{ route('register') }}" class="btn btn-outline">login</a>
                             <a href="#" class="btn btn-primary">Get Started <span>It’s Free</span> </a>
                         </div>
                         <!-- Header Toggle Start -->

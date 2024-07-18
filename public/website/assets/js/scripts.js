@@ -88,6 +88,7 @@
         interval: 2000
         
       });
+
     // if ($(".animation").length > 0) {
     //     $(".animation").typer({
     //         strings: [
@@ -150,6 +151,13 @@
                 },
             },
         });
+    }
+
+    /*********************************
+    /*   Select Start
+    *********************************/
+    if ($(".form__dropdown").length > 0) {
+        $(".form__dropdown").select2();
     }
 
     

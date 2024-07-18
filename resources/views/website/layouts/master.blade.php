@@ -21,8 +21,14 @@
         <link rel="stylesheet" href="{{ asset('website') }}/assets/css/jquery.fancybox.min.css" />
         <!-- Animate Animation -->
         <link rel="stylesheet" href="{{ asset('website') }}/assets/css/aos.css" />
+        <!-- Select 2  -->
+        <link rel="stylesheet" href="{{ asset('website') }}/assets/css/select2.min.css" />
         <!-- User's CSS Here -->
         <link rel="stylesheet" href="{{ asset('website') }}/assets/css/style.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+        @stack('css')
     </head>
     <body>
         <!-- Preloader -->
@@ -44,7 +50,27 @@
         <script src="{{ asset('website') }}/assets/js/appear.min.js"></script>
         <script src="{{ asset('website') }}/assets/js/aos.js"></script>
         <script src="{{ asset('website') }}/assets/js/jquery.cycleText.js"></script>
+        <script src="{{ asset('website') }}/assets/js/select2.min.js"></script>
         <script src="{{ asset('website') }}/assets/js/typer.min.js"></script>
         <script src="{{ asset('website') }}/assets/js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        {!! Toastr::message() !!}
+        @if (session()->has('error'))
+            <script>
+                toastr.error("{{ session('error') }}")
+            </script>
+        @endif
+        @if (session()->has('danger'))
+            <script>
+                toastr.error("{{ session('danger') }}")
+            </script>
+        @endif
+        @if (session()->has('success'))
+            <script>
+                toastr.success("{{ session('success') }}")
+            </script>
+        @endif
+        @stack('js')
     </body>
 </html>

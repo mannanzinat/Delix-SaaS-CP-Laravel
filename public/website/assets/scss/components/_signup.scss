@@ -2,8 +2,18 @@
 /* SignUp Start
 *********************************/
 
+.login__section,
 .signup__section {
     padding: 160px 0 100px;
+
+    @include respond (phone) {
+        padding: 130px 0 80px !important;
+    }
+}
+.signUp__wrapper {
+    @include respond (tabport) {
+        margin-bottom: 40px;
+    }
 }
 .signUp__content {
     .title {
@@ -17,13 +27,23 @@
         span {
             color: $primary;
         }
+
+        @include respond(tabport) {
+            font-size: 34px;
+            line-height: 42px;
+        }
+    
+        @include respond(phone-mid) {
+            font-size: 28px;
+            line-height: 34px;
+        }
     }
     .subtitle {
         font-family: $inter;
         font-size: 20px;
         font-weight: $medium;
         line-height: 30px;
-        margin: 24px 0; 
+        margin: 24px 0 0; 
         color: $heading2;
     }
     p,
@@ -31,11 +51,13 @@
         font-family: $inter;
         font-size: 16px;
         margin-bottom: 0;
+        margin-top: 24px;
 
     }
 }
 
 .process__content {
+    margin-top: 24px;
     p,
     .desc {
         font-family: $inter;
@@ -62,6 +84,10 @@
                 margin-bottom: 0;
             }
 
+
+            @include respond (tabland) {
+                font-size: 15px;
+            }
 
             .icon {
                 height: 28px;
@@ -109,8 +135,13 @@
         padding: 12px 25px;
         height: 70px;
 
+        @include respond (tabland) {
+            height: 50px;
+            padding: 12px;
+        }
+
         img {
-            width: auto;
+            width: 100%;
             height: auto;
             display: inline-block;
             max-width: 120px;
@@ -131,6 +162,21 @@
     padding: 30px 24px;
     border-radius: 12px;
     border: 1px solid rgba($primary, 0.04);
+    position: relative;
+
+    .bgPattern__right {
+        position: absolute;
+        right: -80px;
+        top: 65px;
+        z-index: -1;
+    }
+    .bgPattern__leftBottom {
+        position: absolute;
+        bottom: -60px;
+        left: 50px;
+        z-index: -1;
+    }
+
 	.flex__input {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -145,15 +191,24 @@
 		margin-bottom: 16px;
         position: relative;
 
-        span {
+        small {
             position: absolute;
-            top: 51px;
-            right: 20px;
+            // top: 51px;
+            // right: 20px;
+            top: 46px;
+            right: 10px;
             color: $content;
             font-family: $inter;
             font-size: 14px;
             font-weight: $regular;
             line-height: 18px;
+            // padding: 14px 12px;
+            // border-radius: 0 8px 8px 0;
+
+            background: $secondary;
+            border: 1px solid rgba($primary, 0.2);
+            padding: 4px 10px;
+            border-radius: 4px;
         }
 
         label {
@@ -165,6 +220,7 @@
             margin-bottom: 8px;
 
         }
+        .select2-container .select2-selection--single,
 		.form-control {
 			font-family: $inter;
 			font-size: 14px;
@@ -180,6 +236,9 @@
 			transition: $transition;
             position: relative;
 
+            &.domain {
+                padding-right: 115px;
+            }
 			&.text__area {
 				min-height: 150px;
 			}
@@ -206,6 +265,54 @@
 
         }
 	}
+    .select2-container {
+        &--open {
+            .select2-selection__arrow {
+                &::after {
+                    transform: rotate(-45deg) !important;
+                    top: 4px !important;
+                }
+            }
+        }
+        .select2-dropdown {
+            border: 1px solid $primary;
+            border-radius: $radius;
+        }
+        .select2-selection--single {
+            height: auto;
+    
+            .select2-selection__rendered {
+                padding-left: 0;
+                line-height: initial;
+            }
+            .select2-selection__arrow {
+                position: absolute;
+                top: 10px;
+                right: 5px;
+                width: 20px;
+                height: auto;
+    
+                &::after {
+                    content: "";
+                    position: relative;
+                    border-style: solid;
+                    border-width: 2px 2px 0 0;
+                    height: 10px;
+                    width: 10px;
+                    left: 0;
+                    top: 0;
+                    display: inline-block;
+                    transform: rotate(135deg);
+                    vertical-align: middle;
+                }
+    
+                b {
+                    border: none;
+                }
+            }
+        }
+    }
+    
 	.btn__submit {
 		margin-top: 16px;
 		.btn {
@@ -273,9 +380,16 @@
             border-radius: 50%;
             transition: $transition;
 
+            img {
+                width: auto;
+                height: auto;
+                display: inline-block;
+                max-width: 20px;
+            }
+
             &:hover {
                 background: rgba($primary, 0.02);
-                border-color: rgba($primary, 1);
+                border-color: rgba($primary, 0.08);
             }
         }
     }
@@ -328,7 +442,112 @@
     }
 }
 
+.verify__alert {
+    font-family: $inter;
+    font-size: 16px;
+    font-weight: $medium;
+    line-height: 18px;
+    color: $green;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba($green, 0.1);
+    border-left: 1px solid $green;
+    padding: 16px;
+    border-radius: 0px 6px 6px 0;
+}
+
+.otp__btn {
+    font-family: $inter;
+    font-size: 14px;
+    font-weight: $medium;
+    line-height: 18px;
+    background: $primary;
+    color: $white;
+    padding: 9px 28px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    position: absolute;
+    top: 41px;
+    right: 7px;
+}
+
+.select2-dropdown {
+    border: 1px solid rgba($primary, 0.2) !important;
+    border-radius: 4px !important;
+}
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: rgba($primary, 0.04);
+    color: $primary;
+}
+
+.select2-container--default .select2-results__option--selected {
+    background-color: rgba($primary, 0.04);
+    color: $primary;
+}
+
+.select2-results__option {
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    font-size: 14px;
+    line-height: 18px;
+    color: #333333;
+    font-weight: 400;
+    font-family: 'Inter';
+}
+
   
 /*********************************
 /*  Contact Section End
+*********************************/
+
+
+/*********************************
+/*  Login area Start
+*********************************/
+.login__content {
+    margin-bottom: 32px;
+    .title {
+        font-family: $default;
+        font-size: 42px;
+        font-weight: $semibold;
+        line-height: 50.4px;
+        color: $heading;
+        margin-bottom: 0;
+
+        span {
+            color: $primary;
+        }
+
+        @include respond(tabport) {
+            font-size: 34px;
+            line-height: 42px;
+        }
+    
+        @include respond(phone-mid) {
+            font-size: 28px;
+            line-height: 34px;
+        }
+    }
+    p,
+    .desc {
+        font-family: $inter;
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 0;
+        margin-top: 24px;
+
+        @include respond (tabport) {
+            font-size: 16px;
+            line-height: 18px;
+            margin-top: 15px;
+        }
+
+    }
+}
+
+/*********************************
+/*  Login area End
 *********************************/
