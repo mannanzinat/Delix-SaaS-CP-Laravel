@@ -222,18 +222,20 @@ class SubscriptionRepository
             $status = __('rejected');
         }
         $msg               = __('subscription_status_updated', ['status' => $status]);
-        $this->pushNotification([
-            'ids'     => OneSignalToken::where('client_id', $subscribe->client_id)->pluck('subscription_id')->toArray(),
-            'message' => $msg,
-            'heading' => __('status_has_been_updated'),
-            'url'     => route('client.dashboard'),
-        ]);
-        $this->sendNotification([$subscribe->client->user->id], $msg, 'success', route('client.dashboard'));
+//        $this->pushNotification([
+//            'ids'     => OneSignalToken::where('client_id', $subscribe->client_id)->pluck('subscription_id')->toArray(),
+//            'message' => $msg,
+//            'heading' => __('status_has_been_updated'),
+//            'url'     => route('client.dashboard'),
+//        ]);
+//        $this->sendNotification([$subscribe->client->user->id], $msg, 'success', route('client.dashboard'));
 
         $log               = SubscriptionTransactionLog::create(['description' => 'Admin '.$status.' your plan',
             'client_id'                                                        => $subscribe->client_id]);
 
-        return $subscribe->save();
+        if($subscribe->save()):
+            return $this->updateClientPackageLimitationBySubscription($subscribe);
+        endif;
     }
 
     public function updateSubscriptionLimits($subscriptionId, $newLimits)

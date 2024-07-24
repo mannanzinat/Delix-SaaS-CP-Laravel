@@ -22,6 +22,7 @@ use App\Models\Template;
 use App\Models\Ticket;
 use App\Models\Server;
 use App\Models\User;
+use App\Traits\DnsTrait;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,6 +33,7 @@ class ClientRepository
 {
     use ImageTrait;
     use ServerTrait;
+    use DnsTrait;
 
     public function all($data, $relation = []): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
@@ -114,7 +116,7 @@ class ClientRepository
 
 
             if($request['create_domain'] =='1'):
-                $result = $this->dnsUpdate($request['sub_domain']);
+                $result = $this->dnsAdd($request['sub_domain']);
                 if (!$result['success']):
                     return ['success' => false, 'message' => $result['message']];
                 else:
