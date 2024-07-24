@@ -82,33 +82,32 @@ class RegisteredUserController extends Controller
             $staff->client_id             = $client->id;
             $staff->slug                  = getSlug('clients', $client->company_name);
             $staff->save();
-            DB::commit();
-            Toastr::success(__('user_registration_successful'));
-
+          
             $link                         = route('user.verified', $user->id);
             $template_data                = $this->emailTemplate->emailConfirmation();
-            $data                         = [
-                'confirmation_link' => $link,
-                'user'              => $user,
-                'subject'           => ($template_data->subject) ?: __('welcome'),
-                'email_templates'   => $template_data,
-                'template_title'    => 'Email Confirmation',
+            $data = [
+                'confirmation_link'     => $link,
+                'user'                  => $user,
+                'subject'               => $template_data->subject ?? __('welcome'),
+                'email_templates'       => $template_data,
+                'template_title'        => 'Email Confirmation',
             ];
+
             try {
                 $this->sendmail($request->email, 'emails.template_mail', $data);
             } catch (\Exception $e) {
-                // dd($e->getMessage());
+                \Log::error('Error sending email: ' . $e->getMessage());
             }
 
-            $this->sendAdminNotifications([
-                'message' => __('new_client_registered'),
-                'heading' => $request->company_name,
-                'url'     => route('clients.index'),
-            ]);
+            DB::commit();
+            if ($request->ajax()) {
+                return response()->json(['message' => __('registration_successful')]);
+            } else {
+                Toastr::success(__('registration_successful'));
+            }
 
             return redirect()->route('login');
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             DB::rollback();
             Toastr::error('something_went_wrong_please_try_again');
 

@@ -1,0 +1,9 @@
+@extends('website.layouts.master')
+@section('content')
+    @include('website.home-section.banner')
+    @include('website.home-section.feature')
+    @include('website.home-section.app')
+    @include('website.home-section.management')
+    @include('website.home-section.testimonial')
+    @include('website.home-section.accodion')
+@endsection

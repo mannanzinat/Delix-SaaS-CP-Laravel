@@ -2651,5 +2651,7 @@
     "Latest Commit": "",
     "Enter latest commit": "",
     "Old Commit": "",
-    "don’t_accept": ""
+    "don’t_accept": "",
+    "life_time": "Life Time",
+    "whatsapp_settings_synced_successfully":"WhatsApp settings synced successfully."
 }

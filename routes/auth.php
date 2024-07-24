@@ -17,6 +17,8 @@ Route::post('password-forgot', [AuthController::class, 'forgot'])->name('forgot.
 Route::get('password/reset/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('password/reset-password', [AuthController::class, 'submitResetPasswordForm'])->name('reset-password.post');
 Route::get('user/verified/{verify}', [AuthController::class, 'verified'])->name('user.verified');
+// Route::get('user/verify/{verify}', [AuthController::class, 'verify'])->name('user.verify');
+
 
 Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::middleware('guest')->group(function () {
@@ -25,6 +27,9 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
 
         Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
         Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('postlogin');
+
+        // Route::get('/verify', [AuthenticatedSessionController::class, 'verifyEmail'])->name('verify');
+        // Route::post('verify', [AuthenticatedSessionController::class, 'verifyEmailStore'])->name('verify.email.store');
 
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
         Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');

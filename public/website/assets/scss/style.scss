@@ -1,0 +1,61 @@
+/*-------------------------------------
+    Template Name:  Delix - SaaS Html Template 
+    Template URI: https://---.com
+    Description:  Delix - SaaS Html Template
+    Author: ...
+    Author URI: https://---.com
+    Version: 1.0
+    Tags: theme, template, etc
+---------------------------------------*/
+
+/*
+    Table of Context
+    -------------------------------
+    01. Common CSS
+    02. Content Box
+    03. Video Box
+    04. Icon Box
+    05. Order, Unorder List
+    06. Round One side
+    07. Overlap Image Box
+    08. Image Box
+    09. Icon list block
+    
+    01. Header style
+    02. Banner style
+   
+*/
+
+/*********************************
+/* Fonts
+/* Urbanist
+/* Inter
+/*
+*********************************/
+
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+// Partial files
+@import "base/mediaQuery";
+@import "base/variables";
+@import "base/mixins";
+@import "base/reset";
+@import "base/util";
+@import "base/common";
+
+// Components
+@import "components/button";
+@import "components/section-title";
+@import "components/header";
+@import "components/banner";
+@import "components/feature";
+@import "components/apps";
+@import "components/management";
+@import "components/testimonial";
+@import "components/pricing";
+@import "components/facility";
+@import "components/accordion";
+@import "components/signup";
+@import "components/footer";
+

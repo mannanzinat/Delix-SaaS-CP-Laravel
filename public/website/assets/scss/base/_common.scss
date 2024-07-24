@@ -1,0 +1,353 @@
+/*********************************
+/*  Common Css Start
+*********************************/
+.border-none {
+	border: none !important;
+}
+
+.btn-round {
+	border-radius: 4px !important;
+}
+
+.bg-white {
+	background-color: $white !important;
+}
+.bg-color {
+	background: $secondary !important;
+}
+
+button {
+	&:hover,
+	&:focus {
+		outline: 0px;
+	}
+}
+
+/*********************************
+/*  Input Apperance Start
+*********************************/
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+	cursor: pointer;
+	border-radius: 4px;
+	margin-right: 2px;
+	-webkit-filter: invert(1);
+	filter: invert(1);
+}
+/*********************************
+/*  Input Apperance End
+*********************************/
+
+/*********************************
+/*  Custom Scroll Bar Css
+*********************************/
+::-webkit-scrollbar {
+	width: 8px;
+	height: 4px;
+	border-radius: $radius;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #ddd;
+	border-radius: $radius;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: $primary;
+	border-radius: $radius;
+	// outline: 1px solid $primary;
+}
+/*********************************
+/*  Custom Scroll Bar Css
+*********************************/
+
+/*********************************
+/*  row Custom
+*********************************/
+
+.row > * {
+	max-width: 100%;
+	padding-right: calc(var(--bs-gutter-x) * 1);
+	padding-left: calc(var(--bs-gutter-x) * 1);
+	margin-top: var(--bs-gutter-y);
+}
+
+.column-reverse {
+	&-lg {
+		@include respond (tabland) {
+			flex-direction: column-reverse !important;
+		}
+	}
+	&-md {
+		@include respond (tabport) {
+			flex-direction: column-reverse !important;
+		}
+	}
+}
+.row-reverse {
+	flex-direction: row-reverse !important;
+	&-lg {
+		@include respond (tabland) {
+			flex-direction: row-reverse !important;
+		}
+	}
+	&-md {
+		@include respond (tabport) {
+			flex-direction: eow-reverse !important;
+		}
+	}
+}
+
+@media (min-width: 479px) and (max-width: 575px) {
+	.col-xs-6 {
+		flex: 0 0 auto;
+		width: 50%;
+	}
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1140px;
+    }
+}
+
+/*********************************
+/*  Heading Typography
+*********************************/
+h1 {
+	font-family: $default;
+	font-size: 52px;
+	line-height: 63px;
+	font-weight: $bold;
+	color: $heading;
+
+	@include respond(xl) {
+		font-size: 50px;
+		line-height: 60px;
+	}
+	@include respond(tabport) {
+		font-size: 38px;
+		line-height: 50px;
+	}
+	@include respond(phone) {
+		font-size: 36px;
+		line-height: 50px;
+	}
+	@include respond(phone-xm) {
+		font-size: 28px;
+		line-height: 36px;
+	}
+}
+h2 {
+	font-family: $default;
+	font-size: 42px;
+	font-weight: $semibold;
+	color: $heading;
+	line-height: 50px;
+
+	@include respond(tabport) {
+		font-size: 34px;
+		line-height: 42px;
+	}
+
+	@include respond(phone-mid) {
+		font-size: 28px;
+		line-height: 34px;
+	}
+}
+h3 {
+	font-family: $default;
+	font-size: 32px;
+	line-height: 40px;
+	font-weight: $semibold;
+	color: $heading;
+}
+h4 {
+	font-family: $default;
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: $bold;
+	color: $heading;
+}
+
+/*********************************
+/*  Content Typography
+*********************************/
+p {
+	font-family: $inter;
+	font-size: 16px;
+	font-weight: $regular;
+	line-height: 28px;
+	color: $content;
+}
+
+/*********************************
+/* Animation Css Start
+*********************************/
+.MoveLeftRight {
+	animation: MoveTopRight 2.5s linear infinite alternate;
+}
+.MoveTopBottom {
+	animation: MoveTopLeft 2.5s linear infinite alternate;
+}
+
+
+@keyframes MoveLeftRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-30px);
+    }
+}
+
+@keyframes MoveTopBottom {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+/*********************************
+/* Preloader Css Start
+*********************************/
+#preloader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: $white;
+	z-index: 99999999;
+	width: 100%;
+	height: auto;
+}
+
+#status {
+	width: 120px;
+	height: 120px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	padding: 25px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#status:before {
+	content: '';
+	position: absolute;
+	pointer-events: none;
+	width: 100% !important;
+	height: 100% !important;
+	left: 0;
+	top: 0;
+	opacity: 1;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	border: 4px solid $white;
+    border-left: 4px solid $primary;
+    border-right: 4px solid $primary;
+	// border-bottom: 2px solid $primary;
+	border-radius: 50%;
+	-webkit-animation: rotating 6s linear infinite;
+	animation: rotating 6s linear infinite;
+}
+
+// #status:after {
+// 	content: '';
+// 	position: absolute;
+// 	pointer-events: none;
+// 	width: 90%;
+// 	height: 90%;
+// 	left: 0;
+// 	top: 0;
+// 	opacity: 1;
+// 	bottom: 0;
+// 	right: 0;
+// 	margin: auto;
+// 	border-top: 2px solid $primary;
+// 	border-radius: 50%;
+// 	-webkit-animation: rotatingn 6s linear infinite;
+// 	animation: rotating 6s linear infinite;
+// }
+
+#status img {
+	max-width: 40px;
+	width: auto;
+	height: auto;
+	margin: auto;
+	display: block;
+	// padding-top: 15px;
+}
+
+@keyframes rotating {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+
+
+
+/*********************************
+/* Scroll Up Css Start
+*********************************/
+
+#toTop {
+	position: fixed;
+	bottom: -20px;
+	right: 15px;
+	width: 50px;
+	height: 50px;
+	background: $heading;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $white;
+	font-size: 15px;
+	text-align: center;
+	cursor: pointer;
+	text-transform: capitalize;
+	transition: $transition;
+	z-index: 99;
+	opacity: 0;
+	visibility: hidden;
+	
+	&:hover {
+		background: $primary;
+	}
+	
+	&.active {
+		// transition-delay: 500ms;
+		bottom: 15px;
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+/*********************************
+/* Scroll Up Css End
+*********************************/

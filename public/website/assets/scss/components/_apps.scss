@@ -1,0 +1,105 @@
+/*********************************
+/*  Apps Section Start
+*********************************/
+
+.app__wrapper {
+    @include respond (tabport) {
+       margin-top: 40px;
+    }
+    .title {
+        margin-bottom: 18px;
+        span {
+            color: $primary;
+        }
+
+        @include respond (tabland) {
+            font-size: 27px;
+            line-height: 37px;
+        }
+    }
+    
+    .btn {
+        margin-top: 36px;
+
+        @include respond (phone-sm) {
+            margin-top: 26px;
+        }
+    }
+}
+
+.app__thumb {
+    max-width: 511px;
+    margin: auto;
+    position: relative;
+
+    .rating {
+        position: absolute;
+        right: 15px;
+        top: -20px;
+        max-width: 142px;
+        z-index: 11;
+
+        @include respond (phone-mid) {
+            max-width: 112px;
+            right: 0;
+        }
+    }
+    .download {
+        position: absolute;
+        left: 15px;
+        top: -60px;
+        max-width: 242px;
+        z-index: 11;
+
+        @include respond (phone-mid) {
+            max-width: 212px;
+            left: 0;
+            top: -80px ;
+        }
+    }
+    .platform {
+        position: absolute;
+        max-width: 230px;
+        left: -55px;
+        bottom: -30px;
+
+        @include respond (tabport) {
+            max-width: 200px;
+            left: 15px;
+            bottom: -20px;
+        }
+        @include respond (phone) {
+            max-width: 170px;
+        }
+    }
+}
+
+
+.MoveTopBottom {
+    animation: MoveTopBottom 3s linear infinite alternate;
+}
+.MoveLeftRight {
+    animation: MoveLeftRight 2.5s linear infinite alternate;
+}
+
+
+@keyframes MoveTopBottom {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+@keyframes MoveLeftRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-30px);
+    }
+}
+
+/*********************************
+/*  Apps Section End
+*********************************/

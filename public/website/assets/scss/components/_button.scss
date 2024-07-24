@@ -1,0 +1,99 @@
+/*********************************
+/*  Button Start
+*********************************/
+
+.btn {
+	font-family: $inter;
+	font-size: 16px;
+	line-height: 19px;
+	font-weight: $regular;
+	padding: 16px 25px;
+	border-radius: $radius;
+	border: 1px solid transparent;
+	outline: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	text-transform: capitalize;
+	transition: $transition;
+
+	i {
+		font-size: 17px;
+	}
+
+	img {
+		width: auto;
+		height: auto;
+	}
+
+	&:focus {
+		box-shadow: none;
+		outline: none;
+	}
+
+	&-primary {
+		background-color: $primary;
+		color: $white;
+		border-color: $primary;
+		
+		
+		&:focus,
+		&:hover {
+			background: transparent;
+			color: $primary;
+			border-color: $primary;
+		}
+	}
+	&-secondary {
+		background-color: $heading;
+		color: $white,;
+		border-color: $heading;
+		
+		
+		&:focus,
+		&:hover {
+			background: $primary;
+			color: $white;
+			border-color: $primary;
+		}
+	}
+	&-outline {
+
+		background: transparent;
+		border: 1px solid rgba($primary, 0.2);
+		color: $primary;
+
+		&:focus,
+		&:hover {
+			background: $primary;
+			color: $white;
+			border-color: $primary;
+		}
+	}
+	&-white {
+		background: $white;
+		color: $heading;
+		border: 1px solid $white;
+		
+		&:focus,
+		&:hover {
+			background-color: $primary;
+			color: $white;
+			border-color: $primary;
+		}
+	}
+}
+
+.solid__btn {
+	font-family: $inter;
+	font-size: 14px;
+	line-height: 23px;
+	font-weight: $regular;
+	color: $heading;
+	transition: $transition;
+
+	&:hover {
+		color: $primary;
+	}
+}
