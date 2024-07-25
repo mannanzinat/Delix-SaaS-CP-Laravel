@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Carbon;
 
 class RegisteredUserController extends Controller
 {
@@ -45,7 +46,6 @@ class RegisteredUserController extends Controller
 
         return view('backend.admin.auth.register');
     }
-
     public function store(SignUpRequest $request)
     {
         DB::beginTransaction();
@@ -75,6 +75,9 @@ class RegisteredUserController extends Controller
             $user->client_id              = $client->id;
             $user->permissions            = $permissions;
             $user->status                 = 1;
+            $user->hear_about_delix       = $request->hear_about_delix;
+            $user->token                  = Str::random(40);
+            // $user->token_expired_at       = Carbon\Carbon::addHours(1);
             $user->save();
 
             $staff                        = new ClientStaff();
@@ -83,7 +86,7 @@ class RegisteredUserController extends Controller
             $staff->slug                  = getSlug('clients', $client->company_name);
             $staff->save();
           
-            $link                         = route('user.verified', $user->id);
+            $link                         = route('user.verified', $user->token);
             $template_data                = $this->emailTemplate->emailConfirmation();
             $data = [
                 'confirmation_link'     => $link,

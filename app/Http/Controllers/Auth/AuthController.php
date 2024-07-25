@@ -199,7 +199,7 @@ class AuthController extends Controller
         }
     }
 
-    public function verified($id): \Illuminate\Http\RedirectResponse
+    public function verified($token): \Illuminate\Http\RedirectResponse
     {
         if (isDemoMode()) {
             Toastr::error(__('this_function_is_disabled_in_demo_server'));
@@ -207,9 +207,19 @@ class AuthController extends Controller
             return back();
         }
         try {
-            $response       = $this->userRepository->userVerified($id);
 
-            return redirect()->route('user.verify', $id);
+            $user   = User::where('token', $token)->first();
+            $today  = Carbon::now();
+
+            if ($user->token_expired_at>$today) {
+                Toastr::error(__('your_session_is_expired'));
+
+                return back();
+            }
+
+            $response       = $this->userRepository->userVerified($token);
+
+            return redirect()->route('whatsapp.verify', $token);
 
         } catch (\Exception $e) {
             Toastr::error($e->getMessage());
@@ -292,9 +302,19 @@ class AuthController extends Controller
         }
     }
 
-    public function verify($id)
+    public function whatsappVerify($token)
     {
-        $user = User::where('id', $id)->first();
-        return view('backend.admin.auth.verify', compact('user'));
+        return view('backend.admin.auth.verify', compact('token'));
+    }
+
+    public function whatsappOtp()
+    {
+        dd('hi');
+    }
+
+    public function whatsappOtpStore(Request $request)
+    {
+        dd('hi');
+
     }
 }

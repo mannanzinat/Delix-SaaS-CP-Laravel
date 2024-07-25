@@ -17,7 +17,12 @@ Route::post('password-forgot', [AuthController::class, 'forgot'])->name('forgot.
 Route::get('password/reset/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('password/reset-password', [AuthController::class, 'submitResetPasswordForm'])->name('reset-password.post');
 Route::get('user/verified/{verify}', [AuthController::class, 'verified'])->name('user.verified');
-// Route::get('user/verify/{verify}', [AuthController::class, 'verify'])->name('user.verify');
+Route::get('whatsapp/verify/{verify}', [AuthController::class, 'whatsappVerify'])->name('whatsapp.verify');
+
+Route::post('whatsapp/otp-send', [AuthController::class, 'whatsappOtp'])->name('whatsapp.otp.send');
+Route::post('whatsapp/store-otp', [AuthController::class, 'whatsappOtpStore'])->name('whatsapp.store.otp');
+
+
 
 
 Route::group(['prefix' => localeRoutePrefix()], function () {

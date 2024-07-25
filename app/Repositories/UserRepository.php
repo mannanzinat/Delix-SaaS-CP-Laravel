@@ -149,16 +149,15 @@ class UserRepository
         return true;
     }
 
-    public function userVerified($id)
+    public function userVerified($token)
     {
-        $staff = User::findOrfail($id);
+        $staff = User::where('token', $token)->first();
         $data  = [
             'user'            => $staff,
             'email_templates' => $this->emailTemplate->welcomeMail(),
             'template_title'  => 'Welcome Email',
         ];
 
-        // dd($data);
 
         if (! empty($staff->email_verified_at)) {
             $staff->email_verified_at = null;

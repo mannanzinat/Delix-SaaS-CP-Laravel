@@ -37,6 +37,10 @@ return new class extends Migration
             $table->tinyInteger('is_deleted')->default(0)->comment('0 not delete, 1 deleted');
             $table->bigInteger('role_id')->unsigned()->nullable();
             $table->string('address')->nullable();
+            $table->timestamp('otp_verify')->nullable();
+            $table->string('token')->nullable();
+            $table->timestamp('token_expired_at')->nullable();
+            $table->enum('hear_about_delix', ['google_ads', 'facebook', 'youtube', 'email', 'friend'])->nullable();
             $table->bigInteger('country_id')->unsigned()->nullable();
             $table->text('about')->nullable();
             $table->tinyInteger('is_newsletter_enabled')->default(0)->comment('1=newsletter enable, 0= not newsletter enable');

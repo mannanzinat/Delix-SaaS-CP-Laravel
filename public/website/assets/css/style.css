@@ -4548,6 +4548,12 @@ p {
 .form__wrapper .btn__submit .btn {
   width: 100%;
 }
+
+.form__wrapper .btn__submit .loading__btn.btn-primary {
+  background-color: #FF204E !IMPORTANT;
+  color: #fff;
+  border-color: #FF204E !IMPORTANT;
+}
 .form__wrapper .account {
   font-family: "Urbanist", sans-serif;
   font-size: 16px;

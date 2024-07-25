@@ -38,12 +38,12 @@ class LoginRequest extends FormRequest
         return $rules;
     }
 
-    public function messages(): array
-    {
-        return [
-            'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
-        ];
-    }
+    // public function messages(): array
+    // {
+    //     return [
+    //         'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
+    //     ];
+    // }
 
     /**
      * Attempt to authenticate the request's credentials.

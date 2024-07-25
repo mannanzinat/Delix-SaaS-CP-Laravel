@@ -1,3 +1,9 @@
+
+<style>
+    .text-danger{
+        color: #d9534f;
+    }
+</style>
 @extends('website.layouts.master')
 @section('content')
     <section class="signup__section">
@@ -67,81 +73,91 @@
                             @csrf
                             <div class="form-group">
                                 <label for="company_name">{{ __('company_name') }}</label>
-                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter Your Company Name" value="{{ old('company_name') }}" />
-                                @error('company_name')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="{{ __('enter_your_company_name') }}" value="{{ old('company_name') }}" required />
+                                @if ($errors->has('company_name'))
+                                    <div class="nk-block-des text-danger pt-2">
+                                        <p class="text-danger">{{ $errors->first('company_name') }}</p>
+                                    </div>
+                                @endif
                             </div>
                             <div class="flex__input">
                                 <div class="form-group">
                                     <label for="first_name">{{ __('first_name') }}</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Your First Name" value="{{ old('first_name') }}" />
-                                    @error('first_name')
-                                        <div class="alert__txt">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{ __('enter_your_first_name') }}" value="{{ old('first_name') }}" required />
+                                    @if ($errors->has('first_name'))
+                                        <div class="nk-block-des text-danger pt-2">
+                                            <p class="text-danger">{{ $errors->first('first_name') }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <label for="last_name">{{ __('last_name') }}</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Your Last Name" value="{{ old('last_name') }}" />
-                                    @error('last_name')
-                                        <div class="alert__txt">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{ __('enter_your_last_name') }}" value="{{ old('last_name') }}" required />
+                                    @if ($errors->has('last_name'))
+                                        <div class="nk-block-des text-danger pt-2">
+                                            <p class="text-danger">{{ $errors->first('last_name') }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">{{ __('email') }}</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="info@spareen.com" value="{{ old('email') }}" />
-                                @error('email')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
+                                <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('enter_your_email') }}" value="{{ old('email') }}" required />
+                                @if ($errors->has('email'))
+                                    <div class="nk-block-des text-danger pt-2">
+                                        <p class="text-danger">{{ $errors->first('email') }}</p>
+                                    </div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="password">{{ __('password') }}</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" />
-                                @error('password')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
+                                <input type="password" class="form-control" id="password" name="password" placeholder="{{ __('enter_your_password') }}" required />
+                                @if ($errors->has('password'))
+                                    <div class="nk-block-des text-danger pt-2">
+                                        <p class="text-danger">{{ $errors->first('password') }}</p>
+                                    </div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="domain">{{ __('domain') }}</label>
-                                <input type="text" class="form-control domain" id="domain" name="domain" placeholder="Write Here" value="{{ old('domain') }}" />
+                                <input type="text" class="form-control domain" id="domain" name="domain" placeholder="{{ __('write_here') }}" value="{{ old('domain') }}" />
                                 <small>.delix.cloud</small>
-                                @error('domain')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="hear_about_delix">Where did you hear about Delix?</label>
-                                <select class="form__dropdown form-control" data-width="100%" data-minimum-results-for-search="Infinity" name="hear_about_delix">
+                                <label for="hear_about_delix">{{ __('where_did_you_hear_about_delix?') }}</label>
+                                <select class="form__dropdown form-control" data-width="100%" data-minimum-results-for-search="Infinity" name="hear_about_delix" required>
                                     <option value="google_ads" {{ old('hear_about_delix') == 'google_ads' ? 'selected' : '' }}>{{ __('google_ads') }}</option>
                                     <option value="facebook" {{ old('hear_about_delix') == 'facebook' ? 'selected' : '' }}>{{ __('facebook') }}</option>
                                     <option value="youtube" {{ old('hear_about_delix') == 'youtube' ? 'selected' : '' }}>{{ __('youtube') }}</option>
                                     <option value="email" {{ old('hear_about_delix') == 'email' ? 'selected' : '' }}>{{ __('email') }}</option>
                                     <option value="friend" {{ old('hear_about_delix') == 'friend' ? 'selected' : '' }}>{{ __('friend') }}</option>
                                 </select>
-                                @error('hear_about_delix')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
+                                @if ($errors->has('hear_about_delix'))
+                                    <div class="nk-block-des">
+                                        <p class="text-danger">{{ $errors->first('hear_about_delix') }}</p>
+                                    </div>
+                                @endif
                             </div>
                             <div class="custom__checkbox">
                                 <input type="checkbox" class="form-check-input" id="policyCheck" name="policyCheck" {{ old('policyCheck') ? 'checked' : '' }} />
-                                <label class="form-check-label" for="policyCheck">I agree Privacy Policy & Terms</label>
-                                @error('policyCheck')
-                                    <div class="alert__txt">{{ $message }}</div>
-                                @enderror
+                                <label class="form-check-label" for="policyCheck">{{ __('i_agree_privacy_policy_&_terms') }}</label>
                             </div>
                             <div class="btn__submit">
-                                <button type="submit" class="btn btn-primary">Register</button>
+                                <button type="submit" class="btn btn-primary">{{ __('register') }}</button>
+                                {{-- <button class="loading_button  btn-primary" type="submit" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    {{ __('loading') }}...
+                                </button> --}}
                             </div>
                         </form>
                         <p class="account text-center">
-                            Already have an account?
-                            <a href="login.html">Login</a>
-                            in instead
+                            {{ __('already_have_an_account?') }}
+                            <a href="{{ route('login') }}">{{ __('login') }}</a>
+                            {{ __('in_instead') }}
                         </p>
-                        <div class="devider text-center">or</div>
+                        <div class="devider text-center">{{ __('or') }}</div>
                         <div class="instant__login text-center">
-                            You Can Sign up Using
+                            {{ __('you_can_sign_up_using') }}
                             <div class="login__icon">
                                 <a href="#">
                                     <img src="{{ asset('website') }}/assets/images/login-whatsapp.png" alt="whatsapps" />
@@ -169,7 +185,7 @@
                     success: function(response) {
                         toastr.success('Submitted successfully.');
                         $('.submit__btn .loader').addClass('d-none');
-                        $('.contact-form')[0].reset();
+                        $('.signupForm').reset();
                     },
                     error: function(xhr, status, error) {
                         console.error('Submission failed:', error);

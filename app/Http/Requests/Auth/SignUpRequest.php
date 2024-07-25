@@ -30,12 +30,12 @@ class SignUpRequest extends FormRequest
         $rules = [
             'first_name'       => ['required', 'string', 'max:255'],
             'last_name'        => ['required', 'string', 'max:255'],
-            'company_name'     => ['required', 'string', 'max:255'],
+            'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
             'email'            => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             // 'password'         => ['required', 'string', 'min:6', 'confirmed'],
             'password'         => ['required', 'string', 'min:6'],
             'domain'           => ['nullable'],
-            // 'hear_about_delix' => ['nullable'],
+            'hear_about_delix' => ['nullable'],
 
         ];
 

@@ -41,6 +41,10 @@ class User extends Authenticatable implements JWTSubject
         'onesignal_player_id',
         'is_onesignal_subscribed',
         'is_primary',
+        'hear_about_delix',
+        'otp_verify',
+        'token',
+        'token_expired_at',
     ];
 
     protected $hidden   = [

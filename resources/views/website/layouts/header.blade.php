@@ -208,7 +208,7 @@
                             <a href="#" class="btn btn-primary">Get Started <span>It’s Free</span> </a>
                         </div>
                         <!-- Header Toggle Start -->
-                        <div class="header__toggle">
+                        <div class="header__toggle"> 
                             <i class="fa-solid fa-bars"></i>
                         </div>
                         <!-- Hrader Toggle End -->
