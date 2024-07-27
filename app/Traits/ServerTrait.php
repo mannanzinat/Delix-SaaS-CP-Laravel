@@ -2,76 +2,15 @@
 
 namespace App\Traits;
 
+use App\Models\Client;
+use App\Models\Plan;
 use phpseclib3\Net\SSH2;
 use App\Models\Server;
 use Illuminate\Support\Str;
 
 trait ServerTrait
 {
-    public function dnsUpdate($sub_domain)
-    {
-        $server             = Server::where('default', 1)->first();
-
-        if (!$server):
-            return ['success' => false, 'message' => 'No default server found'];
-        endif;
-
-        $domain             = $sub_domain . ".delix.cloud";
-        $uid                = strtolower(Str::random(4));
-        $server_ip          = $server->ip;
-        $zoneID             = "1ea19630bbad09fbd8c69f5d7a703168";
-        $apiKey             = "21e4220da546e136cc107911a3a8f69eb0c66";
-
-        // Update DNS
-        try {
-            $curl = curl_init();
-            $cf_data = [
-                "content"       => $server_ip,
-                "name"          => $domain,
-                "proxied"       => false,
-                "type"          => "A",
-                "comment"       => "Domain verification record",
-                "ttl"           => 3600,
-            ];
-            curl_setopt_array($curl, [
-                CURLOPT_URL             => "https://api.cloudflare.com/client/v4/zones/$zoneID/dns_records",
-                CURLOPT_RETURNTRANSFER  => true,
-                CURLOPT_ENCODING        => "",
-                CURLOPT_MAXREDIRS       => 10,
-                CURLOPT_TIMEOUT         => 30,
-                CURLOPT_HTTP_VERSION    => CURL_HTTP_VERSION_1_1,
-                CURLOPT_SSL_VERIFYPEER  => false,
-                CURLOPT_CUSTOMREQUEST   => "POST",
-                CURLOPT_POSTFIELDS      => json_encode($cf_data),
-                CURLOPT_HTTPHEADER      => [
-                    "Content-Type: application/json",
-                    "X-Auth-Email: mannanzinat@gmail.com",
-                    "X-Auth-Key: $apiKey"
-                ],
-            ]);
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
-
-            if ($err) {
-                return ['success' => false, 'message' => 'cURL Error: ' . $err];
-            }
-
-            // Check Cloudflare response
-            $cf_response = json_decode($response, true);
-
-            if (isset($cf_response['success']) && !$cf_response['success']) {
-                return ['success' => false, 'message' => 'Cloudflare API Error'];
-            }
-
-        } catch (\Exception $e) {
-            return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
-        }
-        return ['success' => true, 'message' => 'Operation succeeded'];
-    }
-
-    public function deployScript($domain=array())
+    public function deployScript($domain=array()): array
     {
         ini_set('max_execution_time',300);
         $server               = Server::find($domain["server_id"]);
@@ -112,6 +51,7 @@ trait ServerTrait
 
                 // Activate SSL
                 if($ssl_active):
+                    $this->ActiveSsl($domain);
                     //$ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain_name");
                 endif;
             } else {
@@ -124,7 +64,30 @@ trait ServerTrait
         return ['success' => true, 'message' => 'Operation succeeded'];
     }
 
-    public function updateClientPackageLimitation($domain=array(),$plan)
+    public function ActiveSsl($domain=array()): array
+    {
+        ini_set('max_execution_time',300);
+        $server               = Server::find($domain["server_id"]);
+        if (!$server) {
+            return ['success' => false, 'message' => 'No server found'];
+        }
+
+        $domain_name        = $domain["domain_name"];
+        $server_ip          = $server->ip;
+        $ssh                = new SSH2($server_ip);
+        try {
+            if ($ssh->login('root', $server->password)) {
+                    $ssh->exec("clpctl lets-encrypt:install:certificate --domainName=$domain_name");
+            } else {
+                return ['success' => false, 'message' => 'SSH login failed'];
+            }
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
+        }
+        return ['success' => true, 'message' => 'Operation succeeded'];
+    }
+
+    public function updateClientPackageLimitation($domain=array(),$plan=array()): array
     {
         ini_set('max_execution_time',300);
         $server               = Server::find($domain["server_id"]);
@@ -134,6 +97,8 @@ trait ServerTrait
         }
         $domain_name        = $domain["domain_name"];
         $site_user          = $domain["site_user"];
+
+
         $server_ip          = $server->ip;
 
         $ssh                = new SSH2($server_ip);
@@ -150,6 +115,8 @@ trait ServerTrait
                 $ssh->exec("sed -i 's/MERCHANT_APP=.*/MERCHANT_APP=$plan->merchant_app/g' /home/$site_user/htdocs/$domain_name/.env");
                 $ssh->exec("sed -i 's/RIDER_APP=.*/RIDER_APP=$plan->rider_app/g' /home/$site_user/htdocs/$domain_name/.env");
                 $ssh->exec("sed -i 's/IS_FREE=.*/IS_FREE=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/ADMIN_KEY=.*/ADMIN_KEY=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
+                $ssh->exec("sed -i 's/CLIENT_KEY=.*/CLIENT_KEY=$plan->is_free/g' /home/$site_user/htdocs/$domain_name/.env");
             } else {
                 return ['success' => false, 'message' => 'SSH login failed'];
             }
@@ -158,6 +125,20 @@ trait ServerTrait
             return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
         }
         return ['success' => true, 'message' => 'Operation succeeded'];
+    }
+    public function updateClientPackageLimitationBySubscription($subscription): array
+    {
+        $client                     = Client::with('domains')->where('id', $subscription->client_id)->first();
+        $domain_info['server_id']   = $client->domains->server_id;
+        if($client->domains->custom_domain_active == 1):
+            $domain_info['domain_name']             = $client->domains->custom_domain;
+            $domain_info['site_user']               = $client->domains->custom_domain_user;
+        else:
+            $domain_info['domain_name']             = $client->domains->sub_domain.'.delix.cloud';
+            $domain_info['site_user']               = $client->domains->sub_domain_user;
+        endif;
+        $plan                       = Plan::findOrfail($subscription->plan_id);
+        return $this->updateClientPackageLimitation($domain_info,$plan);
     }
 }
 

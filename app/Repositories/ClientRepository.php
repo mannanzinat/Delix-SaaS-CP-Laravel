@@ -22,6 +22,7 @@ use App\Models\Template;
 use App\Models\Ticket;
 use App\Models\Server;
 use App\Models\User;
+use App\Traits\DnsTrait;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,6 +33,7 @@ class ClientRepository
 {
     use ImageTrait;
     use ServerTrait;
+    use DnsTrait;
 
     public function all($data, $relation = []): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
@@ -114,7 +116,7 @@ class ClientRepository
 
 
             if($request['create_domain'] =='1'):
-                $result = $this->dnsUpdate($request['sub_domain']);
+                $result = $this->dnsAdd($request['sub_domain']);
                 if (!$result['success']):
                     return ['success' => false, 'message' => $result['message']];
                 else:
@@ -149,6 +151,9 @@ class ClientRepository
                         $domain_info['site_password']           = $domain->sub_domain_password;
                         $domain_info['database_name']           = $domain->sub_domain_db_name;
                         $domain_info['database_user']           = $domain->sub_domain_user;
+                        $domain_info['database_password']       = $domain->sub_domain_password;
+                        $domain_info['admin_key']               = strtolower(Str::random(24));
+                        $domain_info['client_key']              = strtolower(Str::random(24));
                         $domain_info['database_password']       = $domain->sub_domain_password;
                         $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
                         $result                                 = $this->deployScript($domain_info);

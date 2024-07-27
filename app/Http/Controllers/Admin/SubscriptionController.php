@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\SubscriptionDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubscriptionRequest;
+use App\Models\Client;
 use App\Repositories\Client\SubscriptionRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\PlanRepository;
@@ -51,14 +52,25 @@ class SubscriptionController extends Controller
             return response()->json($data);
         }
         try {
-            $this->subscriptionRepository->subscribeListStatus($request->all(), $id);
-
             $data = [
-                'status'  => 'success',
-                'message' => __('status_update_successfully'),
-                'title'   => __('success'),
+                'status'  => 'danger',
+                'message' => __('something_went_wrong_please_try_again'),
+                'title'   => __('error'),
             ];
-
+            $response = $this->subscriptionRepository->subscribeListStatus($request->all(), $id);
+            if($response['success']):
+                $data = [
+                    'status'  => 'success',
+                    'message' => __('status_update_successfully'),
+                    'title'   => __('success'),
+                ];
+            else:
+                $data = [
+                    'status'  => 'danger',
+                    'message' => $response['message'],
+                    'title'   => __('error'),
+                ];
+            endif;
             return response()->json($data);
         } catch (\Exception $e) {
             $data = [
