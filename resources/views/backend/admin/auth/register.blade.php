@@ -1,9 +1,4 @@
 
-<style>
-    .text-danger{
-        color: #d9534f;
-    }
-</style>
 @extends('website.layouts.master')
 @section('content')
     <section class="signup__section">
@@ -183,14 +178,22 @@
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
-                        toastr.success('Submitted successfully.');
-                        $('.submit__btn .loader').addClass('d-none');
-                        $('.signupForm').reset();
+                        toastr.success(response.message);
+                        $('#signupForm')[0].reset();
                     },
                     error: function(xhr, status, error) {
                         console.error('Submission failed:', error);
                         toastr.error('Submission failed. Please try again later.');
-                        $('.submit__btn .loader').addClass('d-none');
+                        if (xhr.status === 422) { 
+                            var errors = xhr.responseJSON.errors;
+                            for (var field in errors) {
+                                if (errors.hasOwnProperty(field)) {
+                                    var errorMessage = errors[field][0];
+                                    var errorDiv = $('<div class="nk-block-des text-danger pt-2"><p class="text-danger">' + errorMessage + '</p></div>');
+                                    $('#' + field).after(errorDiv);
+                                }
+                            }
+                        }
                     }
                 });
             });

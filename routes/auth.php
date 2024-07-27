@@ -20,7 +20,7 @@ Route::get('user/verified/{verify}', [AuthController::class, 'verified'])->name(
 Route::get('whatsapp/verify/{verify}', [AuthController::class, 'whatsappVerify'])->name('whatsapp.verify');
 
 Route::post('whatsapp/otp-send', [AuthController::class, 'whatsappOtp'])->name('whatsapp.otp.send');
-Route::post('whatsapp/store-otp', [AuthController::class, 'whatsappOtpStore'])->name('whatsapp.store.otp');
+Route::post('whatsapp/otp-confirm', [AuthController::class, 'whatsappOtpConfirm'])->name('whatsapp.otp.confirm');
 
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignUpRequest;
 use App\Models\Activation;
 use App\Models\Client;
+use App\Models\Domain;
 use App\Models\ClientStaff;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -50,50 +51,50 @@ class RegisteredUserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $role                         = DB::table('roles')->where('slug', 'Client-staff')->select('id', 'permissions')->first();
-            $permissions                  = json_decode($role->permissions, true);
+            $role                           = DB::table('roles')->where('slug', 'Client-staff')->select('id', 'permissions')->first();
+            $permissions                    = json_decode($role->permissions, true);
 
-            $timeZoneService              = app(TimeZoneService::class)->execute($request);
-            $client                       = new Client();
-            $client->first_name           = $request->first_name;
-            $client->last_name            = $request->last_name;
-            $client->company_name         = $request->company_name;
-            $client->domain               = $request->domain;
-            $client->timezone             = $timeZoneService['timezone'] ?? setting('time_zone');
-            $client->webhook_verify_token = Str::random(30);
-            $client->api_key              = Str::random(30);
-            $client->slug                 = getSlug('clients', $request['company_name']);
+            $timeZoneService                = app(TimeZoneService::class)->execute($request);
+            $client                         = new Client();
+            $client->first_name             = $request->first_name;
+            $client->last_name              = $request->last_name;
+            $client->company_name           = $request->company_name;
+            $client->domain                 = $request->domain;
+            $client->timezone               = $timeZoneService['timezone'] ?? setting('time_zone');
+            $client->webhook_verify_token   = Str::random(30);
+            $client->api_key                = Str::random(30);
+            $client->slug                   = getSlug('clients', $request['company_name']);
             $client->save();
 
-            $user                         = new User();
-            $user->password               = Hash::make($request->password);
-            $user->first_name             = $request->first_name;
-            $user->last_name              = $request->last_name;
-            $user->role_id                = $role->id;
-            $user->email                  = $request->email;
-            $user->user_type              = 'client-staff';
-            $user->client_id              = $client->id;
-            $user->permissions            = $permissions;
-            $user->status                 = 1;
-            $user->hear_about_delix       = $request->hear_about_delix;
-            $user->token                  = Str::random(40);
-            // $user->token_expired_at       = Carbon\Carbon::addHours(1);
+            $user                           = new User();
+            $user->password                 = Hash::make($request->password);
+            $user->first_name               = $request->first_name;
+            $user->last_name                = $request->last_name;
+            $user->role_id                  = $role->id;
+            $user->email                    = $request->email;
+            $user->user_type                = 'client-staff';
+            $user->client_id                = $client->id;
+            $user->permissions              = $permissions;
+            $user->status                   = 1;
+            $user->hear_about_delix         = $request->hear_about_delix;
+            $user->token                    = Str::random(40);
+            $user->token_expired_at         = \Carbon\Carbon::now()->addHours(1);
             $user->save();
 
-            $staff                        = new ClientStaff();
-            $staff->user_id               = $user->id;
-            $staff->client_id             = $client->id;
-            $staff->slug                  = getSlug('clients', $client->company_name);
+            $staff                          = new ClientStaff();
+            $staff->user_id                 = $user->id;
+            $staff->client_id               = $client->id;
+            $staff->slug                    = getSlug('clients', $client->company_name);
             $staff->save();
-          
-            $link                         = route('user.verified', $user->token);
-            $template_data                = $this->emailTemplate->emailConfirmation();
+
+            $link                           = route('user.verified', $user->token);
+            $template_data                  = $this->emailTemplate->emailConfirmation();
             $data = [
-                'confirmation_link'     => $link,
-                'user'                  => $user,
-                'subject'               => $template_data->subject ?? __('welcome'),
-                'email_templates'       => $template_data,
-                'template_title'        => 'Email Confirmation',
+                'confirmation_link' => $link,
+                'user'              => $user,
+                'subject'           => $template_data->subject ?? __('welcome'),
+                'email_templates'   => $template_data,
+                'template_title'    => 'Email Confirmation',
             ];
 
             try {
@@ -103,20 +104,24 @@ class RegisteredUserController extends Controller
             }
 
             DB::commit();
-            if ($request->ajax()) {
-                return response()->json(['message' => __('registration_successful')]);
-            } else {
-                Toastr::success(__('registration_successful'));
-            }
 
-            return redirect()->route('login');
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => __('registration_successful')]);
+            } else {
+                return redirect()->back()->with('success', __('registration_successful'));
+            }
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('something_went_wrong_please_try_again');
 
-            return redirect()->back()->withErrors(['something_went_wrong_please_try_again']);
+            if ($request->ajax()) {
+                return response()->json(['error' => 'something_went_wrong_please_try_again'], 500);
+            } else {
+                return redirect()->back()->withErrors(['something_went_wrong_please_try_again']);
+            }
         }
     }
+
 
     public function emailConfirmation(Request $request)
     {

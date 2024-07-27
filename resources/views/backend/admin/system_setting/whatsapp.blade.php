@@ -21,9 +21,9 @@
                         <strong>{{ __('oops') }}</strong> {{ __('whatsapp_webhook_not_connected') }}<br>
                         <small>{{ __('real_time_updates_will_not_be_available_until_the_webhook_is_connected') }}</small>
                         
-                        @if (!empty(@Auth::user()->client->whatsappSetting->access_token) &&
-                            !empty(@Auth::user()->client->whatsappSetting->scopes))
-                            <a class="alert-link" href="https://developers.facebook.com/apps/{{ Auth::user()->client->whatsappSetting->app_id }}/whatsapp-business/wa-settings/?business_id={{ Auth::user()->client->whatsappSetting->business_account_id }}"
+                        @if (!empty(setting('access_token')) &&
+                            !empty(setting('scopes')))
+                            <a class="alert-link" href="https://developers.facebook.com/apps/{{ setting('app_id') }}/whatsapp-business/wa-settings/?business_id={{ setting('business_account_id') }}"
                                target="_blank">
                                 <i class="las la-link"></i> {{ __('add_whatsapp_webhook') }}
                             </a>
@@ -48,7 +48,7 @@
                                             {{ __('callback_url') }}</label>
                                         <div class="input-group">
                                             <input type="url"
-                                                value="{{ isDemoMode() ? '******************' : route('whatsapp.webhook', @Auth::user()->client->webhook_verify_token) }}"
+                                                value="{{ isDemoMode() ? '******************' : route('whatsapp.webhook', setting('webhook_verify_token')) }}"
                                                 readonly name="webhook_callback_url" class="form-control"
                                                 placeholder="{{ __('enter_webhook_callback_url') }}"
                                                 aria-label="{{ __('enter_webhook_callback_url') }}"
@@ -68,7 +68,7 @@
                                             {{ __('verify_token') }}</label>
                                         <div class="input-group">
                                             <input type="text"
-                                                value="{{ isDemoMode() ? '******************' : old('webhook_verify_token', @Auth::user()->client->webhook_verify_token) }}"
+                                                value="{{ isDemoMode() ? '******************' : old('webhook_verify_token', setting('webhook_verify_token')) }}"
                                                 readonly name="webhook_verify_token" class="form-control"
                                                 placeholder="{{ __('enter_webhook_verify_token') }}"
                                                 aria-label="{{ __('enter_webhook_verify_token') }}"
@@ -111,7 +111,7 @@
                     </div>
 
 
-                    <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.whatsapp.settings.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row mb-3">
@@ -126,7 +126,7 @@
                                                 {{ __('access_token') }} <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control rounded-2" id="access_token"
                                                 name="access_token"
-                                                value="{{ isDemoMode() ? '******************' : old('access_token', @Auth::user()->client->whatsappSetting->access_token) }}"
+                                                value="{{ isDemoMode() ? '******************' : old('access_token', setting('access_token')) }}"
                                                 placeholder="{{ __('enter_access_token') }}">
                                             <div class="nk-block-des text-danger">
                                                 <p class="access_token_error error">{{ $errors->first('access_token') }}
@@ -134,24 +134,24 @@
                                             </div>
                                         </div>
                                         {{-- <div class="mb-4">
-											<label for="phone_number_id"
-											       class="form-label">{{ __('phone_number_id') }}</label>
-											<input type="text" class="form-control rounded-2" id="phone_number_id"
-											       name="phone_number_id"
-											       value="{{ isDemoMode() ? '******************' : old('phone_number_id', @Auth::user()->client->whatsappSetting->phone_number_id) }}"
-											       placeholder="{{ __('enter_phone_number_id') }}">
-											<div class="nk-block-des text-danger">
-												<p class="phone_number_id_error error">
-													{{ $errors->first('phone_number_id') }}</p>
-											</div>
-										</div> --}}
+                                            <label for="phone_number_id"
+                                                   class="form-label">{{ __('phone_number_id') }}</label>
+                                            <input type="text" class="form-control rounded-2" id="phone_number_id"
+                                                   name="phone_number_id"
+                                                   value="{{ isDemoMode() ? '******************' : old('phone_number_id', @Auth::user()->client->whatsappSetting->phone_number_id) }}"
+                                                   placeholder="{{ __('enter_phone_number_id') }}">
+                                            <div class="nk-block-des text-danger">
+                                                <p class="phone_number_id_error error">
+                                                    {{ $errors->first('phone_number_id') }}</p>
+                                            </div>
+                                        </div> --}}
                                         <div class="mb-4">
                                             <label for="business_account_id" class="form-label"><i
                                                     class="las la-briefcase"></i> {{ __('business_account_id') }} <span
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control rounded-2" id="business_account_id"
                                                 name="business_account_id"
-                                                value="{{ isDemoMode() ? '******************' : old('business_account_id', @Auth::user()->client->whatsappSetting->business_account_id) }}"
+                                                value="{{ isDemoMode() ? '******************' : old('business_account_id', setting('business_account_id')) }}"
                                                 placeholder="{{ __('enter_business_account_id') }}">
                                             <div class="nk-block-des text-danger">
                                                 <p class="business_account_id_error error">
@@ -159,28 +159,28 @@
                                             </div>
                                         </div>
                                         {{-- <div class="mb-4">
-											<label for="app_id"
-											       class="form-label">{{ __('app_id') }}</label>
-											<input type="text" class="form-control rounded-2" id="app_id"
-											       name="app_id"
-											       value="{{ isDemoMode() ? '******************' : old('app_id', @Auth::user()->client->whatsappSetting->app_id) }}"
-											       placeholder="{{ __('enter_app_id') }}">
-											<div class="nk-block-des text-danger">
-												<p class="app_id_id_error error">
-													{{ $errors->first('app_id') }}</p>
-											</div>
-										</div> --}}
+                                            <label for="app_id"
+                                                   class="form-label">{{ __('app_id') }}</label>
+                                            <input type="text" class="form-control rounded-2" id="app_id"
+                                                   name="app_id"
+                                                   value="{{ isDemoMode() ? '******************' : old('app_id', @Auth::user()->client->whatsappSetting->app_id) }}"
+                                                   placeholder="{{ __('enter_app_id') }}">
+                                            <div class="nk-block-des text-danger">
+                                                <p class="app_id_id_error error">
+                                                    {{ $errors->first('app_id') }}</p>
+                                            </div>
+                                        </div> --}}
 
                                         <div class="p-2 border rounded bg-light">
                                             @if (
-                                                !empty(@Auth::user()->client->whatsappSetting->access_token) &&
-                                                    !empty(@Auth::user()->client->whatsappSetting->scopes))
+                                                !empty(setting('access_token')) &&
+                                                    !empty(setting('scopes')))
 
                                                 <div class="mb-2">
                                                     <strong>{{ __('name') }}:</strong>
-                                                    {{ Auth::user()->client->whatsappSetting->name }}
+                                                    {{ setting('name') }}
                                                     <a class="text-success" target="_blank"
-                                                        href="https://business.facebook.com/wa/manage/home/?business_id=&waba_id={{ Auth::user()->client->whatsappSetting->business_account_id }}"
+                                                        href="https://business.facebook.com/wa/manage/home/?business_id=&waba_id={{ setting('business_account_id') }}"
                                                         class="small">
                                                         <small>
                                                             <i class="las la-pen"></i>
@@ -191,15 +191,15 @@
 
                                                 <div class="mb-2">
                                                     <strong>{{ __('expires_at') }}:</strong>
-                                                    {{ Auth::user()->client->whatsappSetting->expires_at }}
+                                                    {{ setting('expires_at') }}
                                                 </div>
                                                 <div class="mb-2">
                                                     <strong>{{ __('app_id') }}:</strong>
-                                                    {{ Auth::user()->client->whatsappSetting->app_id }}
+                                                    {{ setting('app_id') }}
                                                 </div>
                                                 <div class="mb-2">
                                                     <strong>{{ __('token_verified') }}:</strong>
-                                                    @if (Auth::user()->client->whatsappSetting->token_verified)
+                                                    @if (setting('token_verified'))
                                                         <i class="las la-check-circle text-success"></i>
                                                     @else
                                                         <i class="las la-times-circle text-danger"></i>
@@ -208,7 +208,7 @@
 
 
                                                 <?php
-                                                $scopes = @Auth::user()->client->whatsappSetting->scopes ?? [];
+                                                $scopes = @setting('scopes') ?? [];
                                                 $requiredScopes = config('static_array.whatsapp_required_scopes');
                                                 ?>
                                                 <ul class="list-inline">
@@ -234,7 +234,7 @@
                                             @endif
                                         </div>
                                         <div class="d-flex justify-content-end align-items-center mt-30 gap-2">
-                                            @if (@Auth::user()->client->whatsappSetting->access_token)
+                                            {{-- @if (setting('access_token'))
                                                 <button type="button" class="btn btn-danger text-white __js_delete"
                                                     id="remove_access_token"
                                                     data-id="{{ @Auth::user()->client->whatsappSetting->id }}"
@@ -246,7 +246,7 @@
                                                 data-id="{{ @Auth::user()->client->whatsappSetting->id }}"
                                                 data-url="{{ route('client.whatsapp-settings.sync', @Auth::user()->client->whatsappSetting->id) }}">
                                                 <i class="las la-sync-alt"></i> {{ __('sync') }}
-                                            </button>
+                                            </button> --}}
                                             <button type="submit" class="btn sg-btn-primary"><i class="las la-save"></i>
                                                 {{ __('save') }}</button>
                                             @include('backend.common.loading-btn', [

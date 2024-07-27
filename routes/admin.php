@@ -112,6 +112,10 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
         //firebase setting
         Route::get('refund-setting', [SystemSettingController::class, 'refund'])->name('admin.refund');
         Route::post('refund-setting', [SystemSettingController::class, 'saveRefundSetting'])->name('admin.refund');
+        //whatsapp setting
+        Route::get('whatsapp-settings', [SystemSettingController::class, 'whatsAppSettings'])->name('admin.whatsapp.settings');
+        Route::post('whatsapp-settings-update', [SystemSettingController::class, 'whatsAppSettings'])->name('admin.whatsapp.settings.update');
+
         //preferences
         Route::get('preference', [SystemSettingController::class, 'preference'])->name('preference');
         //storage setting

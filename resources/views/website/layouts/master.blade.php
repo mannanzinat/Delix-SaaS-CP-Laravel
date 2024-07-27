@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Delix - SaaS Html Template</title>
         <meta name="description" content="Delix - SaaS Html Template" />
         <link rel="shortcut icon" href="{{ asset('website') }}/assets/images/logo/favicon.png" type="image/f-icon" />

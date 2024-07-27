@@ -20,16 +20,31 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email Verification</label>
-                            <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>Your email has been verified</div>
+                            @if(Session::has('success'))
+                                <div class="alert alert-success alert-dismissible" role="alert">
+                                    {{ Session::get('success') }}
+                                    <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('your_email_has_been_varified') }}</div>
+                                </div>
+                            @endif
                         </div>
                         <div class="form-group">
-                            <label for="whatsapp_number">Verify WhatsApp to Get Started</label>
-                            <input type="number" class="form-control domain" id="whatsapp_number" placeholder="Enter Your WhatsApp Number" />
+                            <label for="phone">Verify WhatsApp to Get Started</label>
+                            <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
+                            @if ($errors->has('phone'))
+                                <div class="nk-block-des text-danger pt-2">
+                                    <p class="text-danger">{{ $errors->first('phone') }}</p>
+                                </div>
+                            @endif
                             <button type="button" class="otp__btn">{{ __('sent_otp') }}</button>
                         </div>
                         <div class="form-group">
-                            <label for="whatsapp_otp">Enter OTP</label>
-                            <input type="number" class="form-control" id="whatsapp_otp" placeholder="Enter Your OTP Number" />
+                            <label for="otp">Enter OTP</label>
+                            <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
+                            @if ($errors->has('otp'))
+                                <div class="nk-block-des text-danger pt-2">
+                                    <p class="text-danger">{{ $errors->first('otp') }}</p>
+                                </div>
+                            @endif
                         </div>
                         <div class="btn__submit">
                             <button type="submit" class="btn btn-primary sent_otp">Get Started</button>
@@ -39,48 +54,96 @@
             </div>
         </div>
     </section>
+    <input type="hidden" value="{{ $token }}" id="token" />
 @endsection
 @push('js')
     <script>
+        //otp send
         $(document).ready(function() {
             $('.otp__btn').on('click', function(event) {
-                var number = $('#whatsapp_number').val();
-                var route  = "{{ route('whatsapp.otp.send') }}";
-
+                event.preventDefault();
+                var phone = $('#phone').val();
+                var token = $('#token').val();
+                var route = "{{ route('whatsapp.otp.send') }}";
                 $.ajax({
                     url: route,
                     type: 'POST',
                     data: {
-                        number: number,
+                        phone: phone,
+                        token: token,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-
+                        toastr.success(response.message);
+                        $('#phone').val('');
+                        $('#token').val('');
+                        $('.text-danger').remove();
                     },
                     error: function(xhr, status, error) {
-
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            $('.text-danger').remove();
+                            if (errors.phone) {
+                                $('#phone').after('<div class="nk-block-des text-danger pt-2"><p class="text-danger">' + errors.phone[0] + '</p></div>');
+                            }
+                            if (errors.token) {
+                                $('#token').after('<div class="nk-block-des text-danger pt-2"><p class="text-danger">' + errors.token[0] + '</p></div>');
+                            }
+                        } else {
+                            toastr.error(xhr.responseJSON.message || 'An error occurred');
+                        }
                     }
                 });
             });
         });
 
+        //confirm otp
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $('.sent_otp').on('click', function(event) {
-                var otp     = $('#whatsapp_otp').val();
-                var route   = "{{ route('whatsapp.store.otp') }}";
+                event.preventDefault();
+                var token   = $('#token').val();
+                var otp     = $('#otp').val();
+                var route   = "{{ route('whatsapp.otp.confirm') }}";
 
                 $.ajax({
                     url: route,
                     type: 'POST',
                     data: {
                         otp: otp,
-                        _token: '{{ csrf_token() }}'
+                        token: token
                     },
                     success: function(response) {
-
+                        if (response.success) {
+                            toastr.success(response.message);
+                            if (response.url) {
+                                window.location.href = response.url;
+                            }
+                        } else {
+                            toastr.success(response.message);
+                        }
+                        $('#otp').val('');
+                        $('#token').val('');
+                        $('.text-danger').remove();
                     },
                     error: function(xhr, status, error) {
-
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            $('.text-danger').remove();
+                            if (errors.otp) {
+                                $('#otp').after('<div class="nk-block-des text-danger pt-2"><p class="text-danger">' + errors.otp[0] + '</p></div>');
+                            }
+                            if (errors.token) {
+                                $('#token').after('<div class="nk-block-des text-danger pt-2"><p class="text-danger">' + errors.token[0] + '</p></div>');
+                            }
+                        } else {
+                            toastr.error(xhr.responseJSON.message || 'An error occurred');
+                        }
                     }
                 });
             });

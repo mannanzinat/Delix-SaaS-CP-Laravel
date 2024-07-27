@@ -305,7 +305,81 @@ class SettingRepository
         }
     }
 
-    
+
+    public function whatsappUpdate($request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $is_connected = 0;
+            $token_verified = 0;
+            $scopes         = null;
+            $accessToken  = $request->access_token;
+            $url          = 'https://graph.facebook.com/debug_token?input_token=' . $accessToken . '&access_token=' . $accessToken;
+            $ch           = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            $response     = curl_exec($ch);
+            $responseData = json_decode($response, true);
+            // dd($responseData);
+            if (isset($responseData['error'])) {
+                return $this->formatResponse(false, $responseData['error']['message'], 'client.whatsapp.settings', []);
+            } else {
+                if (isset($responseData['data']['is_valid']) && $responseData['data']['is_valid'] === true) {
+                    $is_connected = 1;
+                    $token_verified = 1;
+                    $scopes = $responseData['data']['scopes'];
+                } else {
+                    return $this->formatResponse(false, __('access_token_is_not_valid'), 'client.whatsapp.settings', []);
+                }
+            }
+            $scopes = $responseData['data']['scopes'];
+            $dataAccessExpiresAt = isset($responseData['data']['data_access_expires_at']) ?
+                (new \DateTime())->setTimestamp($responseData['data']['data_access_expires_at']) : null;
+            $dataExpiresAt = isset($responseData['data']['expires_at']) ?
+                (new \DateTime())->setTimestamp($responseData['data']['expires_at']) : null;
+            curl_close($ch);
+            $client       = $this->model
+                ->where('type', TypeEnum::WHATSAPP->value)
+                ->where('client_id', Auth::user()->client->id)
+                ->first();
+
+            // dd($responseData);
+            if ($client) {
+                $client                      = $this->model->where('type', TypeEnum::WHATSAPP)->where('client_id', Auth::user()->client->id)->first();
+                $client->access_token        = $accessToken;
+                $client->phone_number_id     = $request->phone_number_id;
+                $client->business_account_id = $request->business_account_id;
+                $client->app_id              = $responseData['data']['app_id'];
+                $client->is_connected        = $is_connected;
+                $client->token_verified      = $token_verified;
+                $client->scopes              = $scopes;
+                $client->name    = $responseData['data']['application'] ?? null;
+                $client->update();
+            } else {
+                $client = $this->model->create([
+                    'access_token'        => $accessToken,
+                    'phone_number_id'     => $request->phone_number_id,
+                    'business_account_id' => $request->business_account_id,
+                    'app_id'              => $responseData['data']['app_id'],
+                    'is_connected'        => $is_connected,
+                    'token_verified'      => $token_verified,
+                    'scopes'              => $scopes,
+                    'name'              => $responseData['data']['application'] ?? null,
+                ]);
+            }
+            DB::commit();
+            return $this->formatResponse(true, __('updated_successfully'), 'client.whatsapp.settings', []);
+        } catch (\Throwable $e) {
+            DB::rollback();
+            if (config('app.debug')) {
+                dd($e->getMessage());
+            }
+            \Log::info('Whatsapp Setting Update', [$e->getMessage()]);
+            return $this->formatResponse(false, __('an_unexpected_error_occurred_please_try_again_later.'), 'client.whatsapp.settings', []);
+        }
+    }
 
 
 }

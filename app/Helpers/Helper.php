@@ -1021,13 +1021,13 @@ if (! function_exists('telegramConnected')) {
 if (! function_exists('isWhatsAppWebhookConnected')) {
     function isWhatsAppWebhookConnected()
     {
-        $whatsappSetting =auth()->user()->client->whatsappSetting;
+        // $whatsappSetting =auth()->user()->client->whatsappSetting;
 
-        if (! empty($whatsappSetting) && $whatsappSetting->webhook_verified) {
+        // if (! empty($whatsappSetting) && $whatsappSetting->webhook_verified) {
             return true;
-        }
+        // }
 
-        return false;
+        // return false;
     }
 }
 

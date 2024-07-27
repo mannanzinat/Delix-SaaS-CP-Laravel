@@ -42,10 +42,12 @@ class User extends Authenticatable implements JWTSubject
         'is_onesignal_subscribed',
         'is_primary',
         'hear_about_delix',
-        'otp_verify',
+        'whatsapp_otp',
+        'whatsapp_verify_at',
         'token',
         'token_expired_at',
     ];
+
 
     protected $hidden   = [
         'password',

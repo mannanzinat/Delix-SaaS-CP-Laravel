@@ -58,6 +58,7 @@ class SignUpRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
         $user = User::where('email', $this->email)->first();
+
         if (isset($user->email) && $user->status == 0) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([

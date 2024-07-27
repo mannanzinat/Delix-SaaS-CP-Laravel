@@ -245,6 +245,11 @@
 								       href="{{ route('admin.panel-setting') }}">{{ __('admin_panel_setting') }}</a>
 								</li>
 							@endcan
+
+							<li>
+								<a class="{{ menuActivation(['admin/whatsapp-settings'], 'active') }}"
+								   href="{{route('admin.whatsapp.settings')}}">{{ __('whatsapp') }}</a>
+							</li>
 							@can('admin.firebase')
 								<li><a class="{{ menuActivation('admin/firebase', 'active') }}"
 								       href="{{ route('admin.firebase') }}">{{ __('firebase') }}</a></li>

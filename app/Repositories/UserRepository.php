@@ -7,6 +7,8 @@ use App\Models\OneSignalToken;
 use App\Models\User;
 use App\Traits\ImageTrait;
 use App\Traits\SendMailTrait;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository
 {
@@ -249,4 +251,65 @@ class UserRepository
 
         return $token;
     }
+
+    public function sendWhatsappOtp($request)
+    {
+        try{
+            $otp                    = rand(100000, 999999);
+            $user                   = User::where('token', $request->token)->first();
+
+            if ($user):
+                $user->whatsapp_otp = $otp;
+                $user->phone        = $request->phone;
+                $user->save();
+                return ['success' => true, 'message' => __('otp_sent_successfully_check_your_whatsapp')];
+
+            endif;
+        }catch(\Exception $e){
+            return ['success' => false, 'message' => __('something_went_wrong_please_try_again')];
+
+        }
+    }
+
+    public function confirmWhatsappOtp($request)
+    {
+        try {
+            $user = User::where('token', $request->token)->first();
+
+
+            if ($user->whatsapp_otp !== $request->otp) :
+                return [
+                    'success' => false,
+                    'message' => __('your_otp_is_incorrect')
+                ];
+            endif;
+
+            $user->whatsapp_verify_at = now();
+            $user->save();
+
+            if (Auth::attempt(['email' => $user->email, 'password' => '123456'])):
+                Auth::login($user);
+
+                return [
+                    'success' => true,
+                    'message' => __('otp_verified_successfully'),
+                    'url'     => route('client.dashboard') 
+                ];
+            else:
+                return [
+                    'success' => false,
+                    'message' => __('authentication_failed')
+                ];
+            endif;
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => __('something_went_wrong'),
+                'error'   => $e->getMessage()
+            ];
+        }
+    }
+
+
+
 }

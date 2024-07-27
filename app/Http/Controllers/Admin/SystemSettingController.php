@@ -15,6 +15,11 @@ use App\Repositories\SettingRepository;
 use Illuminate\Support\Facades\Artisan;
 use App\Repositories\CurrencyRepository;
 use App\Repositories\LanguageRepository;
+use App\Rules\AppIdRule;
+use App\Rules\PhoneNumberIdRule;
+use App\Rules\UniqueAccessToken;
+use App\Rules\BusinessAccountIdRule;
+use Illuminate\Support\Facades\Validator;
 use Pusher\Pusher;
 use Pusher\PusherException;
 use Illuminate\Support\Facades\Http;
@@ -660,5 +665,56 @@ class SystemSettingController extends Controller
     {
         $response = $this->checkOneSignalCredentials();
         return $this->setting->testOneSignalNotification($request);
+    }
+
+    public function whatsAppSettings(Request $request)
+    {
+        return view('backend.admin.system_setting.whatsapp');
+    }
+
+
+    public function update(Request $request)
+    {
+        dd($request->all());
+        if (isDemoMode()) {
+            Toastr::error(__('this_function_is_disabled_in_demo_server'));
+            return back();
+        }
+        $clientId = auth()->user()->client->id;
+        $rules = [
+            'access_token' => ['required', 'string', new UniqueAccessToken($clientId)],
+            'phone_number_id' => ['nullable', 'string', new PhoneNumberIdRule($clientId)],
+            'business_account_id' => ['required', 'string', new BusinessAccountIdRule($clientId)],
+            'app_id' => ['nullable', 'string', new AppIdRule($clientId)],
+        ];
+        $messages = [
+            'access_token.required' => __('access_token_is_required'),
+            'business_account_id.required' => __('business_account_id_is_required'),
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try{
+            $this->setting->update($request);
+            Artisan::call('optimize:clear');
+
+            if ($request->is_cache_enabled == 'enable') {
+                Artisan::call('config:cache');
+            }
+
+            Toastr::success(__('update_successful'));
+            $data = [
+                'success' => __('update_successful'),
+            ];
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            $data = [
+                'error' => __('something_went_wrong_please_try_again'),
+            ];
+
+            return response()->json($data);
+        }
     }
 }

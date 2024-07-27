@@ -37,7 +37,8 @@ return new class extends Migration
             $table->tinyInteger('is_deleted')->default(0)->comment('0 not delete, 1 deleted');
             $table->bigInteger('role_id')->unsigned()->nullable();
             $table->string('address')->nullable();
-            $table->timestamp('otp_verify')->nullable();
+            $table->string('whatsapp_otp')->nullable();
+            $table->timestamp('whatsapp_verify_at')->nullable();
             $table->string('token')->nullable();
             $table->timestamp('token_expired_at')->nullable();
             $table->enum('hear_about_delix', ['google_ads', 'facebook', 'youtube', 'email', 'friend'])->nullable();

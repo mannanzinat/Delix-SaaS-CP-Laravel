@@ -16,7 +16,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ActivityLog;
 use Illuminate\Support\Str;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -97,7 +101,6 @@ class AuthController extends Controller
 
     public function showResetPasswordForm($token)
     {
-        // Check if the token exists in the password_resets table
         $resetRecord = DB::table('password_resets')
             ->where('token', $token)
             ->first();
@@ -105,7 +108,7 @@ class AuthController extends Controller
         if (! $resetRecord) {
             Toastr::error('Invalid token!');
 
-            return redirect()->route('login'); // Redirect to login page or any other appropriate page
+            return redirect()->route('login');
         }
 
         return view('auth.forgetPasswordLink', ['token' => $token]);
@@ -120,7 +123,6 @@ class AuthController extends Controller
                 'password_confirmation' => 'required',
             ]);
 
-            // Check if the token and email combination exists in password_resets table
             $resetRecord    = DB::table('password_resets')
                 ->where('email', $request->email)
                 ->where('token', $request->token)
@@ -130,26 +132,21 @@ class AuthController extends Controller
                 return back()->withInput()->with('error', 'Invalid token!');
             }
 
-            // Update user's password
             $user           = User::where('email', $request->email)->first();
             $user->password = Hash::make($request->password);
             $user->save();
 
-            // Delete the used token from password_resets table
             DB::table('password_resets')->where('email', $request->email)->delete();
 
-            // Prepare data for sending email notification
             $data           = [
                 'user'           => $user,
                 'login_link'     => url('/login'),
                 'template_title' => 'recovery_mail',
             ];
             if(isMailSetupValid()){
-            // Send email notification about the password change
             $this->sendmail($request->email, 'emails.template_mail', $data);
             }
 
-            // Redirect the user to login page with success message
             Toastr::success(__('successfully_password_changed'));
 
             return redirect('/login')->with('message', 'Your password has been changed!');
@@ -208,14 +205,15 @@ class AuthController extends Controller
         }
         try {
 
-            $user   = User::where('token', $token)->first();
-            $today  = Carbon::now();
+            $user           = User::where('token', $token)->first();
+            $today          = Carbon::now()->setTimezone('UTC');
+            $tokenExpiredAt = Carbon::createFromFormat('Y-m-d H:i:s', $user->token_expired_at, 'UTC');
 
-            if ($user->token_expired_at>$today) {
+            if ($today->gt($tokenExpiredAt)) {
                 Toastr::error(__('your_session_is_expired'));
-
                 return back();
             }
+
 
             $response       = $this->userRepository->userVerified($token);
 
@@ -307,14 +305,50 @@ class AuthController extends Controller
         return view('backend.admin.auth.verify', compact('token'));
     }
 
-    public function whatsappOtp()
+    public function whatsappOtp(Request $request)
     {
-        dd('hi');
+        $request->validate([
+            'phone' => ['required', 'unique:users,phone'],
+        ]);
+
+        try {
+            return $this->userRepository->sendWhatsappOtp($request);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => __('something_went_wrong_please_try_again')], 500);
+        }
+    }
+    public function whatsappOtpConfirm(Request $request)
+    {
+        $request->validate([
+            'otp'   => 'required',
+        ]);
+
+        try {
+            $result = $this->userRepository->confirmWhatsappOtp($request);
+
+            if ($result['success']):
+                return response()->json([
+                    'message' => $result['message'],
+                    'url'     => url($result['url']),
+                    'success' => true
+                ], 200);
+            else:
+                return response()->json(['message' => $result['message']], 400);
+            endif;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => __('something_went_wrong_please_try_again'),
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
 
-    public function whatsappOtpStore(Request $request)
-    {
-        dd('hi');
 
-    }
+
+
 }
