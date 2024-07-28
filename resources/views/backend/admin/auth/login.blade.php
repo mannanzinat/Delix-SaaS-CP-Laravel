@@ -64,7 +64,7 @@
                     <a href="#">
                       <img src="{{ asset('website') }}/assets/images/login-whatsapp.png" alt="whatsapps" />
                     </a>
-                    <a href="#">
+                    <a href="{{ route('google.redirect') }}">
                       <img src="{{ asset('website') }}/assets/images/login-email.png" alt="email" />
                     </a>
                   </div>

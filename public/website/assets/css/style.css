@@ -5014,6 +5014,11 @@ p {
   max-width: 150px;
 }
 
+.submit_otp {
+  background: #FF204E;
+  color:#fff;
+}
+
 /*********************************
 /*  Footer Section End
 *********************************/

@@ -10,17 +10,23 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\SocialiteController;
 
 Route::get('activation/{email}/{code}', [AuthController::class, 'activation']);
 Route::get('password-forgot', [AuthController::class, 'forgotPassword'])->name('password.forgot');
 Route::post('password-forgot', [AuthController::class, 'forgot'])->name('forgot.password-email');
 Route::get('password/reset/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('password/reset-password', [AuthController::class, 'submitResetPasswordForm'])->name('reset-password.post');
-Route::get('user/verified/{verify}', [AuthController::class, 'verified'])->name('user.verified');
-Route::get('whatsapp/verify/{verify}', [AuthController::class, 'whatsappVerify'])->name('whatsapp.verify');
+Route::get('user/verified/{token}', [AuthController::class, 'verified'])->name('user.verified');
+Route::get('whatsapp/verify/{token}', [AuthController::class, 'whatsappVerify'])->name('whatsapp.verify');
 
 Route::post('whatsapp/otp-send', [AuthController::class, 'whatsappOtp'])->name('whatsapp.otp.send');
 Route::post('whatsapp/otp-confirm', [AuthController::class, 'whatsappOtpConfirm'])->name('whatsapp.otp.confirm');
+
+
+Route::get('/google/redirect', [SocialiteController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('google.callback');
+
 
 
 

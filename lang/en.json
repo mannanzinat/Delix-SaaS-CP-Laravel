@@ -2666,5 +2666,7 @@
     "enter_your_email": "Enter Your Email",
     "enter_your_password": "Enter Your Password",
     "otp_sent_successfully_check_your_whatsapp": "OTP sent successfully check your whatsapp",
+    "your_email_has_been_varified": "Your email has been varified",
+    "sent_otp": "Send OTP",
     "whatsapp_settings_synced_successfully":"WhatsApp settings synced successfully."
 }

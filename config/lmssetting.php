@@ -54,6 +54,21 @@ return [
         'hero_main_action_btn_label',
         'hero_secondary_action_btn_label',
         'hero_rating_overview',
+
+
+
+        'access_token',
+        'phone_number_id',
+        'business_account_id',
+        'app_id',
+        'is_connected',
+        'token_verified',
+        'scopes',
+        'granular_scopes',
+        'name',
+        'data_access_expires_at',
+        'expires_at',
+        'fb_user_id',
     ],
     'setting_image'                        => [
         'favicon',
@@ -116,6 +131,8 @@ return [
         'customer_agreement',
         'privacy_agreement',
         'payment_agreement',
+
+
     ],
 
     'is_twilio_sms_activated'              => [

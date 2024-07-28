@@ -17,19 +17,19 @@
                     @endif
 
                     @if (!isWhatsAppWebhookConnected())
-                    <div class="alert alert-danger" role="alert">
-                        <strong>{{ __('oops') }}</strong> {{ __('whatsapp_webhook_not_connected') }}<br>
-                        <small>{{ __('real_time_updates_will_not_be_available_until_the_webhook_is_connected') }}</small>
-                        
-                        @if (!empty(setting('access_token')) &&
-                            !empty(setting('scopes')))
-                            <a class="alert-link" href="https://developers.facebook.com/apps/{{ setting('app_id') }}/whatsapp-business/wa-settings/?business_id={{ setting('business_account_id') }}"
-                               target="_blank">
-                                <i class="las la-link"></i> {{ __('add_whatsapp_webhook') }}
-                            </a>
-                        @endif
-                    </div>
-                @endif
+                        <div class="alert alert-danger" role="alert">
+                            <strong>{{ __('oops') }}</strong> {{ __('whatsapp_webhook_not_connected') }}<br>
+                            <small>{{ __('real_time_updates_will_not_be_available_until_the_webhook_is_connected') }}</small>
+                            
+                            @if (!empty(setting('access_token')) &&
+                                !empty(setting('scopes')))
+                                <a class="alert-link" href="https://developers.facebook.com/apps/{{ setting('app_id') }}/whatsapp-business/wa-settings/?business_id={{ setting('business_account_id') }}"
+                                target="_blank">
+                                    <i class="las la-link"></i> {{ __('add_whatsapp_webhook') }}
+                                </a>
+                            @endif
+                        </div>
+                    @endif
                     <div class="row row-eq-height mb-3">
                         <div class="col-lg-6">
                             <div class="card h-100">
@@ -133,18 +133,18 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        {{-- <div class="mb-4">
+                                        <div class="mb-4">
                                             <label for="phone_number_id"
                                                    class="form-label">{{ __('phone_number_id') }}</label>
                                             <input type="text" class="form-control rounded-2" id="phone_number_id"
                                                    name="phone_number_id"
-                                                   value="{{ isDemoMode() ? '******************' : old('phone_number_id', @Auth::user()->client->whatsappSetting->phone_number_id) }}"
+                                                   value="{{ isDemoMode() ? '******************' : old('phone_number_id', setting('phone_number_id')) }}"
                                                    placeholder="{{ __('enter_phone_number_id') }}">
                                             <div class="nk-block-des text-danger">
                                                 <p class="phone_number_id_error error">
                                                     {{ $errors->first('phone_number_id') }}</p>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                         <div class="mb-4">
                                             <label for="business_account_id" class="form-label"><i
                                                     class="las la-briefcase"></i> {{ __('business_account_id') }} <span
@@ -241,12 +241,12 @@
                                                     data-url="{{ route('client.whatsAppSettings.remove-token', @Auth::user()->client->whatsappSetting->id) }}">
                                                     <i class="las la-trash-alt"></i> {{ __('remove') }}
                                                 </button>
-                                            @endif
+                                            @endif --}}
                                             <button type="button" class="btn btn-secondary" id="sync_button"
-                                                data-id="{{ @Auth::user()->client->whatsappSetting->id }}"
-                                                data-url="{{ route('client.whatsapp-settings.sync', @Auth::user()->client->whatsappSetting->id) }}">
+                                                data-id=""
+                                                data-url="{{ route('admin.whatsapp-settings.sync') }}">
                                                 <i class="las la-sync-alt"></i> {{ __('sync') }}
-                                            </button> --}}
+                                            </button>
                                             <button type="submit" class="btn sg-btn-primary"><i class="las la-save"></i>
                                                 {{ __('save') }}</button>
                                             @include('backend.common.loading-btn', [

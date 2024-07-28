@@ -276,7 +276,6 @@ class UserRepository
         try {
             $user = User::where('token', $request->token)->first();
 
-
             if ($user->whatsapp_otp !== $request->otp) :
                 return [
                     'success' => false,

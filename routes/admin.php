@@ -114,7 +114,9 @@ Route::group(['prefix' => localeRoutePrefix()], function () {
         Route::post('refund-setting', [SystemSettingController::class, 'saveRefundSetting'])->name('admin.refund');
         //whatsapp setting
         Route::get('whatsapp-settings', [SystemSettingController::class, 'whatsAppSettings'])->name('admin.whatsapp.settings');
-        Route::post('whatsapp-settings-update', [SystemSettingController::class, 'whatsAppSettings'])->name('admin.whatsapp.settings.update');
+        Route::post('whatsapp-settings-update', [SystemSettingController::class, 'update'])->name('admin.whatsapp.settings.update');
+        Route::post('whatsapp-settings', [SystemSettingController::class, 'whatsAppsync'])->name('admin.whatsapp-settings.sync');
+
 
         //preferences
         Route::get('preference', [SystemSettingController::class, 'preference'])->name('preference');

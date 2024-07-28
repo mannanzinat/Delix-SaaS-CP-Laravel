@@ -20,12 +20,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email Verification</label>
-                            @if(Session::has('success'))
-                                <div class="alert alert-success alert-dismissible" role="alert">
-                                    {{ Session::get('success') }}
-                                    <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('your_email_has_been_varified') }}</div>
-                                </div>
-                            @endif
+                            <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('your_email_has_been_varified') }}</div>
                         </div>
                         <div class="form-group">
                             <label for="phone">Verify WhatsApp to Get Started</label>
@@ -37,7 +32,7 @@
                             @endif
                             <button type="button" class="otp__btn">{{ __('sent_otp') }}</button>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group otp-group" style="display: none;">
                             <label for="otp">Enter OTP</label>
                             <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
                             @if ($errors->has('otp'))
@@ -47,23 +42,24 @@
                             @endif
                         </div>
                         <div class="btn__submit">
-                            <button type="submit" class="btn btn-primary sent_otp">Get Started</button>
+                            <button type="submit" class="btn submit_otp sent_otp" disabled>Get Started</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <input type="hidden" value="{{ $token }}" id="token" />
+    <input type="hidden" value="{{ $token }}" class="token" />
 @endsection
+
 @push('js')
     <script>
-        //otp send
         $(document).ready(function() {
+            //otp send
             $('.otp__btn').on('click', function(event) {
                 event.preventDefault();
                 var phone = $('#phone').val();
-                var token = $('#token').val();
+                var token = $('.token').val();
                 var route = "{{ route('whatsapp.otp.send') }}";
                 $.ajax({
                     url: route,
@@ -78,6 +74,8 @@
                         $('#phone').val('');
                         $('#token').val('');
                         $('.text-danger').remove();
+                        $('.otp-group').show();
+                        $('.sent_otp').removeAttr('disabled');
                     },
                     error: function(xhr, status, error) {
                         if (xhr.status === 422) {
@@ -95,10 +93,8 @@
                     }
                 });
             });
-        });
 
-        //confirm otp
-        $(document).ready(function() {
+            //confirm otp
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -107,9 +103,9 @@
 
             $('.sent_otp').on('click', function(event) {
                 event.preventDefault();
-                var token   = $('#token').val();
-                var otp     = $('#otp').val();
-                var route   = "{{ route('whatsapp.otp.confirm') }}";
+                var token = $('.token').val();
+                var otp   = $('#otp').val();
+                var route = "{{ route('whatsapp.otp.confirm') }}";
 
                 $.ajax({
                     url: route,

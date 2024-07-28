@@ -24,6 +24,7 @@
         "laravel-ready/readable-numbers": "^1.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
+        "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1",
         "netflie/whatsapp-cloud-api": "^2.2",

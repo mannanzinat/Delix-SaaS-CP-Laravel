@@ -217,7 +217,7 @@ class AuthController extends Controller
 
             $response       = $this->userRepository->userVerified($token);
 
-            return redirect()->route('whatsapp.verify', $token);
+            return redirect()->route('whatsapp.verify', $user->token);
 
         } catch (\Exception $e) {
             Toastr::error($e->getMessage());
