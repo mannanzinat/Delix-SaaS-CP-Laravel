@@ -23,20 +23,15 @@
                 <div class="form-group">
                   <label for="email">{{ __('email') }}</label>
                   <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email Address" />
-                  {{-- <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>Wrong Email Address</div> --}}
                   @if ($errors->has('email'))
-                      <div class="nk-block-des text-danger pt-2">
-                          <p class="text-danger">{{ $errors->first('email') }}</p>
-                      </div>
+                      <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>Wrong Email Address</div>
                   @endif
                 </div>
                 <div class="form-group">
                   <label for="password">{{ __('password') }}</label>
                   <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" />
                   @if ($errors->has('password'))
-                      <div class="nk-block-des text-danger pt-2">
-                          <p class="text-danger">{{ $errors->first('password') }}</p>
-                      </div>
+                      <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>Wrong Password</div>
                   @endif
                 </div>
                 {{-- @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key')) --}}
@@ -46,9 +41,14 @@
                 {{-- @endif --}}
 
                 <div class="custom__checkbox">
-                  <input type="checkbox" class="form-check-input" id="policyCheck" />
+                  <input type="checkbox" class="form-check-input" id="policyCheck" name="policy_check" />
                   <label class="form-check-label" for="policyCheck">I agree Privacy Policy & Terms</label>
                 </div>
+                @if ($errors->has('policy_check'))
+                  <div class="nk-block-des text-danger pt-2">
+                    <p class="text-danger">{{ $errors->first('policy_check') }}</p>
+                  </div>
+                @endif
                 <div class="btn__submit">
                   <button type="submit" class="btn btn-primary">{{ __('login') }}</button>
                 </div>

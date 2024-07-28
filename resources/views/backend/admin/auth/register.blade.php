@@ -117,6 +117,11 @@
                                 <label for="domain">{{ __('domain') }}</label>
                                 <input type="text" class="form-control domain" id="domain" name="domain" placeholder="{{ __('write_here') }}" value="{{ old('domain') }}" />
                                 <small>.delix.cloud</small>
+                                @if ($errors->has('domain'))
+                                  <div class="nk-block-des text-danger pt-2">
+                                    <p class="text-danger">{{ $errors->first('domain') }}</p>
+                                  </div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="hear_about_delix">{{ __('where_did_you_hear_about_delix?') }}</label>
@@ -134,15 +139,13 @@
                                 @endif
                             </div>
                             <div class="custom__checkbox">
-                                <input type="checkbox" class="form-check-input" id="policyCheck" name="policyCheck" {{ old('policyCheck') ? 'checked' : '' }} />
+                                <input type="checkbox" class="form-check-input" id="policyCheck" name="policy_check" {{ old('policyCheck') ? 'checked' : '' }} />
                                 <label class="form-check-label" for="policyCheck">{{ __('i_agree_privacy_policy_&_terms') }}</label>
                             </div>
+
+
                             <div class="btn__submit">
                                 <button type="submit" class="btn btn-primary">{{ __('register') }}</button>
-                                {{-- <button class="loading_button  btn-primary" type="submit" disabled>
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    {{ __('loading') }}...
-                                </button> --}}
                             </div>
                         </form>
                         <p class="account text-center">

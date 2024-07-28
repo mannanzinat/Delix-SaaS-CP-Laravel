@@ -286,20 +286,14 @@ class UserRepository
             $user->whatsapp_verify_at = now();
             $user->save();
 
-            if (Auth::attempt(['email' => $user->email, 'password' => '123456'])):
-                Auth::login($user);
+            Auth::login($user);
 
-                return [
-                    'success' => true,
-                    'message' => __('otp_verified_successfully'),
-                    'url'     => route('client.dashboard') 
-                ];
-            else:
-                return [
-                    'success' => false,
-                    'message' => __('authentication_failed')
-                ];
-            endif;
+            return [
+                'success' => true,
+                'message' => __('otp_verified_successfully'),
+                'url'     => route('client.dashboard') 
+            ];
+
         } catch (\Exception $e) {
             return [
                 'success' => false,

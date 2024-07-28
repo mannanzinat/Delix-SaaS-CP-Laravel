@@ -32,10 +32,11 @@ class SignUpRequest extends FormRequest
             'last_name'        => ['required', 'string', 'max:255'],
             'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
             'email'            => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            // 'password'         => ['required', 'string', 'min:6', 'confirmed'],
             'password'         => ['required', 'string', 'min:6'],
-            'domain'           => ['nullable'],
+            'domain'           => ['required'],
             'hear_about_delix' => ['nullable'],
+            // 'policy_check'     => ['required'],
+
 
         ];
 

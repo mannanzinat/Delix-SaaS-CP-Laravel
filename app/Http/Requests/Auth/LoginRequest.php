@@ -28,8 +28,9 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'email'    => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
+            'email'            => ['required', 'string', 'email'],
+            'password'         => ['required', 'string'],
+            'policy_check'     => ['required'],
         ];
         //        if (setting('is_recaptcha_activated') && setting('recaptcha_site_key') && setting('recaptcha_secret')) {
         //            $rules['recaptcha'] = ['required', 'gte:1'];
