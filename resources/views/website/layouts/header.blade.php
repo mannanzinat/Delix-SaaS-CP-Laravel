@@ -6,7 +6,7 @@
                 <!-- Header Logo End -->
                 <div class="header__logo">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('website') }}/assets/images/logo/logo.png" alt="logo" />
+                        <img src="{{ static_asset('website') }}/assets/images/logo/logo.png" alt="logo" />
                     </a>
                 </div>
                 <!-- Header Logo End -->
@@ -20,7 +20,7 @@
                                 <div class="grid__wrapper">
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-01.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-01.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Parcel Management</h4>
@@ -29,7 +29,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-02.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-02.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Merchant Management</h4>
@@ -38,7 +38,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-03.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-03.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Rider Management</h4>
@@ -47,7 +47,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-04.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-04.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Payout Management</h4>
@@ -56,7 +56,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-05.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-05.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">SMS Notification</h4>
@@ -65,7 +65,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-06.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-06.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Deatils Tracking</h4>
@@ -74,7 +74,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-07.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-07.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Branded Website</h4>
@@ -83,7 +83,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-08.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-08.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Branch Management</h4>
@@ -92,7 +92,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-09.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-09.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Merchant App(Android & iOS)</h4>
@@ -101,7 +101,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-10.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-10.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Rider App(Android & iOS)</h4>
@@ -110,7 +110,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-11.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-11.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Report</h4>
@@ -119,7 +119,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-12.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-12.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Delivery Partner</h4>
@@ -130,7 +130,7 @@
                                 <div class="request__feature">
                                     <div class="wrapper">
                                         <div class="icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/message-icon.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/message-icon.png" alt="icon" />
                                         </div>
                                         <div class="content">
                                             <h5 class="title">Feature Request & Feedback</h5>
@@ -149,7 +149,7 @@
                                 <div class="grid__wrapper">
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/resource-icon-01.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/resource-icon-01.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Documentation</h4>
@@ -158,7 +158,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/resource-icon-02.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/resource-icon-02.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Blogs</h4>
@@ -167,7 +167,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/resource-icon-03.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/resource-icon-03.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Facebook Community</h4>
@@ -176,7 +176,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/resource-icon-04.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/resource-icon-04.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Changelog</h4>
@@ -185,7 +185,7 @@
                                     </a>
                                     <a href="#" class="featureBox featureBox__header">
                                         <div class="featureBox__icon">
-                                            <img src="{{ asset('website') }}/assets/images/feature/resource-icon-05.png" alt="icon" />
+                                            <img src="{{ static_asset('website') }}/assets/images/feature/resource-icon-05.png" alt="icon" />
                                         </div>
                                         <div class="featureBox__content">
                                             <h4 class="title">Contacts</h4>
@@ -204,8 +204,16 @@
                 <div class="header__meta">
                     <div class="meta__list">
                         <div class="header__btn">
-                            <a href="{{ route('login') }}" class="btn btn-outline">login</a>
-                            <a href="#" class="btn btn-primary">Get Started <span>It’s Free</span> </a>
+                            @if(Auth::check())
+                                @if(Auth::user()->role_id == 1)
+                                    <a href="{{route('admin.dashboard')}}" class="btn btn-outline">Dashboard</a>
+                                @else
+                                    <a href="{{route('client.dashboard')}}" class="btn btn-outline">Dashboard</a>
+                                @endif
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-outline">Login</a>
+                                <a href="{{ route('register') }}"  class="btn btn-primary">Get Started <span>It’s Free</span> </a>
+                            @endif
                         </div>
                         <!-- Header Toggle Start -->
                         <div class="header__toggle"> 

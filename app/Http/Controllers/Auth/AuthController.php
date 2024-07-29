@@ -302,7 +302,9 @@ class AuthController extends Controller
 
     public function whatsappVerify($token)
     {
-        return view('backend.admin.auth.verify', compact('token'));
+        $user = User::where('token', $token)->first();
+
+        return view('backend.admin.auth.verify', compact('user'));
     }
 
     public function whatsappOtp(Request $request)

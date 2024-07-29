@@ -4278,11 +4278,16 @@ p {
   padding: 160px 0 100px;
 }
 
-.submit_otp {
-  background: #FF204E;
-  color:#fff;
+.btn-primary.disabled, .btn-primary:disabled {
+
+  background-color: #FF204E;
+  color: #fff;
+  border-color: #FF204E;
 }
 
+#policyCheckError{
+  color:#FF204E;
+}
 @media screen and (max-width: 575px) {
   .login__section,
   .signup__section {
@@ -4620,9 +4625,25 @@ p {
 }
 .form__wrapper .btn__submit {
   margin-top: 16px;
+  position: relative;
 }
 .form__wrapper .btn__submit .btn {
   width: 100%;
+}
+.form__wrapper .btn__submit .loading {
+  position: absolute;
+  left: 0;
+}
+.form__wrapper .btn__submit .loading.btn {
+  background: #FF204E;
+  color: #fff;
+  border-color: #FF204E;
+}
+.form__wrapper .btn__submit .loading .spinner-border {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.21em solid currentColor;
+  border-right-color: transparent;
 }
 .form__wrapper .account {
   font-family: "Urbanist", sans-serif;
@@ -5694,4 +5715,128 @@ p {
 
 /*********************************
 /*  Footer Section End
+*********************************/
+
+/*********************************
+/*  Toast Css Start
+*********************************/
+#toast-container .toast {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 15px 15px 15px 50px;
+  width: 300px;
+  border-radius: 10px;
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  border: 1px solid #41CC68;
+  color: #556068;
+  opacity: 1;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+
+#toast-container .toast::before {
+  content: "\58";
+  position: absolute;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  right: 15px;
+  color: #556068;
+  font-size: 12px;
+}
+
+.toast-message {
+  word-wrap: break-word;
+  padding-left: 15px;
+  text-transform: capitalize;
+}
+
+.toast-success {
+  background-color: #EAF7EE !important;
+  border-color: #C0E5C9 !important;
+}
+
+.toast-warning {
+  background-color: #FEF7EA !important;
+  border: 1px solid #FAE5C3 !important;
+}
+.toast-danger {
+  background-color: #FCEDE9 !important;
+  border: 1px solid #F4CDC3 !important;
+}
+.toast-error {
+  background-color: #FCEDE9 !important;
+  border: 1px solid #F4CDC3 !important;
+}
+.toast-info {
+  background-color: #E5EFFA !important;
+  border: 1px solid #C3DCF2 !important;
+}
+
+#toast-container > .toast-success,
+#toast-container > .toast-warning,
+#toast-container > .toast-danger,
+#toast-container > .toast-error,
+#toast-container > .toast-info {
+  /* background-image: none; */
+  /* background-color: red; */
+}
+
+#toast-container > .toast-success::after,
+.toast.toast-warning::after,
+.toast.toast-danger::after,
+.toast.toast-error::after,
+.toast.toast-info::after {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 20px;
+  line-height: 10px;
+}
+
+#toast-container > .toast-success::after {
+  content: "\f00c";
+  background: #41CC68;
+}
+
+.toast.toast-warning::after {
+  content: "\f071";
+  background: #EE9500;
+}
+
+.toast.toast-danger::after {
+  content: "\f071";
+  background: #EC4E2A;
+}
+
+.toast.toast-error::after {
+  content: "\f071";
+  background: #EC4E2A;
+}
+
+.toast.toast-info::after {
+  content: "\f129";
+  background: #0268DC;
+}
+
+#toast-container .toast:hover {
+  box-shadow: none;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  cursor: pointer;
+}
+/*********************************
+/*  Toast Css End
 *********************************/

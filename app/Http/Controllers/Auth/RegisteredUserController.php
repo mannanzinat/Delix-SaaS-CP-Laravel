@@ -106,9 +106,9 @@ class RegisteredUserController extends Controller
             DB::commit();
 
             if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => __('registration_successful')]);
+                return response()->json(['success' => true, 'message' => __('registration_successful_please_check_your_email')]);
             } else {
-                return redirect()->back()->with('success', __('registration_successful'));
+                return redirect()->back()->with('success', __('registration_successful_please_check_your_email'));
             }
         } catch (\Exception $e) {
             DB::rollback();

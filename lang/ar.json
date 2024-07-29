@@ -1169,7 +1169,7 @@
     "from_bank_account": "From Bank Account",
     "download": "Download",
     "transfer_per_page": "Transfer Per Page",
-    "verify_your_mail_first": "Verify Your Mail First",
+    "wrong_email_address": "Wrong Email Address",
     "your_account_is_pending": "Your Account Is Pending",
     "user_available": "User Available",
     "updated_successfully": "Updated Successfully",

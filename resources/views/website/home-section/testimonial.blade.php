@@ -17,7 +17,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-01.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-01.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Ahmed Firoz</h4>
@@ -44,7 +44,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-02.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-02.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Jerry Rose</h4>
@@ -70,7 +70,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-03.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-03.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Karen Leno</h4>
@@ -96,7 +96,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-04.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-04.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Alex Team</h4>
@@ -122,7 +122,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-05.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-05.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Abdul Mannan</h4>
@@ -151,7 +151,7 @@
                         <div class="testimonial__top">
                             <div class="avatar__info">
                                 <div class="avatar">
-                                    <img src="{{ asset('website') }}/assets/images/testimonial/avatar-06.png" alt="avatar" />
+                                    <img src="{{ static_asset('website') }}/assets/images/testimonial/avatar-06.png" alt="avatar" />
                                 </div>
                                 <div class="content">
                                     <h4 class="author__name">Jack Shine</h4>

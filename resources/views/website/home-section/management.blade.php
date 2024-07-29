@@ -15,7 +15,7 @@
                 <div class="management__wrapper">
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
                         <div class="management__thumb">
-                            <img src="{{ asset('website') }}/assets/images/management/management-01.png" alt="management" />
+                            <img src="{{ static_asset('website') }}/assets/images/management/management-01.png" alt="management" />
                         </div>
                     </div>
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
@@ -27,7 +27,7 @@
                         <!-- Card Start -->
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Efficient Onboarding</h4>
@@ -36,7 +36,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Comprehensive Dashboard</h4>
@@ -47,7 +47,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Payment Integration</h4>
@@ -56,7 +56,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Reporting and Analytics</h4>
@@ -73,7 +73,7 @@
                 <div class="management__wrapper row-reverse">
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
                         <div class="management__thumb">
-                            <img src="{{ asset('website') }}/assets/images/management/management-02.png" alt="management" />
+                            <img src="{{ static_asset('website') }}/assets/images/management/management-02.png" alt="management" />
                         </div>
                     </div>
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
@@ -88,7 +88,7 @@
                         <!-- Card Start -->
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Efficient Onboarding</h4>
@@ -97,7 +97,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Comprehensive Dashboard</h4>
@@ -108,7 +108,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Payment Integration</h4>
@@ -117,7 +117,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Reporting and Analytics</h4>
@@ -134,7 +134,7 @@
                 <div class="management__wrapper">
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
                         <div class="management__thumb">
-                            <img src="{{ asset('website') }}/assets/images/management/management-03.png" alt="management" />
+                            <img src="{{ static_asset('website') }}/assets/images/management/management-03.png" alt="management" />
                         </div>
                     </div>
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
@@ -148,7 +148,7 @@
                         <!-- Card Start -->
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Efficient Onboarding</h4>
@@ -157,7 +157,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Comprehensive Dashboard</h4>
@@ -168,7 +168,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Payment Integration</h4>
@@ -177,7 +177,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Reporting and Analytics</h4>
@@ -194,7 +194,7 @@
                 <div class="management__wrapper row-reverse">
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
                         <div class="management__thumb">
-                            <img src="{{ asset('website') }}/assets/images/management/management-04.png" alt="management" />
+                            <img src="{{ static_asset('website') }}/assets/images/management/management-04.png" alt="management" />
                         </div>
                     </div>
                     <div class="management__inner" data-aos="fade-up" data-aos-duration="600">
@@ -206,7 +206,7 @@
                         <!-- Card Start -->
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Efficient Onboarding</h4>
@@ -215,7 +215,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Comprehensive Dashboard</h4>
@@ -226,7 +226,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Payment Integration</h4>
@@ -235,7 +235,7 @@
                         </a>
                         <a href="#" class="managementCard">
                             <div class="managementCard__icon">
-                                <img src="{{ asset('website') }}/assets/images/rocket.png" alt="icon" />
+                                <img src="{{ static_asset('website') }}/assets/images/rocket.png" alt="icon" />
                             </div>
                             <div class="managementCard__content">
                                 <h4 class="title">Reporting and Analytics</h4>

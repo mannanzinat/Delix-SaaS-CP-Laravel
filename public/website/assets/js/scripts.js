@@ -75,36 +75,36 @@
     /*  Typed Js Here
     *********************************/
 
-    $('#demo').cycleText({
+    // $('#demo').cycleText({
 
-        // text separator
-        separator: '|',
+    //     // text separator
+    //     separator: '|',
       
-        // animation type
-        // refer to https://daneden.github.io/animate.css/
-        animation: 'flipInX',
+    //     // animation type
+    //     // refer to https://daneden.github.io/animate.css/
+    //     animation: 'flipInX',
       
-        // animation speed in ms
-        interval: 2000
+    //     // animation speed in ms
+    //     interval: 2000
         
-      });
+    //   });
 
-    // if ($(".animation").length > 0) {
-    //     $(".animation").typer({
-    //         strings: [
-    //             "A Smart Courier Solution",
-    //             "A Smart Parcel Solution",
-    //             "A Smart Courier Service",
-    //         ],
-    //         typeSpeed: 150,
-    //         backspaceSpeed: 80,
-    //         backspaceDelay: 800,
-    //         repeatDelay: 1000,
-    //         repeat:true,
-    //         autoStart:true,
-    //         startDelay: 100,
-    //     });    
-    // }
+    if ($(".animation").length > 0) {
+        $(".animation").typer({
+            strings: [
+                "A Smart Courier Solution",
+                "A Smart Parcel Solution",
+                "A Smart Courier Service",
+            ],
+            typeSpeed: 150,
+            backspaceSpeed: 80,
+            backspaceDelay: 800,
+            repeatDelay: 1000,
+            repeat:true,
+            autoStart:true,
+            startDelay: 100,
+        });    
+    }
 
     /*********************************
     /*  Pricing Slider Carousel

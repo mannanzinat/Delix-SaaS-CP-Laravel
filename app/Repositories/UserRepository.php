@@ -8,11 +8,16 @@ use App\Models\User;
 use App\Traits\ImageTrait;
 use App\Traits\SendMailTrait;
 use App\Providers\RouteServiceProvider;
+use App\Traits\DnsTrait;
+use App\Traits\ServerTrait;
+use Illuminate\Support\Str;
+use App\Models\Domain;
+use App\Models\Server;
 use Illuminate\Support\Facades\Auth;
 
 class UserRepository
 {
-    use ImageTrait, SendMailTrait;
+    use ImageTrait, SendMailTrait, DnsTrait, ServerTrait;
 
     protected $emailTemplate;
 
@@ -276,7 +281,7 @@ class UserRepository
         try {
             $user = User::where('token', $request->token)->first();
 
-            if ($user->whatsapp_otp !== $request->otp) :
+            if ($user->whatsapp_otp !== $request->otp):
                 return [
                     'success' => false,
                     'message' => __('your_otp_is_incorrect')
@@ -285,6 +290,64 @@ class UserRepository
 
             $user->whatsapp_verify_at = now();
             $user->save();
+
+
+            if($user->email_verified_at !== null && $user->whatsapp_verify_at !== null):
+                $client = Client::where('id', $user->client_id)->first();
+                if($user):
+                    $result = $this->dnsAdd($client->domain);
+                    if (!$result['success']):
+                        return ['success' => false, 'message' => $result['message']];
+                    else:
+                        $domain                             = new Domain;
+                        $domain->script_deployed            = 0;
+                        $domain->ssl_active                 = 0;
+                        $server                             = Server::where('default', 1)->first();
+                        $domain->client_id                  = $client->id;
+                        $domain->server_id                  = $server->id;
+                        $domain->sub_domain                 = $client->domain;
+                        $uid                                = strtolower(Str::random(4));
+                        $domain->sub_domain_user            = strtolower("delix-".$client->domain. $uid);
+                        $domain->sub_domain_password        = Str::random(20);
+                        $domain->sub_domain_db_name         = strtolower("db" . $uid . "db");
+                        $domain->sub_domain_db_user         = strtolower("db" . $uid . "db");
+                        $domain->sub_domain_db_password     = Str::random(20);
+                        $uid                                = strtolower(Str::random(4));
+                        $domain->custom_domain              = "";
+                        $domain->custom_domain_user         = strtolower("delix-".$client->domain. $uid);
+                        $domain->custom_domain_password     = Str::random(20);
+                        $domain->custom_domain_db_name      = strtolower("db" . $uid . "db");
+                        $domain->custom_domain_db_user      = strtolower("db" . $uid . "db");
+                        $domain->custom_domain_db_password  = Str::random(20);
+    
+                        // if($request['script_deployed'] =='1'):
+                        //     if($request['ssl_active'] =='1'):
+                        //         $domain->ssl_active                 = 1;
+                        //     endif;
+                            $domain_info['server_id']               = $server->id;
+                            $domain_info['domain_name']             = $domain->sub_domain.'.delix.cloud';
+                            $domain_info['site_user']               = $domain->sub_domain_user;
+                            $domain_info['site_password']           = $domain->sub_domain_password;
+                            $domain_info['database_name']           = $domain->sub_domain_db_name;
+                            $domain_info['database_user']           = $domain->sub_domain_user;
+                            $domain_info['database_password']       = $domain->sub_domain_password;
+                            $domain_info['admin_key']               = strtolower(Str::random(24));
+                            $domain_info['client_key']              = strtolower(Str::random(24));
+                            $domain_info['database_password']       = $domain->sub_domain_password;
+                            $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
+                            $result                                 = $this->deployScript($domain_info);
+                        //     if ($result['success']):
+                        //         $domain->script_deployed            = 1;
+                        //     endif;
+                        // endif;
+                        $domain->save();
+    
+                        if (!$result['success']):
+                            return ['success' => false, 'message' => $result['message']];
+                        endif;
+                    endif;
+                endif;
+            endif;
 
             Auth::login($user);
 

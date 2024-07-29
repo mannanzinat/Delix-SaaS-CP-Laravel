@@ -1,7 +1,7 @@
 <!-- Feature Section Start -->
 <section class="feature__section">
     <div class="bgPattern__rightTop MoveTopBottom">
-        <img src="{{ asset('website') }}/assets/images/bg-pattern-02.png" alt="pattern" />
+        <img src="{{ static_asset('website') }}/assets/images/bg-pattern-02.png" alt="pattern" />
     </div>
     <div class="container">
         <div class="row">
@@ -16,7 +16,7 @@
                 <div class="grid__wrapper">
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-01.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-01.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Parcel Management</h4>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-02.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-02.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Merchant Management</h4>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-03.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-03.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Rider Management</h4>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-04.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-04.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Payout Management</h4>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-05.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-05.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">SMS Notification</h4>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-06.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-06.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Deatils Tracking</h4>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-07.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-07.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Branded Website</h4>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-08.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-08.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Branch Management</h4>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-09.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-09.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Merchant App(Android & iOS)</h4>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-10.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-10.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Rider App(Android & iOS)</h4>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-11.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-11.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Report</h4>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="featureBox" data-aos="fade-up" data-aos-duration="600">
                         <div class="featureBox__icon">
-                            <img src="{{ asset('website') }}/assets/images/feature/feature-icon-12.png" alt="icon" />
+                            <img src="{{ static_asset('website') }}/assets/images/feature/feature-icon-12.png" alt="icon" />
                         </div>
                         <div class="featureBox__content">
                             <h4 class="title">Delivery Partner</h4>

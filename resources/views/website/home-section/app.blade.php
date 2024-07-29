@@ -14,10 +14,10 @@
             </div>
             <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-duration="800">
                 <div class="app__thumb">
-                    <img src="{{ asset('website') }}/assets/images/apps/apps-main.png" alt="apps" />
-                    <img class="rating MoveTopBottom" src="{{ asset('website') }}/assets/images/apps/rating.png" alt="apps" />
-                    <img class="platform MoveLeftRight" src="{{ asset('website') }}/assets/images/apps/platform.png" alt="apps" />
-                    <img class="download MoveLeftRight" src="{{ asset('website') }}/assets/images/apps/download.png" alt="apps" />
+                    <img src="{{ static_asset('website') }}/assets/images/apps/apps-main.png" alt="apps" />
+                    <img class="rating MoveTopBottom" src="{{ static_asset('website') }}/assets/images/apps/rating.png" alt="apps" />
+                    <img class="platform MoveLeftRight" src="{{ static_asset('website') }}/assets/images/apps/platform.png" alt="apps" />
+                    <img class="download MoveLeftRight" src="{{ static_asset('website') }}/assets/images/apps/download.png" alt="apps" />
                 </div>
             </div>
         </div>

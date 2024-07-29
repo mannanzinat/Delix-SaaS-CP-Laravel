@@ -33,9 +33,9 @@ class SignUpRequest extends FormRequest
             'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
             'email'            => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password'         => ['required', 'string', 'min:6'],
-            'domain'           => ['required'],
+            'domain'           => ['required', 'unique:clients,company_name', 'max:8'],
             'hear_about_delix' => ['nullable'],
-            // 'policy_check'     => ['required'],
+            'policy_check'     => ['required'],
 
 
         ];
@@ -47,6 +47,22 @@ class SignUpRequest extends FormRequest
     {
         return [
             'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
+
+
+
+            'first_name.required'   => 'First name is required.',
+            'last_name.required'    => 'Last name is required.',
+            'company_name.required' => 'Company name is required.',
+            'company_name.unique'   => 'Company name has already been taken.',
+            'email.required'        => 'Email is required.',
+            'email.email'           => 'Wrong Email Address',
+            'email.unique'          => 'Email has already been taken.',
+            'password.required'     => 'Password is required.',
+            'password.min'          => 'Password must be at least 6 characters.',
+            'domain.min'            => 'Domain must be less than 8 characters.',
+            'policy_check.required' => 'Privacy Policy is required.',
+
+
         ];
     }
 

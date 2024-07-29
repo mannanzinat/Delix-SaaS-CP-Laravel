@@ -39,6 +39,17 @@ class LoginRequest extends FormRequest
         return $rules;
     }
 
+    public function messages(): array
+    {
+        return [
+            'email.required'        => 'Email is required.',
+            'email.email'           => 'Wrong Email Address.',
+            'password.required'     => 'Password is required.',
+            'policy_check.required' => 'Privacy Policy is required.',
+
+        ];
+    }
+
     // public function messages(): array
     // {
     //     return [
@@ -55,6 +66,12 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
         $user = User::where('email', $this->email)->first();
+    
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => 'Wrong Email Address',
+            ]);
+        }
         if (isset($user->email) && $user->status == 0) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
@@ -108,4 +125,5 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
     }
+
 }

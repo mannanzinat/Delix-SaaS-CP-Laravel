@@ -574,7 +574,7 @@ if (! function_exists('userAvailability')) {
         } elseif (! $user->email_verified_at) {
             return [
                 'status'  => false,
-                'message' => __('verify_your_mail_first'),
+                'message' => __('wrong_email_address'),
                 'code'    => 401,
             ];
         } elseif ($user->status == 0) {

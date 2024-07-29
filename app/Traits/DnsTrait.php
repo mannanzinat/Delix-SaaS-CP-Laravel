@@ -22,6 +22,8 @@ trait DnsTrait
         $zoneID             = "1ea19630bbad09fbd8c69f5d7a703168";
         $apiKey             = "21e4220da546e136cc107911a3a8f69eb0c66";
 
+
+
         // Update DNS
         try {
             $curl = curl_init();
@@ -33,6 +35,8 @@ trait DnsTrait
                 "comment"       => "Domain verification record",
                 "ttl"           => 3600,
             ];
+
+
             curl_setopt_array($curl, [
                 CURLOPT_URL             => "https://api.cloudflare.com/client/v4/zones/$zoneID/dns_records",
                 CURLOPT_RETURNTRANSFER  => true,
