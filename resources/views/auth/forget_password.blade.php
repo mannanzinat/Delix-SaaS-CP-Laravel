@@ -1,4 +1,4 @@
-<!doctype html>
+{{-- <!doctype html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -90,4 +90,47 @@
     </script>
 @endif
 </body>
-</html>
+</html> --}}
+
+
+
+@extends('website.layouts.master')
+  @section('content')
+    <section class="login__section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-10 m-auto">
+                    <div class="login__content text-center">
+                        <h2 class="title"><span>Forget </span> Password</h2>
+                        <p class="desc">You can reset your password here</p>
+                    </div>
+                    <div class="form__wrapper">
+                        <div class="bgPattern__right MoveTopBottom">
+                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
+                        </div>
+                        <div class="bgPattern__right MoveTopBottom">
+                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
+                        </div>
+                        <div class="bgPattern__leftBottom MoveLeftRight">
+                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
+                        </div>
+                        <form action="{{ route('forgot.password-email') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
+                                @if ($errors->has('email'))
+                                    <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('email') }}</div>
+                                @endif
+                            </div>
+                            <div class="btn__submit">
+                                <button type="submit" class="btn btn-primary">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  @endsection
+

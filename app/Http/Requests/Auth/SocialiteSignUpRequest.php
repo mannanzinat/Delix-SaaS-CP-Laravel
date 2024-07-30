@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class SignUpRequest extends FormRequest
+class SocialiteSignUpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,8 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'first_name'       => ['required', 'string', 'max:255'],
             'last_name'        => ['required', 'string', 'max:255'],
             'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
-            'email'            => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password'         => ['required', 'string', 'min:6'],
             'domain'           => ['required', 'unique:clients,company_name', 'max:8'],
             'hear_about_delix' => ['nullable'],
@@ -47,13 +45,9 @@ class SignUpRequest extends FormRequest
     {
         return [
             'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
-            'first_name.required'   => 'First name is required.',
             'last_name.required'    => 'Last name is required.',
             'company_name.required' => 'Company name is required.',
             'company_name.unique'   => 'Company name has already been taken.',
-            'email.required'        => 'Email is required.',
-            'email.email'           => 'Wrong Email Address',
-            'email.unique'          => 'Email has already been taken.',
             'password.required'     => 'Password is required.',
             'password.min'          => 'Password must be at least 6 characters.',
             'domain.min'            => 'Domain must be less than 8 characters.',

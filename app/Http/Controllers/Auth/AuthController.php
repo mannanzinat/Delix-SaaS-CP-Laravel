@@ -46,6 +46,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+
         if ($user) {
             try {
                 $check_user_status = userAvailability($user);
@@ -80,6 +81,7 @@ class AuthController extends Controller
                     'reset_link'     => $link,
                     'template_title' => 'password_reset',
                 ];
+
                 if(isMailSetupValid()){
                     $this->sendmail($request->email, 'emails.template_mail', $data);
                 }
@@ -152,7 +154,6 @@ class AuthController extends Controller
             return redirect('/login')->with('message', 'Your password has been changed!');
         } catch (\Exception $e) {
 
-            // dd($e->getMessage());
             // Log the exception or handle it accordingly
             Toastr::error('An error occurred while processing your request.');
 

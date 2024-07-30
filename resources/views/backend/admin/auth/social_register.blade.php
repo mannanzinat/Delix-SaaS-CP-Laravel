@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="form__wrapper">
-                        <form id="signupForm" action="{{ route('register.store') }}" method="post">
+                        <form id="signupForm" action="{{ route('social.register.store') }}" method="post">
                             @csrf
                             <div class="form-group">
                                 <label for="company_name">{{ __('company_name') }}</label>
@@ -72,7 +72,7 @@
                             <div class="flex__input">
                                 <div class="form-group">
                                     <label for="first_name">{{ __('first_name') }}</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{ __('enter_your_first_name') }}" value="{{ old('first_name') }}" />
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{ __('enter_your_first_name') }}" value="{{ old('first_name', auth()->user()->first_name) }}" />
                                     <div class="alert__txt invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">{{ __('email') }}</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="{{ __('enter_your_email') }}" value="{{ old('email') }}" />
+                                <input type="text" class="form-control disable" id="email" name="email" placeholder="{{ __('enter_your_email') }}" value="{{ old('email', auth()->user()->email) }}" />
                                 <div class="alert__txt invalid-feedback"></div>
                             </div>
                             <div class="form-group">
@@ -132,7 +132,7 @@
                                 <a href="#">
                                     <img src="{{ static_asset('website') }}/assets/images/login-whatsapp.png" alt="whatsapps" />
                                 </a>
-                                <a href="{{ route('login.google') }}">
+                                <a href="#">
                                     <img src="{{ static_asset('website') }}/assets/images/login-email.png" alt="email" />
                                 </a>
                             </div>
@@ -143,7 +143,6 @@
         </div>
     </section>
 @endsection
-
 @push('js')
 <script>
     $(document).ready(function() {
@@ -165,6 +164,7 @@
                     toastr.success(response.message);
                     $('#signupForm')[0].reset();
                     $('.btn__submit .loading').addClass('d-none');
+                    window.location.href = response.route;
                 },
                 error: function(error) {
                     const errors = error.responseJSON.errors || {};

@@ -32,10 +32,14 @@ Route::get('paypal-success', [SubscriptionController::class, 'paypalSuccess'])->
 Route::post('paddle-redirect', [SubscriptionController::class, 'paddleRedirect'])->name('paddle.redirect');
 Route::get('paddle-success', [SubscriptionController::class, 'paddleSuccess'])->name('paddle.payment.success');
 Route::get('back-to-admin', [AuthenticatedSessionController::class, 'back_to_admin'])->name('back.to.admin');
-Route::group(['prefix' => localeRoutePrefix().'/client', 'middleware' => 'subscriptionCheck'], function () {
+// Route::group(['prefix' => localeRoutePrefix().'/client', 'middleware' => 'subscriptionCheck'], function () {
+Route::group(['prefix' => localeRoutePrefix().'/client'], function () {
     // susbcription
     Route::get('my-subscription', [SubscriptionController::class, 'mySubscription'])->name('my.subscription');
-    Route::get('dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+
+    Route::middleware(['authCheck', 'subscriptionCheck'])->group(function () {
+        Route::get('dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+    });
 
     Route::get('whatsapp-settings', [SettingController::class, 'whatsAppSettings'])->name('whatsapp.settings');
     Route::get('telegram-settings', [SettingController::class, 'telegramSettings'])->name('telegram.settings');

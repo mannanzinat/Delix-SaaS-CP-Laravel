@@ -81,10 +81,11 @@ class Kernel extends HttpKernel
         'jwt.verify'           => JwtMiddleware::class,
         'CheckApiKey'          => CheckApiKeyMiddleware::class,
         'XSS'                  => XssMiddleware::class,
+        'authCheck'            => \App\Http\Middleware\AuthCheckMiddleware::class,
         'whatsapp.connected'   => \App\Http\Middleware\CheckWhatsAppConnection::class,
         'telegram.connected'   => \App\Http\Middleware\CheckTelegramConnection::class,
         'subscriptionCheck'    => \App\Http\Middleware\SubscriptionMiddleware::class,
         'check.landing.page'   => \App\Http\Middleware\CheckLandingPageStatus::class,
-
+        
     ];
 }

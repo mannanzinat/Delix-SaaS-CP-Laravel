@@ -33,6 +33,7 @@
                             <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
                             <div class="alert__txt invalid-feedback"></div>
                             <button type="button" class="otp__btn">{{ __('sent_otp') }}</button>
+                            <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
                         </div>
                         <div class="form-group otp-group" style="display: none;">
                             <label for="otp">Enter OTP</label>
@@ -40,7 +41,8 @@
                             <div class="alert__txt invalid-feedback"></div>
                         </div>
                         <div class="btn__submit">
-                            <button type="submit" class="btn btn-primary submit_otp sent_otp" disabled>Get Started</button>
+                            <button type="submit" class="btn btn-primary disable sent_otp">Get Started</button>
+                            <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
                         </div>
                     </div>
                 </div>
@@ -74,7 +76,7 @@
                     success: function(response) {
                         toastr.success(response.message);
                         $('.otp-group').show();
-                        $('.sent_otp').removeAttr('disabled');
+                        $('.sent_otp').removeClass('disable');
                     },
                     error: function(xhr) {
                         $('.form-control').removeClass('is-invalid');
@@ -103,6 +105,8 @@
                 var token = $('.token').val();
                 var otp = $('#otp').val();
                 var route = "{{ route('whatsapp.otp.confirm') }}";
+                $('.btn__submit .loading').removeClass('d-none');
+
 
                 $.ajax({
                     url: route,
@@ -121,6 +125,7 @@
                         } else {
                             toastr.info(response.message);
                         }
+                        $('.btn__submit .loading').addClass('d-none');
                         $('#phone').val('');
                         $('#otp').val('');
                     },
@@ -141,6 +146,7 @@
                         } else {
                             toastr.error(xhr.responseJSON.message || 'An error occurred. Please try again.');
                         }
+                        $('.btn__submit .loading').addClass('d-none');
                     }
                 });
             });

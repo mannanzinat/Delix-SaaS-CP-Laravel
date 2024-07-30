@@ -34,20 +34,28 @@
                       <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('password') }}</div>
                   @endif
                 </div>
-                {{-- @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key')) --}}
-                  {{-- <div class="mb-30">
-                    <div id="html_element" class="g-recaptcha" data-sitekey="{{setting('recaptcha_site_key')}}"></div>
-                  </div> --}}
-                {{-- @endif --}}
-
                 <div class="form-group">
-                  <div class="custom__checkbox">
-                    <input type="checkbox" class="form-check-input" id="policyCheck" name="policy_check" />
-                    <label class="form-check-label" for="policyCheck">I agree Privacy Policy & Terms</label>
+                  <div class="recaptcha form-control">
+                    <div class="custom__checkbox">
+                      <input type="checkbox" class="form-check-input" id="robot" />
+                      <label class="form-check-label mb-0" for="robot">I’m not a robot</label>
+                    </div>
+                    <div class="recaptcha__icon">
+                      <img src="{{ static_asset('website') }}/assets/images/recaptcha.png" alt="racaptcha" />
+                    </div>
                   </div>
-                  @if ($errors->has('policy_check'))
-                      <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('policy_check') }}</div>
-                  @endif
+                </div>
+                <div class="flex__input">
+                  <div class="form-group mb-0">
+                    <div class="custom__checkbox">
+                      <input type="checkbox" class="form-check-input" id="policyCheck" name="policy_check" />
+                      <label class="form-check-label mb-0" for="policyCheck">I agree Privacy Policy & Terms</label>
+                    </div>
+                    @if ($errors->has('policy_check'))
+                        <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('policy_check') }}</div>
+                    @endif
+                  </div>
+                  <a href="{{ route('password.forgot') }}" class="forget">Forgot password?</a>
                 </div>
                 <div class="btn__submit">
                   <button type="submit" class="btn btn-primary">{{ __('login') }}</button>
@@ -64,7 +72,7 @@
                     <a href="#">
                       <img src="{{ static_asset('website') }}/assets/images/login-whatsapp.png" alt="whatsapps" />
                     </a>
-                    <a href="{{ route('google.redirect') }}">
+                    <a href="{{ route('login.google') }}">
                       <img src="{{ static_asset('website') }}/assets/images/login-email.png" alt="email" />
                     </a>
                   </div>

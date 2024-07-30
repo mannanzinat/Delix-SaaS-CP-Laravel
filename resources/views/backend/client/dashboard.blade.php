@@ -21,10 +21,10 @@
                                     <div class="analytics-icon">
                                         <i class="las la-check-double"></i>
                                     </div>
-                                    @if($active_subscription)
+                                    @if(@$active_subscription)
                                         <div class="analytics-content">
                                             <h4>{{ @$active_subscription->plan->name }}</h4>
-                                            <p>{{__('next_billing')}} : {{ Carbon\Carbon::parse($active_subscription->expire_date)->format('Y-m-d') }}</p>
+                                            <p>{{__('next_billing')}} : {{ Carbon\Carbon::parse(@$active_subscription->expire_date)->format('Y-m-d') }}</p>
                                         </div>
                                     @else
                                         <div class="analytics-content">
@@ -55,7 +55,7 @@
                                         </svg>
                                     </div>
                                     <div class="analytics-content">
-                                        <h4>{{$usages['team']}}/{{$active_subscription->team_limit}}</h4>
+                                        <h4>{{$usages['team']}}/{{@$active_subscription->team_limit}}</h4>
                                         <p>{{__('team_member')}}</p>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                     </div>
 
                                     <div class="analytics-content">
-                                        <h4>{{$usages['campaign']}}/{{$active_subscription->campaign_limit}}</h4>
+                                        <h4>{{$usages['campaign']}}/{{@$active_subscription->campaign_limit}}</h4>
                                         <p>{{__('total_campaign')}}</p>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="analytics-content">
-                                        <h4>{{ReadableNumbers::make($usages['contact'])}}/{{ReadableNumbers::make($active_subscription->contact_limit)}}</h4>
+                                        {{-- <h4>{{ReadableNumbers::make($usages['contact'])}}/{{ReadableNumbers::make(@$active_subscription->contact_limit)}}</h4> --}}
                                         <p>{{__('total_contacts')}}</p>
                                     </div>
                                 </div>
@@ -97,9 +97,9 @@
                                     </div>
                                     <div class="analytics-content">
                                         <h4>
-                                            {{ $usages['conversation'] ? ReadableNumbers::make($usages['conversation']) : 'N/A' }}
+                                            {{-- {{ $usages['conversation'] ? ReadableNumbers::make($usages['conversation']) : 'N/A' }} --}}
                                             /
-                                            {{ $active_subscription->conversation_limit ? ReadableNumbers::make($active_subscription->conversation_limit) : 'N/A' }}
+                                            {{ @$active_subscription->conversation_limit ? ReadableNumbers::make(@$active_subscription->conversation_limit) : 'N/A' }}
                                         </h4>                                        
                                         <p>{{__('total_conversation')}}</p>
                                     </div>

@@ -1,16 +1,17 @@
 <?php
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('activation/{email}/{code}', [AuthController::class, 'activation']);
 Route::get('password-forgot', [AuthController::class, 'forgotPassword'])->name('password.forgot');
@@ -23,24 +24,21 @@ Route::get('whatsapp/verify/{token}', [AuthController::class, 'whatsappVerify'])
 Route::post('whatsapp/otp-send', [AuthController::class, 'whatsappOtp'])->name('whatsapp.otp.send');
 Route::post('whatsapp/otp-confirm', [AuthController::class, 'whatsappOtpConfirm'])->name('whatsapp.otp.confirm');
 
+Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/google/callback', [SocialController::class, 'handleGoogleCallback'])->name('google.callback');
 
-Route::get('/google/redirect', [SocialiteController::class, 'redirectToGoogle'])->name('google.redirect');
-Route::get('/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('google.callback');
-
-
-
-
+Route::group([ 'middleware' => ['auth', 'verified']], function () {
+    Route::get('social/register', [SocialController::class, 'create'])->name('social.register');
+    Route::post('social/register', [SocialController::class, 'store'])->name('social.register.store');
+});
 
 Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::middleware('guest')->group(function () {
         Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
-        Route::post('register', [RegisteredUserController::class, 'store'])->name('signup.store');
+        Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
 
         Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
         Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('postlogin');
-
-        // Route::get('/verify', [AuthenticatedSessionController::class, 'verifyEmail'])->name('verify');
-        // Route::post('verify', [AuthenticatedSessionController::class, 'verifyEmailStore'])->name('verify.email.store');
 
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
         Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');

@@ -89,7 +89,6 @@ class ClientDashboardController extends Controller
                     'new_contacts'          => [52, 48, 15, 18, 87, 175, 234, 344, 444, 455, 578, 687],
                     'whatsapp_campaign'     => [5, 10, 5, 3, 5, 0, 8, 10, 5, 3, 5, 2],
                     'telegram_campaign'     => [2, 4, 2, 3, 5, 5, 8, 10, 5, 3, 5, 8],
-                    'whatsapp_conversation' => [750, 785, 15, 18, 87, 175, 234, 344, 444, 455, 578, 687],
                     'telegram_conversation' => [650, 485, 25, 88, 8, 15, 334, 344, 424, 355, 578, 587],
                 ],
                 'usages'              => [
@@ -101,6 +100,8 @@ class ClientDashboardController extends Controller
                 'read_rate'           => 98.25,
             ];
         } else {
+
+
             $data = [
                 'client'              => $client,
                 'active_subscription' => $activeSubscription,
@@ -115,9 +116,9 @@ class ClientDashboardController extends Controller
                 ],
                 'usages'              => [
                     'team'         => $total_team,
-                    'campaign'     => $activeSubscription->campaign_limit                                                         - $activeSubscription->campaign_remaining,
-                    'contact'      => $total_contacts,
-                    'conversation' => ($activeSubscription->conversation_remaining > 0) ? $activeSubscription->conversation_limit - $activeSubscription->conversation_remaining : 0,
+                    'campaign'     => @$activeSubscription->campaign_limit ??  0 - @$activeSubscription->campaign_remaining,
+                    'contact'      => @$total_contacts,
+                    'conversation' => @($activeSubscription->conversation_remaining > 0) ? $activeSubscription->conversation_limit - $activeSubscription->conversation_remaining : 0,
                 ],
                 'read_rate'           => ($read_message != 0) ? $read_message / $delivered_message * 100 : 0,
             ];

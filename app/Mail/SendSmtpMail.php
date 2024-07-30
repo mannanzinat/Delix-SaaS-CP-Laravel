@@ -38,6 +38,7 @@ class SendSmtpMail extends Mailable
     // }
     public function build()
     {
+
         try {
             $this->data['content']['body'] = '';
             $subject = $this->data['content']['subject'] ?? __('Default Subject');
