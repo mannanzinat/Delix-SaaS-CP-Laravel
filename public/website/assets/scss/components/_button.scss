@@ -36,8 +36,7 @@
 		background-color: $primary;
 		color: $white;
 		border-color: $primary;
-		
-		
+
 		&:focus,
 		&:hover {
 			background: transparent;
@@ -47,10 +46,9 @@
 	}
 	&-secondary {
 		background-color: $heading;
-		color: $white,;
+		color: $white;
 		border-color: $heading;
-		
-		
+
 		&:focus,
 		&:hover {
 			background: $primary;
@@ -59,9 +57,8 @@
 		}
 	}
 	&-outline {
-
 		background: transparent;
-		border: 1px solid rgba($primary, 0.2);
+		border: 1px solid $border;
 		color: $primary;
 
 		&:focus,
@@ -75,13 +72,32 @@
 		background: $white;
 		color: $heading;
 		border: 1px solid $white;
-		
+
 		&:focus,
 		&:hover {
 			background-color: $primary;
 			color: $white;
 			border-color: $primary;
 		}
+	}
+	&-gray {
+		background: #00224d0a;
+		border: 1px solid rgba($heading, 0.06);
+		color: $heading;
+		font-weight: $medium;
+
+		&:focus,
+		&:hover {
+			background: $primary;
+			color: $white;
+			border-color: $primary;
+		}
+	}
+	&-primary:disabled,
+	&-primary.disabled {
+		background-color: $primary;
+		color: $white;
+		border-color: $primary;
 	}
 }
 
@@ -97,3 +113,9 @@
 		color: $primary;
 	}
 }
+
+.disable {
+	pointer-events: none;
+	opacity: 0.6; 
+	cursor: not-allowed;
+  }

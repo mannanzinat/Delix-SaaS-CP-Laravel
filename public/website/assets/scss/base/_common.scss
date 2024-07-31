@@ -194,9 +194,11 @@ p {
 *********************************/
 .MoveLeftRight {
 	animation: MoveTopRight 2.5s linear infinite alternate;
+	user-select: none;
 }
 .MoveTopBottom {
 	animation: MoveTopLeft 2.5s linear infinite alternate;
+	user-select: none;
 }
 
 

@@ -60,7 +60,7 @@ class RegisteredUserController extends Controller
         
         $result                     = $this->repo->signUp($request);
 
-        if ($result['success']):
+        if ($result['success'] == true):
             $user                   = $result['user'];
             $link                   = route('user.verified', $user->token);
             $template_data          = $this->emailTemplate->emailConfirmation();
@@ -73,25 +73,22 @@ class RegisteredUserController extends Controller
             ];
 
             try {
-                $this->sendmail($request->email, 'emails.template_mail', $data);
+                if(isMailSetupValid()){
+                    $this->sendmail($request->email, 'emails.template_mail', $data);
+                }
             } catch (\Exception $e) {
                 \Log::error('Error sending email: ' . $e->getMessage());
             }
 
             $message                = __('registration_successful_please_check_your_email');
 
-            if ($request->ajax()):
-                return response()->json(['success' => true, 'message' => $message]);
-            else:
-                return redirect()->back()->with('success', $message);
-            endif;
+            return response()->json(['success' => true, 'message' => $message], 200);
+
         else:
-            if ($request->ajax()):
-                return response()->json(['error' => $result['message']], 500);
-            else:
-                Toastr::error($result['message']);
-                return redirect()->back()->withErrors([$result['message']]);
-            endif;
+            return response()->json([
+                'error' => true,
+                'message' => __('something_went_wrong_please_try_again')
+            ], 500);
         endif;
     }
 

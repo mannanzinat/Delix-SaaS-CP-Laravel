@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('whatsapp_otp')->nullable();
             $table->timestamp('whatsapp_verify_at')->nullable();
+            $table->timestamp('whatsapp_otp_expired_at')->nullable();
             $table->string('token')->nullable();
             $table->timestamp('token_expired_at')->nullable();
             $table->enum('hear_about_delix', ['google_ads', 'facebook', 'youtube', 'email', 'friend'])->nullable();

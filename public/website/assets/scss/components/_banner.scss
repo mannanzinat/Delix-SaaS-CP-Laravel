@@ -158,6 +158,7 @@
 				width: 100%;
 				height: auto;
 				display: inline-block;
+				user-select: none;
 			}
 			&:first-of-type img {
 				max-width: 244px;
@@ -237,6 +238,7 @@
 		width: auto;
 		transform: translate(-50%, -50%);
 		animation: rotate 5s linear infinite;
+		user-select: none;
 	}
 }
 
@@ -255,7 +257,7 @@
 	margin: 42px auto 0;
 	position: relative;
 	background: $white;
-	border: 1px solid rgba($primary, 0.2);
+	border: 1px solid $border;
 	border-radius: $radius + 2;
 	padding: 22px 52px 0;
 
@@ -282,7 +284,7 @@
 			height: 80px;
 			width: 80px;
 			color: $primary;
-			border: 1px solid rgba($primary, 0.2);
+			border: 1px solid $border;
 
 			@include respond (phone-sm) {
 				height: 70px;
@@ -313,14 +315,22 @@
 
 		&::before {
 			animation-delay: 2s;
+			display: none;
 		}
 		&::after {
 			animation-delay: 8s;
+			display: none;
 		}
 	}
 	
 	&.shape__3 {
 		left: 60%;
+
+		&::before,
+		&::after {
+			display: none;
+		}
+
 	}
 	
 	&.shape__4 {

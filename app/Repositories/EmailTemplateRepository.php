@@ -34,12 +34,12 @@ class EmailTemplateRepository
 
     public function changePass()
     {
-        return EmailTemplate::where('email_type', 'password_reset_email')->first();
+        return EmailTemplate::where('identifier', 'password_reset_email')->first();
     }
 
     public function recoveryMail()
     {
-        return EmailTemplate::where('email_type', 'recovery_email')->first();
+        return EmailTemplate::where('identifier', 'recovery_email')->first();
     }
 
     public function update($request)

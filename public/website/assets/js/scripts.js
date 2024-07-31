@@ -75,20 +75,6 @@
     /*  Typed Js Here
     *********************************/
 
-    // $('#demo').cycleText({
-
-    //     // text separator
-    //     separator: '|',
-      
-    //     // animation type
-    //     // refer to https://daneden.github.io/animate.css/
-    //     animation: 'flipInX',
-      
-    //     // animation speed in ms
-    //     interval: 2000
-        
-    //   });
-
     if ($(".animation").length > 0) {
         $(".animation").typer({
             strings: [
@@ -165,6 +151,19 @@
     /*  AOS animation
      **********************************/
     AOS.init();
+
+    /**********************************
+     *  Pasword Show Hide Toggle
+     **********************************/
+    $('.toggle-password').click(function(){
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        let toggleShow = $(this).parent().find("input");
+        if($(this).hasClass('fa-eye-slash')){
+            toggleShow.attr('type', 'password');
+        } else {
+            toggleShow.attr('type', 'text');
+        }
+    });
 
     /**********************************
      *  Back to Top JS 

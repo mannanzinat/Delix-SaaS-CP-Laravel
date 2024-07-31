@@ -7,9 +7,11 @@ use App\Models\Activation;
 use App\Models\PasswordRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Repositories\EmailTemplateRepository;
 use App\Traits\ImageTrait;
 use App\Traits\SendMailTrait;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,10 +29,13 @@ class AuthController extends Controller
     use ImageTrait, SendMailTrait;
 
     protected $userRepository;
+    protected $emailTemplate;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, EmailTemplateRepository $emailTemplate)
     {
         $this->userRepository = $userRepository;
+        $this->emailTemplate = $emailTemplate;
+
     }
 
     public function forgotPassword()
@@ -40,66 +45,78 @@ class AuthController extends Controller
 
     public function forgot(Request $request)
     {
-        $request->validate([
+        $validator  = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user       = User::where('email', $request->email)->first();
 
-
-        if ($user) {
-            try {
-                $check_user_status = userAvailability($user);
-
-                if (! $check_user_status['status']) {
-                    Toastr::error($check_user_status['message']);
-
-                    return back();
-                }
-                DB::table('password_resets')->where('email', $user->email)->delete();
-                $token             = Str::random(64);
-                $link              = url('/').'/password/reset/'.$token.'?email='.urlencode($user->email);
-
-                DB::table('password_resets')->insert([
-                    'email'      => $request->email,
-                    'token'      => $token,
-                    'created_at' => Carbon::now(),
-                ]);
-
-                // Create a PasswordRequest record (assuming this is a custom model)
-                // Not necessary if you're not using it elsewhere
-                // PasswordRequest::where('user_id', $user->id)->delete();
-                // PasswordRequest::create([
-                //     'user_id' => $user->id,
-                //     'otp'     => $token,
-                // ]);
-
-                // Prepare data for email template
-                $data              = [
-                    'token'          => $token,
-                    'user'           => $user,
-                    'reset_link'     => $link,
-                    'template_title' => 'password_reset',
-                ];
-
-                if(isMailSetupValid()){
-                    $this->sendmail($request->email, 'emails.template_mail', $data);
-                }
-
-                Toastr::success(__('receive__mail_password_hints'));
-
-                return redirect()->back();
-            } catch (Exception $e) {
-                Toastr::warning(__('An error occurred while processing your request.'));
-
-                return redirect()->back();
+        if (!$user) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'errors' => ['email' => ['Wrong email.']]
+                ], 422);
             }
-        } else {
-            Toastr::warning(__('user_not_found'));
 
+            $validator          = Validator::make([], []);
+            $validator->errors()->add('email', 'Wrong email.');
+            return Redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $check_user_status = userAvailability($user);
+
+            if (!$check_user_status['status']) {
+                if ($request->ajax()) {
+                    return response()->json(['message' => $check_user_status['message']], 403);
+                }
+
+                Toastr::error($check_user_status['message']);
+                return back();
+            }
+
+            DB::table('password_resets')->where('email', $user->email)->delete();
+
+            $token = Str::random(64);
+            $link  = url('/').'/password/reset/'.$token.'?email='.urlencode($user->email);
+
+            $template_data = $this->emailTemplate->changePass();
+            DB::table('password_resets')->insert([
+                'email'         => $request->email,
+                'token'         => $token,
+                'created_at'    => Carbon::now(),
+            ]);
+
+            $data = [
+                'token'             => $token,
+                'user'              => $user,
+                'reset_link'        => $link,
+                'subject'           => $template_data->subject ?? __('password_reset_mail'),
+                'email_templates'   => $template_data,
+                'template_title'    => 'password_reset',
+            ];
+
+            if (isMailSetupValid()) {
+                $this->sendmail($request->email, 'emails.template_mail', $data);
+            }
+
+            if ($request->ajax()) {
+                return response()->json(['message' => __('receive__mail_password_hints')], 200);
+            }
+
+            Toastr::success(__('receive__mail_password_hints'));
+            return redirect()->back();
+
+        } catch (Exception $e) {
+            if ($request->ajax()) {
+                return response()->json(['message' => __('An error occurred while processing your request.')], 500);
+            }
+
+            Toastr::warning(__('An error occurred while processing your request.'));
             return redirect()->back();
         }
     }
+
 
     public function showResetPasswordForm($token)
     {
@@ -116,50 +133,48 @@ class AuthController extends Controller
         return view('auth.forgetPasswordLink', ['token' => $token]);
     }
 
-    public function submitResetPasswordForm(Request $request): RedirectResponse
+    public function submitResetPasswordForm(Request $request)
     {
+        $request->validate([
+            'password'              => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required',
+
+        ]);
+
         try {
-            $request->validate([
-                'email'                 => 'required|email|exists:users',
-                'password'              => 'required|string|min:6|confirmed',
-                'password_confirmation' => 'required',
-            ]);
+            $resetRecord = DB::table('password_resets')->where('token', $request->token)->first();
 
-            $resetRecord    = DB::table('password_resets')
-                ->where('email', $request->email)
-                ->where('token', $request->token)
-                ->first();
-
-            if (! $resetRecord) {
-                return back()->withInput()->with('error', 'Invalid token!');
+            if (!$resetRecord) {
+                return response()->json(['error' => 'Invalid token!'], 400);
             }
 
-            $user           = User::where('email', $request->email)->first();
+            $user           = User::where('email', $resetRecord->email)->first();
             $user->password = Hash::make($request->password);
             $user->save();
 
-            DB::table('password_resets')->where('email', $request->email)->delete();
+            DB::table('password_resets')->where('email', $user->email)->delete();
 
-            $data           = [
-                'user'           => $user,
-                'login_link'     => url('/login'),
-                'template_title' => 'recovery_mail',
+            $template_data = $this->emailTemplate->recoveryMail();
+            $data = [
+                'user'              => $user,
+                'login_link'        => url('/login'),
+                'subject'           => $template_data->subject ?? __('recovery_mail'),
+                'email_templates'   => $template_data,
+                'template_title'    => 'recovery_mail',
             ];
-            if(isMailSetupValid()){
-            $this->sendmail($request->email, 'emails.template_mail', $data);
+
+            if (isMailSetupValid()) {
+                $this->sendmail($user->email, 'emails.template_mail', $data);
             }
 
-            Toastr::success(__('successfully_password_changed'));
-
-            return redirect('/login')->with('message', 'Your password has been changed!');
+            return response()->json(['success' => 'Your password has been changed!'], 200);
         } catch (\Exception $e) {
-
-            // Log the exception or handle it accordingly
-            Toastr::error('An error occurred while processing your request.');
-
-            return redirect()->back();
+            return response()->json(['error' => 'An error occurred while processing your request.'], 500);
         }
     }
+
+
+
 
     public function passwordUpdate(Request $request)
     {
@@ -310,19 +325,25 @@ class AuthController extends Controller
 
     public function whatsappOtp(Request $request)
     {
-        $request->validate([
-            'phone' => ['required', 'unique:users,phone'],
+        $validator     = $request->validate([
+            'phone'    => ['required', 'unique:users,phone'],
         ]);
 
-        try {
-            return $this->userRepository->sendWhatsappOtp($request);
+        $result         = $this->userRepository->sendWhatsappOtp($request);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => __('something_went_wrong_please_try_again')], 500);
-        }
+        if ($result['success']):
+            return response()->json([
+                'success' => true,
+                'message' => __('otp_sent_successfully_check_your_whatsapp')
+            ]);
+        else:
+            return response()->json([
+                'error' => true,
+                'message' => __('something_went_wrong_please_try_again')
+            ], 500);
+        endif;
     }
+
     public function whatsappOtpConfirm(Request $request)
     {
         $request->validate([

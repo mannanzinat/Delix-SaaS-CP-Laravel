@@ -55,7 +55,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // OTP Send
             $('.otp__btn').on('click', function(event) {
                 event.preventDefault();
                 $('.alert__txt').hide();
@@ -92,14 +91,15 @@
                                     input.siblings('.alert__txt').show();
                                 }
                             });
-                        } else {
+                        } else if (xhr.status === 500) {
                             toastr.error(xhr.responseJSON.message || 'An error occurred. Please try again.');
+                        } else {
+                            toastr.error('An unexpected error occurred. Please try again.');
                         }
                     }
                 });
             });
 
-            // Confirm OTP
             $('.sent_otp').on('click', function(event) {
                 event.preventDefault();
                 var token = $('.token').val();
@@ -130,6 +130,7 @@
                         $('#otp').val('');
                     },
                     error: function(xhr) {
+                        console.log(xhr.responseJSON.errors);
                         $('.form-group').removeClass('has-error');
                         $('.invalid-feedback').html('').hide();
 
@@ -144,12 +145,13 @@
                                 }
                             });
                         } else {
-                            toastr.error(xhr.responseJSON.message || 'An error occurred. Please try again.');
+                            toastr.error(xhr.responseJSON.message || 'something_went_wrong_please_try_again.');
                         }
                         $('.btn__submit .loading').addClass('d-none');
                     }
                 });
             });
+
         });
 
     </script>

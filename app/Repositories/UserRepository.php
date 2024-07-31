@@ -260,12 +260,13 @@ class UserRepository
     public function sendWhatsappOtp($request)
     {
         try{
-            $otp                    = rand(100000, 999999);
-            $user                   = User::where('token', $request->token)->first();
+            $otp                                       = rand(100000, 999999);
+            $user                                      = User::where('token', $request->token)->first();
 
             if ($user):
-                $user->whatsapp_otp = $otp;
-                $user->phone        = $request->phone;
+                $user->whatsapp_otp                    = $otp;
+                $user->whatsapp_otp_expired_at         = \Carbon\Carbon::now()->addMinute(1);
+                $user->phone                           = $request->phone;
                 $user->save();
                 return ['success' => true, 'message' => __('otp_sent_successfully_check_your_whatsapp')];
 
@@ -300,8 +301,8 @@ class UserRepository
                         return ['success' => false, 'message' => $result['message']];
                     else:
                         $domain                             = new Domain;
-                        $domain->script_deployed            = 0;
-                        $domain->ssl_active                 = 0;
+                        $domain->script_deployed            = 1;
+                        $domain->ssl_active                 = 1;
                         $server                             = Server::where('default', 1)->first();
                         $domain->client_id                  = $client->id;
                         $domain->server_id                  = $server->id;
@@ -320,26 +321,22 @@ class UserRepository
                         $domain->custom_domain_db_user      = strtolower("db" . $uid . "db");
                         $domain->custom_domain_db_password  = Str::random(20);
     
-                        // if($request['script_deployed'] =='1'):
-                        //     if($request['ssl_active'] =='1'):
-                        //         $domain->ssl_active                 = 1;
-                        //     endif;
-                            $domain_info['server_id']               = $server->id;
-                            $domain_info['domain_name']             = $domain->sub_domain.'.delix.cloud';
-                            $domain_info['site_user']               = $domain->sub_domain_user;
-                            $domain_info['site_password']           = $domain->sub_domain_password;
-                            $domain_info['database_name']           = $domain->sub_domain_db_name;
-                            $domain_info['database_user']           = $domain->sub_domain_user;
-                            $domain_info['database_password']       = $domain->sub_domain_password;
-                            $domain_info['admin_key']               = strtolower(Str::random(24));
-                            $domain_info['client_key']              = strtolower(Str::random(24));
-                            $domain_info['database_password']       = $domain->sub_domain_password;
-                            $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
-                            $result                                 = $this->deployScript($domain_info);
-                        //     if ($result['success']):
-                        //         $domain->script_deployed            = 1;
-                        //     endif;
-                        // endif;
+
+                        $domain_info['server_id']               = $server->id;
+                        $domain_info['domain_name']             = $domain->sub_domain.'.delix.cloud';
+                        $domain_info['site_user']               = $domain->sub_domain_user;
+                        $domain_info['site_password']           = $domain->sub_domain_password;
+                        $domain_info['database_name']           = $domain->sub_domain_db_name;
+                        $domain_info['database_user']           = $domain->sub_domain_user;
+                        $domain_info['database_password']       = $domain->sub_domain_password;
+                        $domain_info['admin_key']               = strtolower(Str::random(24));
+                        $domain_info['client_key']              = strtolower(Str::random(24));
+                        $domain_info['database_password']       = $domain->sub_domain_password;
+                        $domain_info['ssl_active']              = ($domain->ssl_active == 1) ? true:false;
+                        $result                                 = $this->deployScript($domain_info);
+                        if ($result['success']):
+                            $domain->script_deployed            = 1;
+                        endif;
                         $domain->save();
     
                         if (!$result['success']):

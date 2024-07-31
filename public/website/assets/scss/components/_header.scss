@@ -32,8 +32,11 @@
 					display: block;
 					max-width: 160px;
 
+					@include respond(tabland) {
+						max-width: 130px;
+					}
 					@include respond(phone-xm) {
-						max-width: 140px;
+						max-width: 120px;
 					}
 				}
 			}
@@ -163,7 +166,7 @@
 								width: 100% !important;
 								left: 50% !important;
 								transform: translateX(-50%);
-								border: 1px solid rgba($primary, 0.2);
+								border: 1px solid $border;
 								padding: 24px;
 
 								a {
@@ -237,11 +240,6 @@
 					&:hover {
 						background: $primary;
 						color: $white;
-						span {
-							// background: $primary;
-							// border-color: $primary;
-							color: $heading;
-						}
 					}
 				}
 
@@ -257,7 +255,7 @@
 		}
 
 		.header__toggle {
-			height: 43px;
+			height: 39px;
 			width: 50px;
 			display: flex;
 			align-items: center;
@@ -273,10 +271,7 @@
 			@include respond(tabland) {
 				display: flex;
 			}
-			@include respond(phone-sm) {
-				height: 40px;
-				width: 50px;
-			}
+			
 
 			&:hover {
 				background: $primary;
@@ -441,6 +436,48 @@
 								color: $primary;
 							}
 						}
+					}
+				}
+			}
+		}
+		&__btn {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			margin: 20px 15px;
+
+			.btn {
+				padding: 12px 27px;
+
+				span {
+					background: rgba($white, 0.2);
+					border: 1px solid rgba($white, 0.3);
+					border-radius: 4px;
+					padding: 3px 14px;
+					font-size: 14px;
+					line-height: 17px;
+				}
+
+				&-outline {
+					border: 1px solid #1118270F;
+					color: $heading;
+					border-radius: 6px;
+
+					&:focus,
+					&:hover {
+						background: transparent;
+						border-color: $primary;
+						color: $heading;
+					}
+				}
+				&-primary {
+					padding: 9px 12px;
+					border-radius: 6px;
+					font-weight: $medium;
+
+					&:hover {
+						background: $primary;
+						color: $white;
 					}
 				}
 			}

@@ -44,6 +44,7 @@ class User extends Authenticatable implements JWTSubject
         'hear_about_delix',
         'whatsapp_otp',
         'whatsapp_verify_at',
+        'whatsapp_otp_expired_at',
         'token',
         'token_expired_at',
     ];

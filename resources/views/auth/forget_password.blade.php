@@ -1,136 +1,81 @@
-{{-- <!doctype html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-
-    <title>{{__('login')}}</title>
-    <!--====== LineAwesome ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/line-awesome.min.css') }}">
-    <!--====== Dropzone CSS ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/dropzone.min.css') }}">
-    <!--====== Summernote CSS ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/summernote-lite.min.css') }}">
-    <!--====== Choices CSS ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/choices.min.css') }}">
-    <!--====== AppCSS ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/app.css') }}">
-    <!--====== ResponsiveCSS ======-->
-    <link rel="stylesheet" href="{{ static_asset('admin/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('admin/css/toastr.min.css') }}">
-</head>
-<body>
-<section class="signup-section">
+@extends('website.layouts.master')
+@section('content')
+<section class="login__section">
     <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-lg-5 col-md-8 col-sm-10 position-relative">
-
-                <img src="{{ static_asset('admin/img/shape/rect.svg') }}" alt="Rect Shape" class="bg-rect-shape">
-                <img src="{{ static_asset('admin/img/shape/circle.svg') }}" alt="Rect Shape" class="bg-circle-shape">
-                <img src="{{ static_asset('admin/img/shape/circle-block.svg') }}" alt="Rect Shape" class="bg-circle-block-shape">
-
-                <div class="login-form bg-white rounded-20">
-                    <div class="logo d-flex justify-content-center items-center mb-4">
-                        <a  href="{{url('/')}}">
-                            <img style="max-height: 35px" src="{{ setting('light_logo') && @is_file_exists(setting('light_logo')['original_image']) ? get_media(setting('light_logo')['original_image']) : getFileLink('80x80',[]) }}" alt="Corporate Logo">
-                        </a>
+        <div class="row">
+            <div class="col-lg-6 col-md-10 m-auto">
+                <div class="login__content text-center">
+                    <h2 class="title"><span>Forget </span> Password</h2>
+                    <p class="desc">You can reset your password here</p>
+                </div>
+                <div class="form__wrapper">
+                    <div class="bgPattern__right MoveTopBottom">
+                        <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
                     </div>
-                    <h3>{{__('forgot_password')}}</h3>
-                    <p>{{__('enter_your_email_address_to_recover_your_password') }}</p>
-
-                    <form method="POST" action="{{ route('forgot.password-email') }}" class="needs-validation" novalidate>
+                    <div class="bgPattern__right MoveTopBottom">
+                        <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
+                    </div>
+                    <div class="bgPattern__leftBottom MoveLeftRight">
+                        <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
+                    </div>
+                    <form id="forgotPasswordForm" action="{{ route('forgot.password-email') }}" method="POST">
                         @csrf
-                        <div class="mb-30">
-                            <label for="email" class="form-label">{{__('email')}} *</label>
-                            <input type="text" class="form-control rounded-2" id="email" value="" name="email"  placeholder="{{ __('email') }}" required autofocus>
-                            <x-input-error :messages="$errors->get('email')" class="mt-2 nk-block-des text-danger" />
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
+                            <div id="emailError" class="alert__txt"></div>
                         </div>
-                        @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
-                            <div class="mb-30">
-                                <div id="html_element" class="g-recaptcha" data-sitekey="{{setting('recaptcha_site_key')}}"></div>
-                            </div>
-                        @endif
-                        <div class="mb-30"><button type="submit" class="btn btn-lg sg-btn-primary d-block w-100">{{__('submit')}}</button></div>
-                        <span class="text-center d-block">{{__('back_to')}} <a href="{{ route('login') }}" class="sg-text-primary">{{__('sign_in')}}</a>?</span>
+                        <div class="btn__submit">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                            <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- JS Files -->
-<!--====== jQuery ======-->
-<script src="{{ static_asset('admin/js/jquery.min.js') }}"></script>
-<!--====== Bootstrap & Popper JS ======-->
-<script src="{{ static_asset('admin/js/bootstrap.bundle.min.js') }}"></script>
-<!--====== NiceScroll ======-->
-<script src="{{ static_asset('admin/js/jquery.nicescroll.min.js') }}"></script>
-<!--====== Bootstrap-Select JS ======-->
-<script src="{{ static_asset('admin/js/choices.min.js') }}"></script>
-<!--====== Summernote JS ======-->
-<script src="{{ static_asset('admin/js/summernote-lite.min.js') }}"></script>
-<!--====== Dropzone JS ======-->
+@endsection
+  @push('js')
+    <script>
+        $(document).ready(function() {
+            $('#forgotPasswordForm').on('submit', function(event) {
+                event.preventDefault();
 
-<!--====== ReCAPTCHA ======-->
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-<!--====== MainJS ======-->
-<script src="{{ static_asset('admin/js/app.js') }}"></script>
+                var form          = $(this);
+                var url           = form.attr('action');
+                var formData      = form.serialize();
+                $('.btn__submit .loading').removeClass('d-none');
 
-<script src="{{ static_asset('admin/js/toastr.min.js') }}"></script>
-{!! Toastr::message() !!}
-@if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
-    <script type="text/javascript">
-        var onloadCallback = function() {
-            grecaptcha.render('html_element', {
-                'sitekey' : '{{setting('recaptcha_site_key')}}',
-                'size' : 'md'
+                $('#emailError').html('');
+    
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        toastr.success(response.message);
+                        $('#forgotPasswordForm')[0].reset();
+                        $('.btn__submit .loading').addClass('d-none');
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            if (errors && errors.email) {
+                                $('#emailError').html('<i class="fa-solid fa-circle-info"></i>' + errors.email[0]);
+                            }
+                        } else if (xhr.status === 403) {
+                            toastr.error(xhr.responseJSON.message || 'Forbidden');
+                        } else if (xhr.status === 500) {
+                            toastr.error(xhr.responseJSON.message || 'An error occurred while processing your request.');
+                        } else {
+                            toastr.error('An unexpected error occurred.');
+                        }
+                        $('.btn__submit .loading').addClass('d-none');
+                    }
+                });
             });
-        };
+        });
     </script>
-@endif
-</body>
-</html> --}}
-
-
-
-@extends('website.layouts.master')
-  @section('content')
-    <section class="login__section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-10 m-auto">
-                    <div class="login__content text-center">
-                        <h2 class="title"><span>Forget </span> Password</h2>
-                        <p class="desc">You can reset your password here</p>
-                    </div>
-                    <div class="form__wrapper">
-                        <div class="bgPattern__right MoveTopBottom">
-                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
-                        </div>
-                        <div class="bgPattern__right MoveTopBottom">
-                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
-                        </div>
-                        <div class="bgPattern__leftBottom MoveLeftRight">
-                            <img src="{{ static_asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
-                        </div>
-                        <form action="{{ route('forgot.password-email') }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" />
-                                @if ($errors->has('email'))
-                                    <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('email') }}</div>
-                                @endif
-                            </div>
-                            <div class="btn__submit">
-                                <button type="submit" class="btn btn-primary">Send</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-  @endsection
+  @endpush
 

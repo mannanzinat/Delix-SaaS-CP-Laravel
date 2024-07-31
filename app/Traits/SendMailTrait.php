@@ -23,24 +23,6 @@ trait SendMailTrait
             $emails = is_array($to) ? array_filter($to) : [$to];
 
 
-            // \Log::info('Sending email', [
-            //     'to'   => $emails,
-            //     'from' => $from,
-            //     'view' => $view,
-            //     'data' => $data,
-            // ]);
-
-            // if (!isset($attribute['content']) || !is_array($attribute['content'])) {
-            //     throw new \Exception('Email content is not properly set.');
-            // }
-
-            // if (!isset($data['confirmation_link']) || !isset($data['user'])) {
-            //     throw new \Exception('Required email content keys are missing.');
-            // }
-
-  
-            // dd($emails);
-
             Mail::to($emails)->send(new SendSmtpMail($attribute));
 
             return true;

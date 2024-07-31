@@ -166,25 +166,34 @@
                     $('#signupForm')[0].reset();
                     $('.btn__submit .loading').addClass('d-none');
                 },
-                error: function(error) {
-                    const errors = error.responseJSON.errors || {};
-                    $.each(errors, function(key, value) {
-                        if (key === 'policy_check') {
-                            const checkbox = $(`[name="${key}"]`);
-                            checkbox.addClass('is-invalid');
-                            $('#policyCheckError').html('<i class="fa-solid fa-circle-info"></i> ' + value[0]);
-                            $('#policyCheckError').show();
-                        } else {
-                            const input = $(`#${key}`);
-                            if (input.length > 0) {
-                                input.addClass('is-invalid');
-                                input.siblings('.invalid-feedback').html('<i class="fa-solid fa-circle-info"></i> ' + value[0]);
-                                input.siblings('.invalid-feedback').show();
+                error: function(xhr) {
+                    const errors = xhr.responseJSON.errors || {};
+                    if (xhr.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').hide();
+
+                        $.each(errors, function(key, value) {
+                            if (key === 'policy_check') {
+                                const checkbox = $(`[name="${key}"]`);
+                                checkbox.addClass('is-invalid');
+                                $('#policyCheckError').html('<i class="fa-solid fa-circle-info"></i> ' + value[0]);
+                                $('#policyCheckError').show();
+                            } else {
+                                const input = $(`#${key}`);
+                                if (input.length > 0) {
+                                    input.addClass('is-invalid');
+                                    input.siblings('.invalid-feedback').html('<i class="fa-solid fa-circle-info"></i> ' + value[0]);
+                                    input.siblings('.invalid-feedback').show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        toastr.error(errors.message || 'Something went wrong. Please try again.');
+                    }
+    
                     $('.btn__submit .loading').addClass('d-none');
                 }
+
             });
         });
     });

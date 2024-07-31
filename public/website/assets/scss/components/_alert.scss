@@ -1,0 +1,125 @@
+/*********************************
+/*  Alert Css Start
+*********************************/
+.alert {
+    position: fixed;
+    // position: relative;
+    top: 6px;
+    right: 6px;
+    overflow: hidden;
+    padding: 15px 15px 15px 50px;
+    width: 300px;
+    border-radius: 10px;
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    box-shadow: none;
+    border: 1px solid #41CC68;
+    color: #556068;
+    opacity: 1;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 500;
+    z-index: 999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 3px;
+
+    &-message {
+        word-wrap: break-word;
+        padding-left: 12px;
+        text-transform: capitalize;
+    }
+    &-success {
+        background-color: #EAF7EE !important;
+        border-color: #C0E5C9 !important;
+
+        &::after {
+            content: "\f00c";
+            background: #41CC68;
+        }
+    }
+    
+    &-warning {
+        background-color: #FEF7EA !important;
+        border: 1px solid #FAE5C3 !important;
+
+        &::after {
+            content: "\f071";
+            background: #EE9500;
+        }
+    }
+    &-danger {
+        background-color: #FCEDE9 !important;
+        border: 1px solid #F4CDC3 !important;
+
+        &::after {
+            content: "\f071";
+            background: #EC4E2A;
+        }
+    }
+    &-error {
+        background-color: #FCEDE9 !important;
+        border: 1px solid #F4CDC3 !important;
+
+        &::after {
+            content: "\f071";
+            background: #EC4E2A;
+        }
+    }
+    &-info {
+        background-color: #E5EFFA !important;
+        border: 1px solid #C3DCF2 !important;
+
+        &::after {
+            content: "\f129";
+            background: #0268DC;
+        }
+    }
+    &-success::after,
+    &-warning::after,
+    &-danger::after,
+    &-error::after,
+    &-info::after {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 20px;
+      line-height: 10px;
+      transform: translateY(-50%);
+    }
+
+    &:hover {
+        box-shadow: none;
+        opacity: 1;
+        filter: alpha(opacity=100);
+        cursor: pointer;
+      }
+    
+
+    .btn-close {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        padding: 0;
+        color: #000;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+}
+  
+
+/*********************************
+/*  Alert Css End
+*********************************/

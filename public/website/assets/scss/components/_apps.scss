@@ -77,9 +77,11 @@
 
 .MoveTopBottom {
     animation: MoveTopBottom 3s linear infinite alternate;
+    user-select: none;
 }
 .MoveLeftRight {
     animation: MoveLeftRight 2.5s linear infinite alternate;
+    user-select: none;
 }
 
 

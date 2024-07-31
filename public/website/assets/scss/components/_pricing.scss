@@ -341,7 +341,7 @@
 .feature__accordion {
     .accordion {
         .accordion-button {
-            border: 1px solid rgba($primary, 0.2);
+            border: 1px solid $border;
             border-radius: 8px !important;
             padding: 20px 50px 20px 20px !important;
             background: transparent !important;
@@ -351,7 +351,7 @@
                 border-radius: 8px;
             }
             &:focus {
-                border: 1px solid rgba($primary, 0.2) !important;
+                border: 1px solid $border  !important;
                 border-color: rgba($primary, 0.2) !important;
             }
 
