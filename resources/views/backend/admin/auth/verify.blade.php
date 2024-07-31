@@ -33,7 +33,6 @@
                             <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
                             <div class="alert__txt invalid-feedback"></div>
                             <button type="button" class="otp__btn">{{ __('sent_otp') }}</button>
-                            <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
                         </div>
                         <div class="form-group otp-group" style="display: none;">
                             <label for="otp">Enter OTP</label>
@@ -55,6 +54,19 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            checkOtpExpiration();
+            function checkOtpExpiration() {
+                var expire_time = "{{ $user->whatsapp_otp_expired_at }}";
+                var now         = new Date();
+                var expireDate  = new Date(expire_time.replace(/ /g, 'T'));
+                console.log(expire_time, expireDate);
+
+                if (now > expireDate) {
+                    $('.otp__btn').text('Resend OTP');
+                    $('.sent_otp').addClass('disable');
+                }
+            }
+
             $('.otp__btn').on('click', function(event) {
                 event.preventDefault();
                 $('.alert__txt').hide();
@@ -102,9 +114,9 @@
 
             $('.sent_otp').on('click', function(event) {
                 event.preventDefault();
-                var token = $('.token').val();
-                var otp = $('#otp').val();
-                var route = "{{ route('whatsapp.otp.confirm') }}";
+                var token   = $('.token').val();
+                var otp     = $('#otp').val();
+                var route   = "{{ route('whatsapp.otp.confirm') }}";
                 $('.btn__submit .loading').removeClass('d-none');
 
 
