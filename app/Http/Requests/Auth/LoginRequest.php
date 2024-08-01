@@ -32,9 +32,9 @@ class LoginRequest extends FormRequest
             'password'         => ['required', 'string'],
             'policy_check'     => ['required'],
         ];
-        //        if (setting('is_recaptcha_activated') && setting('recaptcha_site_key') && setting('recaptcha_secret')) {
-        //            $rules['recaptcha'] = ['required', 'gte:1'];
-        //        }
+        if (setting('is_recaptcha_activated') && setting('recaptcha_site_key') && setting('recaptcha_secret')) {
+            $rules['recaptcha'] = ['gte:1'];
+        }
 
         return $rules;
     }
@@ -42,20 +42,15 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required'        => 'Email is required.',
-            'email.email'           => 'Wrong Email Address.',
-            'password.required'     => 'Password is required.',
-            'policy_check.required' => 'Privacy Policy is required.',
+            'g-recaptcha-response.gte' => __('Please verify that you are not a robot.'),
+            'email.required'                => 'Email is required.',
+            'email.email'                   => 'Wrong Email Address.',
+            'password.required'             => 'Password is required.',
+            'policy_check.required'         => 'Privacy Policy is required.',
 
         ];
     }
 
-    // public function messages(): array
-    // {
-    //     return [
-    //         'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
-    //     ];
-    // }
 
     /**
      * Attempt to authenticate the request's credentials.

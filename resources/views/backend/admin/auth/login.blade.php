@@ -1,3 +1,15 @@
+{{-- <style>
+  #html_element div {
+      width: 100% !important;
+  }
+
+  #html_element #rc-anchor-container {
+      width: auto !important;
+  }
+  #html_element iframe {
+      width: 100% !important;
+  }
+</style> --}}
 @extends('website.layouts.master')
   @section('content')
     <section class="login__section">
@@ -30,21 +42,17 @@
                 <div class="form-group">
                   <label for="password">{{ __('password') }}</label>
                   <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" />
+                  <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                  <div id="password-error" class="alert__txt"></div>
                   @if ($errors->has('password'))
                       <div class="alert__txt"><i class="fa-solid fa-circle-info"></i>{{ $errors->first('password') }}</div>
                   @endif
                 </div>
-                <div class="form-group">
-                  <div class="recaptcha form-control">
-                    <div class="custom__checkbox">
-                      <input type="checkbox" class="form-check-input" id="robot" />
-                      <label class="form-check-label mb-0" for="robot">I’m not a robot</label>
-                    </div>
-                    <div class="recaptcha__icon">
-                      <img src="{{ static_asset('website') }}/assets/images/recaptcha.png" alt="racaptcha" />
-                    </div>
+                @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
+                  <div class="my-4">
+                    <div id="html_element" class="g-recaptcha" data-sitekey="{{setting('recaptcha_site_key')}}"></div>
                   </div>
-                </div>
+                @endif
                 <div class="flex__input">
                   <div class="form-group mb-0">
                     <div class="custom__checkbox">
@@ -87,15 +95,22 @@
   @push('js')
     <!--====== ReCAPTCHA ======-->
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-    {!! Toastr::message() !!}
-    {{-- @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key')) --}}
-      <script type="text/javascript">
+
+    @if ($errors->any())
+    <script>
+            @foreach ($errors->all() as $error)
+                toastr.error('{{ $error }}');
+            @endforeach
+    </script>
+    @endif
+    @if (setting('is_recaptcha_activated') && setting('recaptcha_site_key'))
+    <script type="text/javascript">
         var onloadCallback = function() {
-          grecaptcha.render('html_element', {
+        grecaptcha.render('html_element', {
             'sitekey' : '{{setting('recaptcha_site_key')}}',
-            'size' : 'md'
-          });
+            'size' : 'lg'
+        });
         };
-      </script>
-    {{-- @endif --}}
+    </script>
+    @endif
   @endpush

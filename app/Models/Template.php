@@ -11,7 +11,7 @@ class Template extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['template_id', 'name', 'components', 'category', 'language', 'client_id', 'status', 'type'];
+    protected $fillable = ['template_id', 'name', 'components', 'category', 'language', 'client_id', 'status', 'default', 'type'];
 
     protected $casts    = [
         'components' => 'array',

@@ -32,6 +32,7 @@ return new class extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
             $table->string('status')->default('APPROVED');
+            $table->string('default')->default('0');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Traits\GetUserBrowser;
 use Brian2694\Toastr\Facades\Toastr;
+use ReCaptcha\ReCaptcha;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,6 +37,13 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
 
+        if (setting('is_recaptcha_activated')) {
+            $recaptcha = new ReCaptcha(setting('recaptcha_secret'));
+            $resp = $recaptcha->verify($request->input('g-recaptcha-response'), $request->ip());
+            if (!$resp->isSuccess()) {
+                return redirect()->back()->withInput()->with('danger', __('please_verify_that_you_are_not_a_robot'));
+            }
+        }
         if ($this->activityLog($request)) {
             $request->authenticate();
             $request->session()->regenerate();

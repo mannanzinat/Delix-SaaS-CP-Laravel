@@ -676,7 +676,6 @@ class SystemSettingController extends Controller
 
     public function update(Request $request)
     {
-
         try {
             $is_connected       = 0;
             $token_verified     = 0;
@@ -685,66 +684,63 @@ class SystemSettingController extends Controller
             $url                = 'https://graph.facebook.com/debug_token?input_token=' . $accessToken . '&access_token=' . $accessToken;
 
             $ch                 = curl_init($url);
+
+
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             $response           = curl_exec($ch);
+
             $responseData       = json_decode($response, true);
-        
-            // if (isset($responseData['error'])) {
-            //     return $this->formatResponse(false, $responseData['error']['message'], 'client.whatsapp.settings', []);
-            // } else {
-            //     if (isset($responseData['data']['is_valid']) && $responseData['data']['is_valid'] === true) {
-            //         $is_connected   = 1;
-            //         $token_verified = 1;
-            //         $scopes         = $responseData['data']['scopes'];
-            //     } else {
-            //         return $this->formatResponse(false, __('access_token_is_not_valid'), 'client.whatsapp.settings', []);
-            //     }
-            // }
+
+            if (isset($responseData['error'])) {
+                return $this->formatResponse(false, $responseData['error']['message'], 'client.whatsapp.settings', []);
+            } else {
+                if (isset($responseData['data']['is_valid']) && $responseData['data']['is_valid'] === true) {
+                    $is_connected   = 1;
+                    $token_verified = 1;
+                    $scopes         = $responseData['data']['scopes'];
+                } else {
+                    return $this->formatResponse(false, __('access_token_is_not_valid'), 'client.whatsapp.settings', []);
+                }
+            }
 
             $dataAccessExpiresAt = isset($responseData['data']['data_access_expires_at']) ? 
-                (new \DateTime())->setTimestamp($responseData['data']['data_access_expires_at']) : null;
+                (new \DateTime())->setTimestamp($responseData['data']['data_access_expires_at'])->format('c') : null;
             $dataExpiresAt = isset($responseData['data']['expires_at']) ? 
-                (new \DateTime())->setTimestamp($responseData['data']['expires_at']) : null;
+                (new \DateTime())->setTimestamp($responseData['data']['expires_at'])->format('c') : null;
             curl_close($ch);
-
 
             $request->merge([
                 'access_token'              => $accessToken,
                 'phone_number_id'           => $request->phone_number_id,
                 'business_account_id'       => $request->business_account_id,
-                // 'app_id'                    => $responseData['data']['app_id'],
+                'app_id'                    => $responseData['data']['app_id'],
                 'is_connected'              => $is_connected,
                 'token_verified'            => $token_verified,
-                // 'scopes'                    => $scopes,
-                // 'granular_scopes'           => $responseData['data']['granular_scopes'] ?? null,
-                // 'name'                      => $responseData['data']['application'] ?? null,
-                // 'data_access_expires_at'    => $dataAccessExpiresAt,
-                // 'expires_at'                => $dataExpiresAt,
-                // 'fb_user_id'                => $responseData['data']['user_id'] ?? null,
+                'scopes'                    => $scopes,
+                'granular_scopes'           => $responseData['data']['granular_scopes'] ?? null,
+                'name'                      => $responseData['data']['application'] ?? null,
+                'data_access_expires_at'    => $dataAccessExpiresAt,
+                'expires_at'                => $dataExpiresAt,
+                'fb_user_id'                => $responseData['data']['user_id'] ?? null,
             ]);
 
-
             $this->setting->update($request);
-            // $this->loadTemplate();
+            $this->loadTemplate();
 
             Toastr::success(__('update_successful'));
             return back();
-            // $data = [
-            //     'success' => __('update_successful'),
-            // ];
-
-            // return response()->json($data);
         } catch (\Exception $e) {
-
             Toastr::error(__('something_went_wrong_please_try_again'));
-
+            return back();
         }
     }
 
+
     public function loadTemplate()
     {
+
         try {
             $accessToken                   = setting('access_token');
             $whatsapp_business_account_id  = setting('business_account_id');
@@ -766,7 +762,7 @@ class SystemSettingController extends Controller
 
             foreach ($allData as $templateObject) {
 
-                $template = Template::withPermission()->firstOrNew(['template_id' => $templateObject['id']]);
+                $template = Template::firstOrNew(['template_id' => $templateObject['id']]);
                 $template->fill([
                     'name'          => $templateObject['name'],
                     'components'    => $templateObject['components'] ?? [],
@@ -776,8 +772,11 @@ class SystemSettingController extends Controller
                 ]);
 
                 $template->save();
+                $otp            = Template::where('name', 'delix_otp')->first();
+                $otp->default   = 1;
+                $otp->save();
             }
-            Template::whereNotIn('template_id', collect($allData)->pluck('id'))->withPermission()->delete();
+            Template::whereNotIn('template_id', collect($allData)->pluck('id'))->delete();
             return $this->formatResponse(true, __('updated_successfully'), 'client.templates.index', []);
         } catch (\Throwable $e) {
             if (config('app.debug')) {
