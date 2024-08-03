@@ -20,7 +20,7 @@ class TelegramContactsDataTable extends DataTable
                 return $row->created_at->format('d-m-Y');
             })
             ->addColumn('name', function ($contacts) {
-                return view('backend.client.telegram.contacts.name', compact('contacts'));
+                return view('website.clienttelegram.contacts.name', compact('contacts'));
             })
             ->addColumn('username', function ($row) {
                 return @$row->username;
@@ -35,7 +35,7 @@ class TelegramContactsDataTable extends DataTable
                 return $row->is_left_group == 1 ? 'Yes' : 'No';
             })
             ->addColumn('checkbox', function ($contacts) {
-                return view('backend.client.telegram.contacts.checkbox', compact('contacts'));
+                return view('website.clienttelegram.contacts.checkbox', compact('contacts'));
             })
             ->rawColumns(['created_at'])
         ;

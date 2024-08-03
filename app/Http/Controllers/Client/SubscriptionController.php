@@ -55,13 +55,13 @@ class SubscriptionController extends Controller
             'log_detail'          => $log_details,
         ];
 
-        return view('backend.client.subscription.my_subscription', $data);
+        return view('website.client.subscription.my_subscription', $data);
     }
 
     public function pendingSubscription()
     {
 
-        return view('backend.client.subscription.pending_subscription');
+        return view('website.client.subscription.pending_subscription');
     }
 
     public function availablePlans()
@@ -75,7 +75,7 @@ class SubscriptionController extends Controller
                 'active_subscription' => $client->activeSubscription,
             ];
 
-            return view('backend.client.subscription.upgrade_plan', $data);
+            return view('website.client.subscription.upgrade_plan', $data);
         } catch (\Exception $e) {
 
             return back()->with('error', 'something_went_wrong_please_try_again');
@@ -101,7 +101,7 @@ class SubscriptionController extends Controller
             ];
 
 
-            return view('backend.client.subscription.payment_page', $data);
+            return view('website.client.subscription.payment_page', $data);
         } catch (\Exception $e) {
             return back()->with('error', 'something_went_wrong_please_try_again');
         }
@@ -442,7 +442,7 @@ class SubscriptionController extends Controller
                 'client'   => auth()->user()->client,
             ];
 
-            return view('backend.client.subscription.paddle', $data);
+            return view('website.client.subscription.paddle', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 

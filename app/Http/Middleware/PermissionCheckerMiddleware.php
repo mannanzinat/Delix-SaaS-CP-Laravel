@@ -9,6 +9,7 @@ class PermissionCheckerMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
+
         if (auth()->check()) {
 
             if (Auth()->user()->role_id == 1 || Auth()->user()->role_id == 2) {

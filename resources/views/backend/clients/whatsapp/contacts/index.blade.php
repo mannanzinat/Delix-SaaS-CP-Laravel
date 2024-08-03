@@ -248,7 +248,7 @@
             </div>
         </div>
     </div>
-    @include('backend.client.whatsapp.contacts.modal.view')
+    @include('website.clientwhatsapp.contacts.modal.view')
 @endsection
 @include('backend.common.block-script')
 {{-- @include('backend.common.delete-script') --}}

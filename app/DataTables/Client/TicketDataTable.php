@@ -17,9 +17,9 @@ class TicketDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($ticket) {
-                return view('backend.client.ticket.action', compact('ticket'));
+                return view('website.clientticket.action', compact('ticket'));
             })->addColumn('status', function ($ticket) {
-                return view('backend.client.ticket.status', compact('ticket'));
+                return view('website.clientticket.status', compact('ticket'));
             })->addColumn('created_at', function ($ticket) {
                 return Carbon::parse($ticket->created_at)->format('M d, Y h:i A');
             })->addColumn('department', function ($ticket) {

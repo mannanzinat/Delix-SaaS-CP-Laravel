@@ -62,7 +62,7 @@ class ContactController extends Controller
             'countries' => $countries,
             'templates' => $this->template->all(),
         ];
-        return $contactsDataTable->render('backend.client.whatsapp.contacts.index', $data);
+        return $contactsDataTable->render('website.clientwhatsapp.contacts.index', $data);
     }
 
 
@@ -125,7 +125,7 @@ class ContactController extends Controller
         $data   = [
             'groups' => $groups,
         ];
-        return $contactsDataTable->render('backend.client.telegram.contacts.index', $data);
+        return $contactsDataTable->render('website.clienttelegram.contacts.index', $data);
     }
 
     public function create()
@@ -138,7 +138,7 @@ class ContactController extends Controller
                 'lists'     => $list,
                 'countries' => $this->country->combo(),
             ];
-            return view('backend.client.whatsapp.contacts.create', $data);
+            return view('website.clientwhatsapp.contacts.create', $data);
         } catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
             return back();
@@ -178,7 +178,7 @@ class ContactController extends Controller
                 'lists'     => $list,
                 'countries' => $this->country->combo(),
             ];
-            return view('backend.client.whatsapp.contacts.edit', $data);
+            return view('website.clientwhatsapp.contacts.edit', $data);
         } catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
             return back();
@@ -564,7 +564,7 @@ class ContactController extends Controller
             'lists'    => $list,
         ];
 
-        return view('backend.client.whatsapp.import.create', $data);
+        return view('website.clientwhatsapp.import.create', $data);
     }
 
     public function parseCSV(Request $request)

@@ -50,14 +50,14 @@
                                                     id="locale" name="locale" required>
                                                     @foreach (config('static_array.whatsapp_supported_languages') as $key => $lang)
                                                         <option value="{{ $key }}"
-                                                            {{ old('locale') == $key ? 'selected' : '' }}>
+                                                            {{ old('locale', 'en') == $key ? 'selected' : '' }}>
                                                             {{ $lang }}
                                                         </option>
                                                     @endforeach
                                                 </select>
                                                 <div class="invalid-feedback text-danger"></div>
                                             </div>
-                                        </div>
+                                        </div>                                       
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -84,7 +84,7 @@
                                                         {{ __('marketing') }}
                                                     </label>
                                                 </div>
-                                                <div class="radio_button">
+                                                {{-- <div class="radio_button">
                                                     <input type="radio" id="authentication" name="template_category"
                                                         id="authentication" value="AUTHENTICATION"
                                                         {{ old('template_category') == 'AUTHENTICATION' ? 'checked' : '' }} />
@@ -92,7 +92,7 @@
                                                         <i class="las la-lock-open"></i>
                                                         {{ __('auth/otp') }}
                                                     </label>
-                                                </div>
+                                                </div> --}}
                                                 <div class="invalid-feedback text-danger"></div>
                                             </div>
                                         </div>
@@ -246,7 +246,112 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @include('backend.client.whatsapp.template.partials._append_buttons')
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-4 position-relative">
+                                                <label for="button_type" class="d-block">{{ __('button') }} <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="radio_button">
+                                                    <input type="radio" name="button_type" id="none"
+                                                        value="NONE"
+                                                        {{ old('button_type') == 'NONE' ? 'checked' : 'checked' }} />
+                                                    <label class="btn btn-default" for="none">
+                                                        {{ __('none') }}
+                                                    </label>
+                                                    <div class="invalid-feedback text-danger"></div>
+
+                                                </div>
+                                                <div class="radio_button">
+                                                    <input type="radio" id="cta" name="button_type"
+                                                        id="cta" value="CTA"
+                                                        {{ old('button') == 'CTA' ? 'checked' : '' }} />
+                                                    <label class="btn btn-default" for="cta">
+                                                        {{ __('cta') }}</label>
+                                                    <div class="invalid-feedback text-danger"></div>
+
+                                                </div>
+                                                <div class="radio_button">
+                                                    <input type="radio" id="quick_reply" name="button_type"
+                                                        id="quick_reply" value="QUICK_REPLY"
+                                                        {{ old('button_type') == 'quick_reply' ? 'checked' : '' }} />
+                                                    <label class="btn btn-default" for="quick_reply">
+                                                        {{ __('quick_reply') }}</label>
+                                                    <div class="invalid-feedback text-danger"></div>
+
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div id="call-to-action-section" class="position-relative"
+                                                style="display:none">
+                                                <div class="call-to-action-btn">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="dropdown">
+                                                                <button class="btn sg-btn-primary dropdown-toggle btn-sm"
+                                                                    type="button" data-bs-toggle="dropdown"
+                                                                    aria-expanded="false">
+                                                                    <i class="las la-plus"></i>
+                                                                    {{ __('add_call_to_action') }}
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item add_call_to_action"
+                                                                            data-action="visit_website"
+                                                                            data-max="2"
+                                                                            href="javascript:void(0);">
+                                                                            <i class="las la-globe-africa"></i>
+                                                                            {{ __('visit_website') }}
+                                                                            <span class="d-block add-btn-notice">2
+                                                                                {{ __('buttons_maximum') }}</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item add_call_to_action"
+                                                                            data-action="call_phone_number"
+                                                                            data-max="1"
+                                                                            href="javascript:void(0);"> 
+                                                                            <i class="las la-phone-volume"></i>
+                                                                            {{ __('call_phone_number') }}
+                                                                            <span class="d-block add-btn-notice">1
+                                                                                {{ __('buttons_maximum') }}</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    {{-- <li>
+                                                                        <a class="dropdown-item add_call_to_action"
+                                                                            data-action="copy_offer_code"
+                                                                            data-max="1"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="las la-copy"></i>
+                                                                            {{ __('copy_offer_code') }}
+                                                                            <span class="d-block add-btn-notice">1
+                                                                                {{ __('buttons_maximum') }}</span>
+                                                                        </a>
+                                                                    </li> --}}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="append-call-to-action" id="append-call-to-action">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="quick_reply-section" class="position-relative" style="display:none">
+                                                <div class="quick_reply-btn">
+                                                    <button class="btn sg-btn-primary add-quick-reply-btn btn-sm"
+                                                        type="button" data-action="quick_reply" data-max="8">
+                                                        <i class="las la-plus"></i> 
+                                                        {{ __('add_quick_reply') }}
+                                                        <span class="d-block add-btn-notice">
+                                                            {{ __('8') }}
+                                                            {{ __('buttons_maximum') }}
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="append-quick-reply" id="append-quick-reply">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="mb-4 mt-2">
@@ -267,18 +372,18 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="whatsapp-container">
-                                    @include('backend.client.whatsapp.template.partials._preview')
+                                    @include('website.clientwhatsapp.template.partials._preview')
                                 </div>
                             </div>
                         </div>
-                        @include('backend.client.whatsapp.template.partials._reason_of_rejection')
+                        @include('website.clientwhatsapp.template.partials._reason_of_rejection')
 
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    @include('backend.client.whatsapp.template.partials._category_modal')
+    @include('website.clientwhatsapp.template.partials._category_modal')
 @endsection
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -287,7 +392,7 @@
         window.translations = {!! json_encode(json_decode(file_get_contents(base_path('lang/en.json')), true)) !!};
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-    <script src="{{ static_asset('admin/js/custom/template.js') }}?v=1.0.0"></script>
+    <script src="{{ static_asset('admin/js/custom/template.js') }}?v=1.9.0"></script>
     <script>
         window.addEventListener('scroll', function() {
             const container = document.querySelector('.whatsapp-container');

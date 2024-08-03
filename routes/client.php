@@ -21,18 +21,20 @@ use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\WhatsappCampaignController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('available-plans', [SubscriptionController::class, 'availablePlans'])->name('available.plans');
-Route::get('pending-subscription', [SubscriptionController::class, 'pendingSubscription'])->name('pending.subscription');
-Route::get('upgrade-plan/{id}', [SubscriptionController::class, 'upgradePlan'])->name('upgrade.plan');
-Route::post('offline-claim', [SubscriptionController::class, 'offlineClaim'])->name('offline.claim');
-Route::post('stripe-redirect', [SubscriptionController::class, 'stripeRedirect'])->name('stripe.redirect');
-Route::get('stripe-success', [SubscriptionController::class, 'stripeSuccess'])->name('stripe.payment.success');
-Route::post('paypal-redirect', [SubscriptionController::class, 'paypalRedirect'])->name('paypal.redirect');
-Route::get('paypal-success', [SubscriptionController::class, 'paypalSuccess'])->name('paypal.payment.success');
-Route::post('paddle-redirect', [SubscriptionController::class, 'paddleRedirect'])->name('paddle.redirect');
-Route::get('paddle-success', [SubscriptionController::class, 'paddleSuccess'])->name('paddle.payment.success');
-Route::get('back-to-admin', [AuthenticatedSessionController::class, 'back_to_admin'])->name('back.to.admin');
-// Route::group(['prefix' => localeRoutePrefix().'/client', 'middleware' => 'subscriptionCheck'], function () {
+
+// Route::middleware(['authCheck'])->group(function () {
+    Route::get('available-plans', [SubscriptionController::class, 'availablePlans'])->name('available.plans');
+    Route::get('pending-subscription', [SubscriptionController::class, 'pendingSubscription'])->name('pending.subscription');
+    Route::get('upgrade-plan/{id}', [SubscriptionController::class, 'upgradePlan'])->name('upgrade.plan');
+    Route::post('offline-claim', [SubscriptionController::class, 'offlineClaim'])->name('offline.claim');
+    Route::post('stripe-redirect', [SubscriptionController::class, 'stripeRedirect'])->name('stripe.redirect');
+    Route::get('stripe-success', [SubscriptionController::class, 'stripeSuccess'])->name('stripe.payment.success');
+    Route::post('paypal-redirect', [SubscriptionController::class, 'paypalRedirect'])->name('paypal.redirect');
+    Route::get('paypal-success', [SubscriptionController::class, 'paypalSuccess'])->name('paypal.payment.success');
+    Route::post('paddle-redirect', [SubscriptionController::class, 'paddleRedirect'])->name('paddle.redirect');
+    Route::get('paddle-success', [SubscriptionController::class, 'paddleSuccess'])->name('paddle.payment.success');
+    Route::get('back-to-admin', [AuthenticatedSessionController::class, 'back_to_admin'])->name('back.to.admin');
+// });
 Route::group(['prefix' => localeRoutePrefix().'/client'], function () {
     // susbcription
     Route::get('my-subscription', [SubscriptionController::class, 'mySubscription'])->name('my.subscription');

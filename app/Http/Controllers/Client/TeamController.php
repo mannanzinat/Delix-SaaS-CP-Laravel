@@ -38,7 +38,7 @@ class TeamController extends Controller
     public function index(TeamDataTable $dataTable)
     {
         try {
-            return $dataTable->render('backend.client.team.index');
+            return $dataTable->render('website.clientteam.index');
         } catch (\Exception $e) {
 
             Toastr::error('something_went_wrong_please_try_again');
@@ -50,7 +50,7 @@ class TeamController extends Controller
     public function create(Request $request)
     {
         try {
-            return view('backend.client.team.create');
+            return view('website.clientteam.create');
         } catch (Exception $e) {
 
             Toastr::error('something_went_wrong_please_try_again');
@@ -128,7 +128,7 @@ class TeamController extends Controller
                 'user' => $user,
             ];
 
-            return view('backend.client.team.edit', $data);
+            return view('website.clientteam.edit', $data);
         } catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 

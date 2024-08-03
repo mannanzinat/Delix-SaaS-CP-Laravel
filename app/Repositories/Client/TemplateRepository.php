@@ -762,7 +762,7 @@ class TemplateRepository
     {
         $row  = $this->find($id);
         $data = app(TemplateService::class)->execute($row);
-        return view('backend.client.whatsapp.campaigns.partials.__template', $data)->render();
+        return view('website.clientwhatsapp.campaigns.partials.__template', $data)->render();
     }
 
     public function statusChange($request)

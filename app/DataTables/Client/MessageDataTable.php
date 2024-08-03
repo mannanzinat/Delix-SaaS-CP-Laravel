@@ -28,7 +28,7 @@ class MessageDataTable extends DataTable
                 // return date('d M Y H:i:s', strtotime($message->schedule_at));
             })
             ->addColumn('status', function ($message) {
-                return view('backend.client.whatsapp.campaigns.status', compact('message'));
+                return view('website.clientwhatsapp.campaigns.status', compact('message'));
             })
             ->setRowId('id');
     }

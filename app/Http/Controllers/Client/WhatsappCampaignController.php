@@ -65,7 +65,7 @@ class WhatsappCampaignController extends Controller
             'lists'     => $this->contactListsRepo->combo(),
         ];
 
-        return $dataTable->render('backend.client.whatsapp.campaigns.index', $data);
+        return $dataTable->render('website.clientwhatsapp.campaigns.index', $data);
     }
 
     public function create()
@@ -78,7 +78,7 @@ class WhatsappCampaignController extends Controller
 
         ];
 
-        return view('backend.client.whatsapp.campaigns.create', $data);
+        return view('website.clientwhatsapp.campaigns.create', $data);
 
     }
 
@@ -132,7 +132,7 @@ class WhatsappCampaignController extends Controller
             'readRatePercentage' => $this->ContactsRepo->readRatePercentage($modifiedRequest),
             'activePercentage'   => $activePercentage,
         ];
-        return view('backend.client.whatsapp.overview.index', $data);
+        return view('website.clientwhatsapp.overview.index', $data);
     }
 
     public function campaignCountContact(Request $request)
@@ -155,7 +155,7 @@ class WhatsappCampaignController extends Controller
                 'campaign' => $campaign,
             ];
 
-            return $dataTable->with('id', $id)->render('backend.client.whatsapp.campaigns.view', $data);
+            return $dataTable->with('id', $id)->render('website.clientwhatsapp.campaigns.view', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
@@ -184,7 +184,7 @@ class WhatsappCampaignController extends Controller
              $template  = $this->templateRepo->find($request->template_id);
             $data = app(TemplateService::class)->execute($template);
             $data['contact_id'] = $request->contact_id;
-            return view('backend.client.whatsapp.campaigns.contact_template', $data);
+            return view('website.clientwhatsapp.campaigns.contact_template', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
             if (config('app.debug')) {

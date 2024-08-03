@@ -30,12 +30,12 @@ class TemplateController extends Controller
 
     public function index(TemplateDataTable $templateDataTable)
     {
-        return $templateDataTable->render('backend.client.whatsapp.template.index');
+        return $templateDataTable->render('website.clientwhatsapp.template.index');
     }
 
     public function getTelegramTemplate(TelegramTemplateDataTable $templateDataTable)
     {
-        return $templateDataTable->render('backend.client.telegram.template.index');
+        return $templateDataTable->render('website.clienttelegram.template.index');
     }
 
     public function loadTemplate(Request $request)
@@ -58,7 +58,7 @@ class TemplateController extends Controller
             return redirect()->route('client.whatsapp.settings')->with('error',__('for_template_create_app_id_must_required'));
         }
         $data['locales'] =  Language::pluck('name','locale');
-        return view('backend.client.whatsapp.template.create',$data);
+        return view('website.clientwhatsapp.template.create',$data);
     }
 
     public function store(TemplateStoreRequest $request)
@@ -88,7 +88,7 @@ class TemplateController extends Controller
         $row =  $this->repo->find($id);
         $data = app(TemplateService::class)->execute($row);
 
-        return view('backend.client.whatsapp.template.edit', $data);
+        return view('website.clientwhatsapp.template.edit', $data);
     }
 
 

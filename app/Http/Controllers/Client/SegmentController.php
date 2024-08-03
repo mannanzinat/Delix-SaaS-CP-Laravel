@@ -23,7 +23,7 @@ class SegmentController extends Controller
 
     public function index(SegmentDataTable $segmentsDataTable)
     {
-        return $segmentsDataTable->render('backend.client.whatsapp.segments.index');
+        return $segmentsDataTable->render('website.clientwhatsapp.segments.index');
     }
 
     public function store(Request $request): \Illuminate\Http\JsonResponse
@@ -64,7 +64,7 @@ class SegmentController extends Controller
                 'segments' => $segments,
             ];
 
-            return view('backend.client.whatsapp.segments.edit', $data);
+            return view('website.clientwhatsapp.segments.edit', $data);
         } catch (Exception $e) {
 
             if (config('app.debug')) {

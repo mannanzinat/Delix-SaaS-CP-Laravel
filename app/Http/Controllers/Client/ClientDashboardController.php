@@ -124,7 +124,7 @@ class ClientDashboardController extends Controller
             ];
         }
 
-        return view('backend.client.dashboard', $data);
+        return view('website.client.dashboard', $data);
     }
 
     public function profile(UserRepository $userRepository)

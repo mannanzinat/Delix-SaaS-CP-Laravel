@@ -23,11 +23,11 @@ class ContactsDataTable extends DataTable
                 return isDemoMode() ? '+*************' : @$query->phone;
             })
             ->addColumn('status', function ($query) {
-                return view('backend.client.whatsapp.contacts.partials.status', compact('query'));
+                return view('website.clientwhatsapp.contacts.partials.status', compact('query'));
             })
 
             ->addColumn('checkbox', function ($query) {
-                return view('backend.client.whatsapp.contacts.partials.checkbox', compact('query'));
+                return view('website.clientwhatsapp.contacts.partials.checkbox', compact('query'));
             })
             ->addColumn('contacts_list', function ($query) {
                 $contactLists = '';
@@ -54,10 +54,10 @@ class ContactsDataTable extends DataTable
 
             ->rawColumns(['created_at'])
             ->addColumn('action', function ($query) {
-                return view('backend.client.whatsapp.contacts.partials.action', compact('query'));
+                return view('website.clientwhatsapp.contacts.partials.action', compact('query'));
             })
             ->addColumn('name', function ($query) {
-                return view('backend.client.whatsapp.contacts.partials.name', compact('query'));
+                return view('website.clientwhatsapp.contacts.partials.name', compact('query'));
             })->setRowId('id');
     }
 

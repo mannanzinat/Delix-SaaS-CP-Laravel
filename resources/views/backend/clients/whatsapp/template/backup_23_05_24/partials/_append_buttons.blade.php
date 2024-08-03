@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <div class="mb-4 mt-2 position-relative" id="button_wrapper">
-            @include('backend.client.whatsapp.template.partials._add_button_action')
+            @include('website.clientwhatsapp.template.partials._add_button_action')
 
             <div class="append-button" id="append-button">
                 @if (isset($buttons) && !empty($buttons))

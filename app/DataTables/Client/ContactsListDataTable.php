@@ -20,16 +20,16 @@ class ContactsListDataTable extends DataTable
             })
             ->rawColumns(['created_at'])
             ->addColumn('action', function ($query) {
-                return view('backend.client.whatsapp.contacts_list.action', compact('query'));
+                return view('website.clientwhatsapp.contacts_list.action', compact('query'));
             })
             ->addColumn('title', function ($query) {
-                return view('backend.client.whatsapp.contacts_list.title', compact('query'));
+                return view('website.clientwhatsapp.contacts_list.title', compact('query'));
             })
             ->addColumn('contacts', function ($query) {
-                return view('backend.client.whatsapp.contacts_list.contacts', compact('query'));
+                return view('website.clientwhatsapp.contacts_list.contacts', compact('query'));
             })
             ->addColumn('read_by', function ($query) {
-                return view('backend.client.whatsapp.contacts_list.read_by', compact('query'));
+                return view('website.clientwhatsapp.contacts_list.read_by', compact('query'));
             })->setRowId('id');
     }
 

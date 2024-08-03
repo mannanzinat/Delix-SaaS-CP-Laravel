@@ -75,7 +75,7 @@ class MessageController extends Controller
                 ] : false,
             ];
 
-            return view('backend.client.chat.index', $data);
+            return view('website.clientchat.index', $data);
         } catch (\Exception $e) {
             Toastr::error($e->getMessage());
 

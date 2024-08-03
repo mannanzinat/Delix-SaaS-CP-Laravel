@@ -29,7 +29,7 @@ class TicketController extends Controller
                 'hold'     => $this->ticket->countByStatus('hold'),
             ];
 
-            return $dataTable->render('backend.client.ticket.index', $data);
+            return $dataTable->render('website.clientticket.index', $data);
         }catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
@@ -44,7 +44,7 @@ class TicketController extends Controller
                 'departments' => $departmentRepository->activeDepartments(),
             ];
 
-            return view('backend.client.ticket.create', $data);
+            return view('website.clientticket.create', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
@@ -94,7 +94,7 @@ class TicketController extends Controller
                 'replies' => $ticket->replies,
             ];
 
-            return view('backend.client.ticket.reply', $data);
+            return view('website.clientticket.reply', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
@@ -163,7 +163,7 @@ class TicketController extends Controller
                 'reply' => $this->ticket->replyFind($id),
             ];
 
-            return view('backend.client.ticket.reply_edit', $data);
+            return view('website.clientticket.reply_edit', $data);
         }catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 

@@ -21,23 +21,23 @@ class WhatsAppCampaignDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('name', function ($query) {
-                return view('backend.client.whatsapp.campaigns.partials.name', compact('query'));
+                return view('website.clientwhatsapp.campaigns.partials.name', compact('query'));
             })
             ->addColumn('total_contact', function ($query) {
                 return $query->total_contact;
             })
             ->addColumn('statistics', function ($query) {
-                return view('backend.client.whatsapp.campaigns.partials.statistics', compact('query'));
+                return view('website.clientwhatsapp.campaigns.partials.statistics', compact('query'));
             })
             ->addColumn('status', function ($query) {
-                return view('backend.client.whatsapp.campaigns.partials.status', compact('query'));
+                return view('website.clientwhatsapp.campaigns.partials.status', compact('query'));
             })
 
             ->addColumn('created_at', function ($query) {
                 return dateTimeClientTimeZoneWise($query->created_at);
             })
             ->addColumn('action', function ($query) {
-                return view('backend.client.whatsapp.campaigns.partials.action', compact('query'));
+                return view('website.clientwhatsapp.campaigns.partials.action', compact('query'));
             })
             ->setRowId('id');
     }

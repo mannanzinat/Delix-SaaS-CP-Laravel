@@ -39,7 +39,7 @@
                             <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
                             <div class="alert__txt invalid-feedback"></div>
                         </div>
-                        <div class="btn__submit">
+                        <div class="btn__submit w-100">
                             <button type="submit" class="btn btn-primary disable sent_otp">Get Started</button>
                             <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
                         </div>

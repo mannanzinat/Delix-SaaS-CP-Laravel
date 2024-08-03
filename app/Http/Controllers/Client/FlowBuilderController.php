@@ -33,7 +33,7 @@ class FlowBuilderController extends Controller
     public function index(FlowDataTable $dataTable)
     {
         try {
-            return $dataTable->render('backend.client.flow.index');
+            return $dataTable->render('website.clientflow.index');
         } catch (\Exception $e) {
             Toastr::error($e->getMessage());
 
@@ -47,7 +47,7 @@ class FlowBuilderController extends Controller
             'contact' => false,
         ];
 
-        return view('backend.client.flow.create', $data);
+        return view('website.clientflow.create', $data);
     }
 
     public function store(Request $request): JsonResponse
@@ -74,7 +74,7 @@ class FlowBuilderController extends Controller
             'contact' => false,
         ];
 
-        return view('backend.client.flow.create', $data);
+        return view('website.clientflow.create', $data);
     }
 
     public function edit($id): JsonResponse

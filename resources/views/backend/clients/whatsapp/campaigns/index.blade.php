@@ -155,7 +155,7 @@
         </div>
     </section>
     @include('backend.common.delete-script')
-    @include('backend.client.whatsapp.campaigns.partials.__js_resend_modal')
+    @include('website.clientwhatsapp.campaigns.partials.__js_resend_modal')
 @endsection
 @push('js')
     {{ $dataTable->scripts() }}

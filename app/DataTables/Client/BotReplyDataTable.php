@@ -16,19 +16,19 @@ class BotReplyDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('name', function ($reply) {
-                return view('backend.client.bot_reply.column.name', compact('reply'));
+                return view('website.clientbot_reply.column.name', compact('reply'));
             })
             ->addColumn('type', function ($reply) {
-                return view('backend.client.bot_reply.column.type', compact('reply'));
+                return view('website.clientbot_reply.column.type', compact('reply'));
             })
             ->addColumn('status', function ($reply) {
-                return view('backend.client.bot_reply.column.status', compact('reply'));
+                return view('website.clientbot_reply.column.status', compact('reply'));
             })
             ->addColumn('keywords', function ($reply) {
                 return $reply->keywords;
             })
             ->addColumn('action', function ($reply) {
-                return view('backend.client.bot_reply.column.action', compact('reply'));
+                return view('website.clientbot_reply.column.action', compact('reply'));
             })->setRowId('id');
     }
 

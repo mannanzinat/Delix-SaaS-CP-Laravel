@@ -26,12 +26,12 @@ class BotReplyController extends Controller
 
     public function index(BotReplyDataTable $replyDataTable)
     {
-        return $replyDataTable->render('backend.client.bot_reply.index');
+        return $replyDataTable->render('website.clientbot_reply.index');
     }
 
     public function create()
     {
-        return view('backend.client.bot_reply.create');
+        return view('website.clientbot_reply.create');
     }
 
     public function store(BotReplyRequest $request)
@@ -65,7 +65,7 @@ class BotReplyController extends Controller
     {
         $reply = $this->replyRepo->find($id);
 
-        return view('backend.client.bot_reply.edit', compact('reply'));
+        return view('website.clientbot_reply.edit', compact('reply'));
     }
 
     public function update(BotReplyRequest $request, $id)

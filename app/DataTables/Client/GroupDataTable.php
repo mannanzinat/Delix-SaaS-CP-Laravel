@@ -26,10 +26,10 @@ class GroupDataTable extends DataTable
             })
             ->rawColumns(['created_at'])
             ->addColumn('status', function ($query) {
-                return view('backend.client.telegram.groups.status', compact('query'));
+                return view('website.clienttelegram.groups.status', compact('query'));
             })
             ->addColumn('action', function ($query) {
-                return view('backend.client.telegram.groups.action', compact('query'));
+                return view('website.clienttelegram.groups.action', compact('query'));
             })
            
             ->setRowId('id');

@@ -30,7 +30,7 @@ class TemplateDataTable extends DataTable
                 return $row->language;
             })
             ->addColumn('action', function ($row) {
-                return view('backend.client.whatsapp.template.action', compact('row'));
+                return view('website.clientwhatsapp.template.action', compact('row'));
             })
             ->setRowId('id');
         ;

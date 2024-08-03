@@ -85,7 +85,7 @@
                                     <div class="col-6" style="display: flex; flex-direction: column;">
                                         <div class="card h-100">
                                             <div class="card-body" id="load-template">
-                                                @include('backend.client.whatsapp.campaigns.partials.__template',[
+                                                @include('website.clientwhatsapp.campaigns.partials.__template',[
                                                     'template' => $row,
                                                     'variables' => $variables,
                                                 ])

@@ -621,17 +621,17 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="whatsapp-container">
-                                    @include('backend.client.whatsapp.template.partials._preview')
+                                    @include('website.clientwhatsapp.template.partials._preview')
                                 </div>
                             </div>
                         </div>
-                        @include('backend.client.whatsapp.template.partials._reason_of_rejection')
+                        @include('website.clientwhatsapp.template.partials._reason_of_rejection')
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    @include('backend.client.whatsapp.template.partials._category_modal')
+    @include('website.clientwhatsapp.template.partials._category_modal')
 @endsection
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>

@@ -16,9 +16,9 @@ class FlowDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('status', function ($flow) {
-                return view('backend.client.flow.status', compact('flow'));
+                return view('website.clientflow.status', compact('flow'));
             })->addColumn('action', function ($flow) {
-                return view('backend.client.flow.action', compact('flow'));
+                return view('website.clientflow.action', compact('flow'));
             })->setRowId('id');
     }
 

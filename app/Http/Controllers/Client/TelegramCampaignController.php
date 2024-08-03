@@ -64,14 +64,14 @@ class TelegramCampaignController extends Controller
             'lists'     => $this->contactListsRepo->combo(),
         ];
 
-        return $dataTable->with(['campaign_type' => 'telegram'])->render('backend.client.telegram.campaigns.index', $data);
+        return $dataTable->with(['campaign_type' => 'telegram'])->render('website.clienttelegram.campaigns.index', $data);
     }
 
     public function groups(GroupDataTable $groupDataTable)
     {
         $data = [];
 
-        return $groupDataTable->render('backend.client.telegram.groups.index', $data);
+        return $groupDataTable->render('website.clienttelegram.groups.index', $data);
     }
 
     public function create()
@@ -82,7 +82,7 @@ class TelegramCampaignController extends Controller
 
         ];
 
-        return view('backend.client.telegram.campaigns.create', $data);
+        return view('website.clienttelegram.campaigns.create', $data);
     }
 
     public function store(TelegramCampaignRequest $request): \Illuminate\Http\RedirectResponse
@@ -123,7 +123,7 @@ class TelegramCampaignController extends Controller
             'totalsubscribers' => $totalsubscribers,
         ];
 
-        return view('backend.client.telegram.overview.index', $data);
+        return view('website.clienttelegram.overview.index', $data);
     }
 
     public function statusChange(Request $request): \Illuminate\Http\JsonResponse
@@ -173,7 +173,7 @@ class TelegramCampaignController extends Controller
                 'campaign' => $campaign,
             ];
 
-            return view('backend.client.telegram.campaigns.view', $data);
+            return view('website.clienttelegram.campaigns.view', $data);
         } catch (\Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 

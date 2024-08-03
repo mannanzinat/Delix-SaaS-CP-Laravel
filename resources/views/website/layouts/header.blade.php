@@ -203,12 +203,12 @@
                 <!-- Header Meta Start -->
                 <div class="header__meta">
                     <div class="meta__list">
-                        <div class="header__btn">
+                        <div class="header__btn">                            
                             @if(Auth::check())
                                 @if(Auth::user()->role_id == 1)
-                                    <a href="{{route('admin.dashboard')}}" class="btn btn-outline">Dashboard</a>
+                                    <a href="{{route('admin.dashboard')}}" class="btn btn-primary">Dashboard</a>
                                 @else
-                                    <a href="{{route('client.dashboard')}}" class="btn btn-outline">Dashboard</a>
+                                    <a href="{{route('client.dashboard')}}" class="btn btn-primary">Dashboard</a>
                                 @endif
                             @else
                                 <a href="{{ route('login') }}" class="btn btn-outline">Login</a>

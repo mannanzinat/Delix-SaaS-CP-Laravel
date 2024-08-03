@@ -35,12 +35,12 @@
 			<div class="modal-content">
 				<h6 class="sub-title create_sub_title">{{__('create_list') }}</h6>
 				<button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				@include('backend.client.whatsapp.contacts_list.create')
+				@include('website.clientwhatsapp.contacts_list.create')
 			</div>
 		</div>
 	</div>
 	@include('backend.common.delete-script')
-	@include('backend.client.whatsapp.contacts.modal.create')
+	@include('website.clientwhatsapp.contacts.modal.create')
 @endsection
 
 @push('js')

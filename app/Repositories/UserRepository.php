@@ -263,75 +263,72 @@ class UserRepository
         try {
             $otp = rand(100000, 999999);
             $user = User::where('token', $request->token)->first();
-            $template = Template::where('name', 'authentication_template')->first();
-            $phoneNumberId = setting('phone_number_id');
-            // dd($template->components['1']['buttons']);
+            // $template = Template::where('name', 'authentication_template')->first();
+            // $phoneNumberId = setting('phone_number_id');
 
 
-            unset($template->components['1']['buttons']['0']['example']);
-            $curl           = curl_init();
+            // unset($template->components['1']['buttons']['0']['example']);
+            // $curl           = curl_init();
 
-            $postData = json_encode([
-                'messaging_product' => 'whatsapp',
-                'recipient_type'    => 'individual',
-                'to'                => '8801747436390',
-                'type'              => 'template',
-                'template' => [
-                    'name'          => $template->name,
-                    'language'      => [
-                        'code'      => 'en'
-                    ],
-                    'components' => [
-                        [
-                            'type'          => 'body',
-                            'parameters'    => [
-                                [
-                                    'type' => 'text',
-                                    'text' => $otp . ' is your verification code.'
-                                ]
-                            ]
-                        ],
-                        [
-                            'type'      => 'buttons',
-                            'sub_type'  => $template->components['1']['buttons']['0']['type'],
-                            'index'     =>0,
-                            'parameters' => [
-                                [
-                                    "type"  => "URL",
-                                    "text"  => "123456",
-                                    "url"   => "https://www.whatsapp.com/otp/code/?otp_type=COPY_CODE&code=otp{{1}}",
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            ]);
+            // $postData = json_encode([
+            //     'messaging_product' => 'whatsapp',
+            //     'recipient_type'    => 'individual',
+            //     'to'                => '8801747436390',
+            //     'type'              => 'template',
+            //     'template' => [
+            //         'name'          => $template->name,
+            //         'language'      => [
+            //             'code'      => 'en'
+            //         ],
+            //         'components' => [
+            //             [
+            //                 'type'          => 'body',
+            //                 'parameters'    => [
+            //                     [
+            //                         'type' => 'text',
+            //                         'text' => $otp . ' is your verification code.'
+            //                     ]
+            //                 ]
+            //             ],
+            //             [
+            //                 'type'      => 'button',
+            //                 'sub_type'  => $template->components['1']['buttons']['0']['type'],
+            //                 'index'     =>0,
+            //                 'parameters' => [
+            //                     [
+            //                         "type"  => "URL",
+            //                         "text"  => "123456",
+            //                         "url"   => "https://www.whatsapp.com/otp/code/?otp_type=COPY_CODE&code=ot678",
+            //                     ]
+            //                 ]
+            //             ]
+            //         ]
+            //     ],
+            // ]);
 
-            curl_setopt_array($curl, [
-                CURLOPT_URL => "https://graph.facebook.com/v13.0/{$phoneNumberId}/messages",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $postData,
-                CURLOPT_HTTPHEADER => [
-                    'Content-Type: application/json',
-                    'Authorization: Bearer ' . setting('access_token')
-                ],
-            ]);
+            // curl_setopt_array($curl, [
+            //     CURLOPT_URL => "https://graph.facebook.com/v13.0/{$phoneNumberId}/messages",
+            //     CURLOPT_RETURNTRANSFER => true,
+            //     CURLOPT_ENCODING => '',
+            //     CURLOPT_MAXREDIRS => 10,
+            //     CURLOPT_TIMEOUT => 0,
+            //     CURLOPT_FOLLOWLOCATION => true,
+            //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            //     CURLOPT_CUSTOMREQUEST => 'POST',
+            //     CURLOPT_POSTFIELDS => $postData,
+            //     CURLOPT_HTTPHEADER => [
+            //         'Content-Type: application/json',
+            //         'Authorization: Bearer ' . setting('access_token')
+            //     ],
+            // ]);
 
-            $response = curl_exec($curl);
+            // $response = curl_exec($curl);
 
-            dd($response);
+            // curl_close($curl);
 
-            curl_close($curl);
-
-            if ($response === false) {
-                throw new \Exception("cURL Error: " . curl_error($curl));
-            }
+            // if ($response === false) {
+            //     throw new \Exception("cURL Error: " . curl_error($curl));
+            // }
 
             if ($user) {
                 $user->whatsapp_otp = $otp;

@@ -54,6 +54,7 @@ Route::post('whatsapp/webhook/{token}', [WhatsAppController::class, 'receiveResp
 Route::get('message/schedule/send', [WhatsAppController::class, 'sendScheduleMessage'])->name('message.schedule.send');
 Route::get('client-staff', [ClientController::class, 'clientStaff'])->name('client_staff.list');
 //Telegram
+
 Route::any('telegram/webhook/{token}', [TelegramController::class, 'receiveResponse'])->name('telegram.webhook');
 Route::group(['prefix' => localeRoutePrefix()], function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified', 'adminCheck', 'PermissionCheck']], function () {

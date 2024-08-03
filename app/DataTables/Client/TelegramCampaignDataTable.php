@@ -18,20 +18,20 @@ class TelegramCampaignDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('name', function ($query) {
-                return view('backend.client.telegram.campaigns.partials.name', compact('query'));
+                return view('website.clienttelegram.campaigns.partials.name', compact('query'));
             })
             ->addColumn('total_contact', function ($query) {
                 return $query->total_contact;
             })
             ->addColumn('status', function ($query) {
-                return view('backend.client.telegram.campaigns.partials.status', compact('query'));
+                return view('website.clienttelegram.campaigns.partials.status', compact('query'));
             })
 
             ->addColumn('created_at', function ($query) {
                 return $query->created_at->format('d-m-Y');
             })
             ->addColumn('action', function ($query) {
-                return view('backend.client.telegram.campaigns.partials.action', compact('query'));
+                return view('website.clienttelegram.campaigns.partials.action', compact('query'));
             })
             ->setRowId('id');
     }

@@ -37,7 +37,7 @@ class OverviewController extends Controller
             'allContact' => $allContacts,
         ];
 
-        return view('backend.client.whatsapp.overview.index', $data);
+        return view('website.clientwhatsapp.overview.index', $data);
     }
 
     public function create()
@@ -48,7 +48,7 @@ class OverviewController extends Controller
                 'segments' => $segments,
             ];
 
-            return view('backend.client.whatsapp.contact.create', $data);
+            return view('website.clientwhatsapp.contact.create', $data);
         }catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
@@ -86,7 +86,7 @@ class OverviewController extends Controller
                 'contact'  => $contacts,
             ];
 
-            return view('backend.client.whatsapp.contact.edit', $data);
+            return view('website.clientwhatsapp.contact.edit', $data);
         }catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 

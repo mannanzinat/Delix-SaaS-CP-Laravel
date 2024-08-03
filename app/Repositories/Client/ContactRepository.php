@@ -364,7 +364,7 @@ class ContactRepository
                 'lists'     => $lists,
                 'countries' => $countries,
             ];
-            $result =  view('backend.client.whatsapp.contacts.modal.__contact_body', $data)->render();
+            $result =  view('website.clientwhatsapp.contacts.modal.__contact_body', $data)->render();
             return $this->formatResponse(true, __('data_found'), 'client.contacts.index', $result);
         } catch (\Throwable $e) { 
             dd($e->getMessage());

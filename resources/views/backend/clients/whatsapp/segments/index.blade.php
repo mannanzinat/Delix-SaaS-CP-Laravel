@@ -32,7 +32,7 @@
             <div class="modal-content">
                 <h6 class="sub-title create_sub_title">{{__('add_new_segments') }}</h6>
                 <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                @include('backend.client.whatsapp.segments.create')
+                @include('website.clientwhatsapp.segments.create')
             </div>
         </div>
     </div>

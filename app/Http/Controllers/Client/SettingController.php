@@ -33,7 +33,7 @@ class SettingController extends Controller
 
     public function whatsAppSettings(Request $request)
     {
-        return view('backend.client.setting.whatsApp');
+        return view('website.clientsetting.whatsApp');
     }
 
     public function billingDetails(Request $request)
@@ -42,12 +42,12 @@ class SettingController extends Controller
             'client' => $this->client->find(auth()->user()->client_id),
         ];
 
-        return view('backend.client.setting.billing_details', $data);
+        return view('website.clientsetting.billing_details', $data);
     }
 
     public function telegramSettings(Request $request)
     {
-        return view('backend.client.setting.telegram');
+        return view('website.clientsetting.telegram');
     }
 
     public function generalSettings(Request $request)
@@ -59,7 +59,7 @@ class SettingController extends Controller
             'time_zones' => Timezone::all(),
         ];
 
-        return view('backend.client.setting.general', $data);
+        return view('website.clientsetting.general', $data);
     }
 
     public function update(Request $request)
@@ -163,7 +163,7 @@ class SettingController extends Controller
 
     public function api(Request $request)
     {
-        return view('backend.client.setting.api');
+        return view('website.clientsetting.api');
     }
 
     public function update_api(Request $request)
@@ -206,6 +206,6 @@ class SettingController extends Controller
 
     public function aiWriterSetting()
     {
-        return view('backend.client.setting.ai_writer_setting');
+        return view('website.clientsetting.ai_writer_setting');
     }
 }

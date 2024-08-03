@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+// Auth::logout();
 Route::get('activation/{email}/{code}', [AuthController::class, 'activation']);
 Route::get('password-forgot', [AuthController::class, 'forgotPassword'])->name('password.forgot');
 Route::post('password-forgot', [AuthController::class, 'forgot'])->name('forgot.password-email');

@@ -18,11 +18,11 @@ class TeamDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('status', function ($user) {
-                return view('backend.client.team.status', compact('user'));
+                return view('website.clientteam.status', compact('user'));
             })->addColumn('action', function ($user) {
-                return view('backend.client.team.action', compact('user'));
+                return view('website.clientteam.action', compact('user'));
             })->addColumn('name', function ($user) {
-                return view('backend.client.team.name', compact('user'));
+                return view('website.clientteam.name', compact('user'));
             })->addColumn('phone_details', function ($user) {
                 return countryCode($user->phone_country_id).$user->phone;
             })->addColumn('last_login', function ($user) {

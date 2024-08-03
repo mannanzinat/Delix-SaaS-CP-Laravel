@@ -16,9 +16,9 @@ class SegmentDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('status', function ($segments) {
-                return view('backend.client.whatsapp.segments.status', compact('segments'));
+                return view('website.clientwhatsapp.segments.status', compact('segments'));
             })->addColumn('action', function ($segments) {
-                return view('backend.client.whatsapp.segments.action', compact('segments'));
+                return view('website.clientwhatsapp.segments.action', compact('segments'));
             })->setRowId('id');
     }
 

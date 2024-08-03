@@ -61,7 +61,7 @@ class AiWriterController extends Controller
             'use_cases' => $this->useCases(),
         ];
 
-        return view('backend.client.ai_writer.index', $data);
+        return view('website.clientai_writer.index', $data);
     }
 
     public function saveAiSetting(Request $request, SettingRepository $setting): \Illuminate\Http\JsonResponse

@@ -50,7 +50,7 @@ class ContactsListController extends Controller
             'countries' => $this->country->combo(),
         ];
 
-        return $contactsListDataTable->render('backend.client.whatsapp.contacts_list.index', $data);
+        return $contactsListDataTable->render('website.clientwhatsapp.contacts_list.index', $data);
     }
 
     public function store(ContactListRequest $request): \Illuminate\Http\JsonResponse
@@ -89,7 +89,7 @@ class ContactsListController extends Controller
                 'contact_list' => $list,
             ];
 
-            return view('backend.client.whatsapp.contacts_list.edit', $data);
+            return view('website.clientwhatsapp.contacts_list.edit', $data);
         } catch (Exception $e) {
             Toastr::error('something_went_wrong_please_try_again');
 
