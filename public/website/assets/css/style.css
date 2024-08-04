@@ -4505,6 +4505,26 @@ p {
   z-index: -1;
 }
 
+.flex__input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 20px;
+}
+@media screen and (max-width: 479px) {
+  .flex__input {
+    grid-template-columns: auto;
+    gap: 0;
+    display: block;
+  }
+}
+
 form .flex__input {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -4939,6 +4959,13 @@ form .btn__submit .loading .spinner-border {
   background: #FFF8F9;
   border: 1px solid rgba(255, 32, 78, 0.2);
   color: #FF204E;
+}
+.otp__btn.btn {
+  padding: 8px 14px;
+}
+.otp__btn.btn .spinner-border {
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
 .send {
@@ -6085,9 +6112,10 @@ form .btn__submit .loading .spinner-border {
   border: 1px solid transparent;
   white-space: nowrap;
 }
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 575px) {
   .card .custom__tabs .nav-link {
     white-space: normal;
+    min-width: auto;
   }
 }
 @media screen and (max-width: 400px) {
@@ -6565,6 +6593,13 @@ form .btn__submit .loading .spinner-border {
   border-radius: 8px;
   margin-top: 16px;
   text-align: left;
+  gap: 10px;
+}
+@media screen and (max-width: 479px) {
+  .free__plan {
+    display: block;
+    text-align: center;
+  }
 }
 .free__plan span {
   font-family: "Urbanist", sans-serif;
@@ -6590,6 +6625,12 @@ form .btn__submit .loading .spinner-border {
   padding: 11px 26px;
   font-weight: 500;
   border-radius: 6px;
+}
+@media screen and (max-width: 479px) {
+  .free__plan .btn {
+    width: 100%;
+    margin-top: 12px;
+  }
 }
 
 /*********************************
@@ -6642,9 +6683,15 @@ form .btn__submit .loading .spinner-border {
           justify-content: space-between;
   gap: 10px;
   margin-bottom: 30px;
+  text-align: end;
 }
 .bank__details .list__item li:last-of-type {
   margin-bottom: 0;
+}
+@media screen and (max-width: 575px) {
+  .bank__details .list__item li {
+    margin-bottom: 24px;
+  }
 }
 @media screen and (max-width: 400px) {
   .bank__details .list__item li {
@@ -6663,10 +6710,21 @@ form .btn__submit .loading .spinner-border {
   font-weight: 600;
   line-height: 14px;
   color: #111827;
+  text-align: start;
 }
 @media screen and (max-width: 1199px) {
   .bank__details .list__item li span {
     font-size: 18px;
+  }
+}
+@media screen and (max-width: 575px) {
+  .bank__details .list__item li span {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 575px) {
+  .bank__details .list__item li span {
+    font-size: 14px;
   }
 }
 
@@ -6675,7 +6733,7 @@ form .btn__submit .loading .spinner-border {
   margin-top: 16px;
   max-width: 400px;
 }
-.upload__input span {
+.upload__input .ttl {
   font-family: "Urbanist", sans-serif;
   font-size: 18px;
   font-weight: 600;
@@ -6730,6 +6788,11 @@ form .btn__submit .loading .spinner-border {
   border-radius: 0 8px 8px 0;
   pointer-events: none;
 }
+@media screen and (max-width: 479px) {
+  .upload__input .avatar-upload .btn span {
+    display: none;
+  }
+}
 .upload__input .avatar__preview {
   width: 60px;
   min-width: 60px;
@@ -6740,7 +6803,6 @@ form .btn__submit .loading .spinner-border {
   display: inline-block;
 }
 .upload__input .avatar__preview #imagePreview {
-  background-image: url("../images/avatar.jpg");
   width: 100%;
   height: 100%;
   border-radius: 6px;

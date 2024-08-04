@@ -150,13 +150,14 @@ class SubscriptionController extends Controller
     public function stripeRedirect(Request $request): RedirectResponse
     {
         try {
-            $package        = $this->planRepository->find($request->package_id);
 
+            $package        = $this->planRepository->find(2);
             $client         = auth()->user()->client;
             if (!$client->stripe_customer_id) {
                 $this->createStripeCustomer($client);
             }
-            $plan_id        = $this->planRepository->getPGCredential($request->package_id, 'stripe');
+            $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
+
             if (!$plan_id) {
                 Toastr::error('stripe_plan_not_found');
 
@@ -197,6 +198,8 @@ class SubscriptionController extends Controller
                 'success_url'          => route('client.stripe.payment.success', ['session_id' => $stripe_session->id, 'trx_id' => $request->trx_id]),
                 'cancel_url'           => url()->previous(),
             ];
+            dd($session);
+
             $headers        = [
                 'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
                 'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -215,11 +218,10 @@ class SubscriptionController extends Controller
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
 
-            // Check if the exception is a Stripe API error and the error code is 'resource_missing'
             if ($e instanceof ApiErrorException && $e->getError()->code === 'resource_missing') {
                 Toastr::error('Customer not found. Please try again.');
-
-                return redirect()->back(); // Redirect the user back to the previous page
+            } else {
+                Toastr::error('An error occurred. Please try again later.');
             }
 
             // Handle other exceptions
@@ -231,13 +233,13 @@ class SubscriptionController extends Controller
 
     // public function stripeRedirect(Request $request): RedirectResponse
     // {
-    //     $package        = $this->planRepository->find($request->package_id);
+    //     $package        = $this->planRepository->find(2);
 
     //     $client         = auth()->user()->client;
     //     if (! $client->stripe_customer_id) {
     //         $this->createStripeCustomer($client);
     //     }
-    //     $plan_id        = $this->planRepository->getPGCredential($request->package_id, 'stripe');
+    //     $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
     //     if (! $plan_id) {
     //         Toastr::error('stripe_plan_not_found');
 
@@ -333,7 +335,7 @@ class SubscriptionController extends Controller
         } else {
             $base_url = 'https://api-m.paypal.com';
         }
-        $plan_id           = $this->planRepository->getPGCredential($request->package_id, 'paypal');
+        $plan_id           = $this->planRepository->getPGCredential(2, 'paypal');
 
         if (!$plan_id) {
             Toastr::error('paypal_plan_not_found');
@@ -363,7 +365,7 @@ class SubscriptionController extends Controller
 
         $subscription_data = [
             'plan_id'             => $plan_id,
-            'custom_id'           => $request->package_id,
+            'custom_id'           => 2,
             'application_context' => [
                 'brand_name'          => setting('system_name'),
                 'locale'              => 'en-US',
@@ -436,8 +438,8 @@ class SubscriptionController extends Controller
             Session::put('billing_info', $billingInfo);
 
             $data        = [
-                'plan'     => $this->planRepository->find($request->package_id),
-                'price_id' => $this->planRepository->getPGCredential($request->package_id, 'paddle'),
+                'plan'     => $this->planRepository->find(2),
+                'price_id' => $this->planRepository->getPGCredential(2, 'paddle'),
                 'trx_id'   => $request->trx_id,
                 'client'   => auth()->user()->client,
             ];

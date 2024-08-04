@@ -32,16 +32,19 @@
                             <label for="phone">Verify WhatsApp to Get Started</label>
                             <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
                             <div class="alert__txt invalid-feedback"></div>
-                            <button type="button" class="otp__btn">{{ __('sent_otp') }}</button>
+                            <!-- <button type="button" class="otp__btn">{{ __('sent_otp') }}</button> -->
+                            <a href="javascript:void(0)" class="otp__btn">Sent OTP</a>
+						    <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
+                            <div class="send d-none">OTP Sent !</div>
                         </div>
                         <div class="form-group otp-group" style="display: none;">
                             <label for="otp">Enter OTP</label>
                             <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
                             <div class="alert__txt invalid-feedback"></div>
                         </div>
-                        <div class="btn__submit w-100">
+                        <div class="btn__submit">
                             <button type="submit" class="btn btn-primary disable sent_otp">Get Started</button>
-                            <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div>
+                            <!-- <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div> -->
                         </div>
                     </div>
                 </div>
@@ -88,6 +91,7 @@
                         toastr.success(response.message);
                         $('.otp-group').show();
                         $('.sent_otp').removeClass('disable');
+                        $('.send').removeClass('d-none');
                     },
                     error: function(xhr) {
                         $('.form-control').removeClass('is-invalid');

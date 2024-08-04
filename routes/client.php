@@ -22,7 +22,7 @@ use App\Http\Controllers\Client\WhatsappCampaignController;
 use Illuminate\Support\Facades\Route;
 
 
-// Route::middleware(['authCheck'])->group(function () {
+Route::middleware(['authCheck'])->group(function () {
     Route::get('available-plans', [SubscriptionController::class, 'availablePlans'])->name('available.plans');
     Route::get('pending-subscription', [SubscriptionController::class, 'pendingSubscription'])->name('pending.subscription');
     Route::get('upgrade-plan/{id}', [SubscriptionController::class, 'upgradePlan'])->name('upgrade.plan');
@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('paddle-redirect', [SubscriptionController::class, 'paddleRedirect'])->name('paddle.redirect');
     Route::get('paddle-success', [SubscriptionController::class, 'paddleSuccess'])->name('paddle.payment.success');
     Route::get('back-to-admin', [AuthenticatedSessionController::class, 'back_to_admin'])->name('back.to.admin');
-// });
+});
 Route::group(['prefix' => localeRoutePrefix().'/client'], function () {
     // susbcription
     Route::get('my-subscription', [SubscriptionController::class, 'mySubscription'])->name('my.subscription');
