@@ -772,9 +772,6 @@ class SystemSettingController extends Controller
                 ]);
 
                 $template->save();
-                $otp            = Template::where('name', 'delix_otp')->first();
-                $otp->default   = 1;
-                $otp->save();
             }
             Template::whereNotIn('template_id', collect($allData)->pluck('id'))->delete();
             return $this->formatResponse(true, __('updated_successfully'), 'client.templates.index', []);

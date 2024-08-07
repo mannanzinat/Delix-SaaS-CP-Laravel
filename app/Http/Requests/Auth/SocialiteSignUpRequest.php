@@ -28,9 +28,9 @@ class SocialiteSignUpRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'last_name'        => ['required', 'string', 'max:255'],
+            'last_name'        => ['nullable'],
             'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
-            'password'         => ['required', 'string', 'min:6'],
+            'password'         => ['nullable', 'string', 'min:6'],
             'domain'           => ['required', 'unique:clients,company_name', 'max:8'],
             'hear_about_delix' => ['nullable'],
             'policy_check'     => ['required'],

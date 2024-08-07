@@ -38,16 +38,6 @@
                                 <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
                                 <div class="send d-none">OTP Sent !</div>
                             </div>
-
-                            {{-- <div class="form-group">
-                                <label for="number">Verify WhatsApp to Get Started</label>
-                                <input type="number" class="form-control verfication domain" id="phone" placeholder="Enter Your WhatsApp Number">
-                                <div class="alert__txt invalid-feedback"></div>
-
-                                <button type="button" class="otp__btn resend">Resent OTP</button>
-                                <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
-                                <div class="send">OTP Sent !</div>
-                            </div> --}}
                             <div class="form-group otp-group" style="display: none;">
                                 <label for="otp">Enter OTP</label>
                                 <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
@@ -69,25 +59,13 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // checkOtpExpiration();
-            // function checkOtpExpiration() {
-            //     var expire_time = "{{ $user->whatsapp_otp_expired_at }}";
-            //     var now         = new Date();
-            //     var expireDate  = new Date(expire_time.replace(/ /g, 'T'));
-            //     console.log(expire_time, expireDate);
-
-            //     if (now > expireDate) {
-            //         // $('.otp__btn').text('Resend OTP');
-            //         $('.sent_otp').addClass('disable');
-            //     }
-            // }
 
             $('.resend').on('click', function(event) {
                 event.preventDefault();
                 $('.alert__txt').hide();
                 $('.form-control').removeClass('is-invalid');
                 $('.otp__btn.btn').removeClass('d-none');
-
+                // $('.otp__btn.btn').addClass('disable');
                 var phone = $('#phone').val();
                 var token = $('.token').val();
                 var route = "{{ route('whatsapp.otp.send') }}";
@@ -109,6 +87,7 @@
                     error: function(xhr) {
                         $('.form-control').removeClass('is-invalid');
                         $('.alert__txt').hide();
+                        $('.otp__btn.btn').addClass('d-none');
 
                         if (xhr.status === 422) {
                             const errors = xhr.responseJSON.errors || {};
@@ -129,19 +108,15 @@
                 });
             });
 
-
-
-
-
-
-
             $('.sent_otp').on('click', function(event) {
                 event.preventDefault();
                 var token   = $('.token').val();
                 var otp     = $('#otp').val();
                 var route   = "{{ route('whatsapp.otp.confirm') }}";
-                $('.btn__submit .loading').removeClass('d-none');
+                var $button = $(this);
 
+                $button.prop('disabled', true); // Disable the button
+                $('.btn__submit .loading').removeClass('d-none');
 
                 $.ajax({
                     url: route,
@@ -163,6 +138,7 @@
                         $('.btn__submit .loading').addClass('d-none');
                         $('#phone').val('');
                         $('#otp').val('');
+                        $button.prop('disabled', false); // Re-enable the button
                     },
                     error: function(xhr) {
                         console.log(xhr.responseJSON.errors);
@@ -183,10 +159,10 @@
                             toastr.error(xhr.responseJSON.message || 'something_went_wrong_please_try_again.');
                         }
                         $('.btn__submit .loading').addClass('d-none');
+                        $button.prop('disabled', false); // Re-enable the button
                     }
                 });
             });
-
         });
 
     </script>

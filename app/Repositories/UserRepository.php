@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\OneSignalToken;
 use App\Models\User;
 use App\Models\Template;
+use Carbon\Carbon;
 use App\Traits\ImageTrait;
 use App\Traits\SendMailTrait;
 use App\Providers\RouteServiceProvider;
@@ -262,84 +263,17 @@ class UserRepository
     public function sendWhatsappOtp($request)
     {
         try {
-            $otp = rand(100000, 999999);
-            $user = User::where('token', $request->token)->first();
-            $response = $this->sendWAOtp(
+            $otp        = rand(100000, 999999);
+            $user       = User::where('token', $request->token)->first();
+            $response   = $this->sendWAOtp(
                 $request->phone,
                 $otp
             );
 
-            // $template = Template::where('name', 'authentication_template')->first();
-            // $phoneNumberId = setting('phone_number_id');
-
-
-            // unset($template->components['1']['buttons']['0']['example']);
-            // $curl           = curl_init();
-
-            // $postData = json_encode([
-            //     'messaging_product' => 'whatsapp',
-            //     'recipient_type'    => 'individual',
-            //     'to'                => '8801747436390',
-            //     'type'              => 'template',
-            //     'template' => [
-            //         'name'          => $template->name,
-            //         'language'      => [
-            //             'code'      => 'en'
-            //         ],
-            //         'components' => [
-            //             [
-            //                 'type'          => 'body',
-            //                 'parameters'    => [
-            //                     [
-            //                         'type' => 'text',
-            //                         'text' => $otp . ' is your verification code.'
-            //                     ]
-            //                 ]
-            //             ],
-            //             [
-            //                 'type'      => 'button',
-            //                 'sub_type'  => $template->components['1']['buttons']['0']['type'],
-            //                 'index'     =>0,
-            //                 'parameters' => [
-            //                     [
-            //                         "type"  => "URL",
-            //                         "text"  => "123456",
-            //                         "url"   => "https://www.whatsapp.com/otp/code/?otp_type=COPY_CODE&code=ot678",
-            //                     ]
-            //                 ]
-            //             ]
-            //         ]
-            //     ],
-            // ]);
-
-            // curl_setopt_array($curl, [
-            //     CURLOPT_URL => "https://graph.facebook.com/v13.0/{$phoneNumberId}/messages",
-            //     CURLOPT_RETURNTRANSFER => true,
-            //     CURLOPT_ENCODING => '',
-            //     CURLOPT_MAXREDIRS => 10,
-            //     CURLOPT_TIMEOUT => 0,
-            //     CURLOPT_FOLLOWLOCATION => true,
-            //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            //     CURLOPT_CUSTOMREQUEST => 'POST',
-            //     CURLOPT_POSTFIELDS => $postData,
-            //     CURLOPT_HTTPHEADER => [
-            //         'Content-Type: application/json',
-            //         'Authorization: Bearer ' . setting('access_token')
-            //     ],
-            // ]);
-
-            // $response = curl_exec($curl);
-
-            // curl_close($curl);
-
-            // if ($response === false) {
-            //     throw new \Exception("cURL Error: " . curl_error($curl));
-            // }
-
             if ($user) {
-                $user->whatsapp_otp = $otp;
-                $user->whatsapp_otp_expired_at = \Carbon\Carbon::now()->addMinute(1);
-                $user->phone = $request->phone;
+                $user->whatsapp_otp             = $otp;
+                $user->whatsapp_otp_expired_at  = \Carbon\Carbon::now()->addMinute(5);
+                $user->phone                    = $request->phone;
                 $user->save();
                 return ['success' => true, 'message' => __('otp_sent_successfully_check_your_whatsapp')];
             } else {
@@ -357,12 +291,22 @@ class UserRepository
     public function confirmWhatsappOtp($request)
     {
         try {
-            $user = User::where('token', $request->token)->first();
+            $user                   = User::where('token', $request->token)->first();
 
             if ($user->whatsapp_otp !== $request->otp):
                 return [
-                    'success' => false,
-                    'message' => __('your_otp_is_incorrect')
+                    'success'       => false,
+                    'message'       => __('your_otp_is_incorrect')
+                ];
+            endif;
+
+            $now                    = now();
+            $formatted_present_time = $now->format('Y-m-d H:i:s');
+
+            if($formatted_present_time>$user->whatsapp_otp_expired_at):
+                return [
+                    'success'       => false,
+                    'message'       => __('your_session_is_expired'),
                 ];
             endif;
 
@@ -434,7 +378,7 @@ class UserRepository
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => __('something_went_wrong'),
+                'message' =>  $e->getMessage(),
                 'error'   => $e->getMessage()
             ];
         }

@@ -41,6 +41,7 @@ class SocialController extends Controller
                 $user   = User::create([
                             'first_name'            => $googleUser->name,
                             'email'                 => $googleUser->email,
+                            'password'              => bcrypt($googleUser->password),
                             'email_verified_at'     => date('Y-m-d H:i:s'),
                         ]);
             endif;

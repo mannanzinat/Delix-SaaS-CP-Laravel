@@ -71,41 +71,21 @@
                             </div>
                             <div class="flex__input">
                                 <div class="form-group">
-                                    <label for="first_name">{{ __('first_name') }}</label>
+                                    <label for="first_name">{{ __('name') }}</label>
                                     <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{ __('enter_your_first_name') }}" value="{{ old('first_name', auth()->user()->first_name) }}" />
                                     <div class="alert__txt invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="last_name">{{ __('last_name') }}</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{ __('enter_your_last_name') }}" value="{{ old('last_name') }}" />
+                                    <label for="email">{{ __('email') }}</label>
+                                    <input type="text" class="form-control disable" id="email" name="email" placeholder="{{ __('enter_your_email') }}" value="{{ old('email', auth()->user()->email) }}" />
                                     <div class="alert__txt invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="email">{{ __('email') }}</label>
-                                <input type="text" class="form-control disable" id="email" name="email" placeholder="{{ __('enter_your_email') }}" value="{{ old('email', auth()->user()->email) }}" />
-                                <div class="alert__txt invalid-feedback"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">{{ __('password') }}</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="{{ __('enter_your_password') }}" />
-                                <div class="alert__txt invalid-feedback"></div>
-                            </div>
+
                             <div class="form-group">
                                 <label for="domain">{{ __('domain') }}</label>
                                 <input type="text" class="form-control domain" id="domain" name="domain" placeholder="{{ __('write_here') }}" value="{{ old('domain') }}" />
                                 <small>.delix.cloud</small>
-                                <div class="alert__txt invalid-feedback"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="hear_about_delix">{{ __('where_did_you_hear_about_delix?') }}</label>
-                                <select class="form__dropdown form-control" data-width="100%" data-minimum-results-for-search="Infinity" name="hear_about_delix">
-                                    <option value="google_ads" {{ old('hear_about_delix') == 'google_ads' ? 'selected' : '' }}>{{ __('google_ads') }}</option>
-                                    <option value="facebook" {{ old('hear_about_delix') == 'facebook' ? 'selected' : '' }}>{{ __('facebook') }}</option>
-                                    <option value="youtube" {{ old('hear_about_delix') == 'youtube' ? 'selected' : '' }}>{{ __('youtube') }}</option>
-                                    <option value="email" {{ old('hear_about_delix') == 'email' ? 'selected' : '' }}>{{ __('email') }}</option>
-                                    <option value="friend" {{ old('hear_about_delix') == 'friend' ? 'selected' : '' }}>{{ __('friend') }}</option>
-                                </select>
                                 <div class="alert__txt invalid-feedback"></div>
                             </div>
                             <div class="">
