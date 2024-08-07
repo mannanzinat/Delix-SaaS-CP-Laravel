@@ -18,19 +18,17 @@
                                 @endphp
                                 <div class="custom__tabs text-center">
                                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                                        @php($i = 0)
                                         @foreach($uniquePackages as $package)
-                                            @php($i++)
                                             <li class="nav-item" role="presentation">
                                                 <button
-                                                    class="nav-link @if($i == 1) active @endif"
+                                                    class="nav-link @if($loop->first) active @endif"
                                                     id="{{ $package->billing_period }}-tab"
                                                     data-bs-toggle="pill"
                                                     data-bs-target="#{{ $package->billing_period }}"
                                                     type="button"
                                                     role="tab"
                                                     aria-controls="{{ $package->billing_period }}"
-                                                    aria-selected="@if($i == 1) true @else false @endif"
+                                                    aria-selected="@if($loop->first) true @else false @endif"
                                                     data-package-id="{{ $package->id }}"
                                                 >
                                                     {{ __($package->billing_period) }}
@@ -46,21 +44,23 @@
                                                 role="tabpanel"
                                                 aria-labelledby="{{ $package->billing_period }}-tab"
                                             >
-											<div class="package__category">
-												<div class="custom__radio">
-													<input type="radio" id="starter-{{ $package->id }}" name="radio-group" value="{{ $package->id }}" />
-													<label for="starter-{{ $package->id }}">
-														<div class="package__left">
-															<span class="titles">{{ __($package->name) }}</span>
-															<span class="discount">Get 20% Off</span>
-														</div>
-														<div class="package__right">
-															<span class="price"><del>{{ setting('default_currency') }} 70</del>{{ setting('default_currency') }} . {{ $package->price }}</span>
-															<span class="duration">/{{ $package->name }}</span>
-														</div>
-													</label>
-												</div>
-											</div>
+                                                <div class="package__category">
+                                                    <div class="custom__radio">
+                                                        <input type="radio" id="starter-{{ $package->id }}" name="radio-group" value="{{ $package->id }}" />
+                                                        <label for="starter-{{ $package->id }}">
+                                                            <div class="package__left">
+                                                                <span class="titles">{{ __($package->name) }}</span>
+                                                                <span class="discount">Get 20% Off</span>
+                                                            </div>
+                                                            <div class="package__right">
+                                                                <span class="price">
+                                                                    <del>{{ setting('default_currency') }} 70</del>{{ setting('default_currency') }} {{ $package->price }}
+                                                                </span>
+                                                                <span class="duration">/{{ $package->name }}</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
 
                                                 <div class="free__plan">
                                                     <div class="plan__left">
@@ -117,12 +117,6 @@
                                             id="cards"
                                             role="tabpanel"
                                             aria-labelledby="cards-tab"
-											@if (Session::has('success'))
-												<div class="alert alert-success text-center">
-													<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-													<p>{{ Session::get('success') }}</p>
-												</div>
-											@endif
                                         >
                                             <form 
                                                 role="form" 
@@ -130,13 +124,13 @@
                                                 method="post" 
                                                 class="require-validation"
                                                 data-cc-on-file="false"
-                                                data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                                                data-stripe-publishable-key="{{ setting('stripe_key') }}"
                                                 id="payment-form"
                                             >
                                                 @csrf
                                                 <!-- Hidden input for package ID -->
                                                 <input type="hidden" name="package_id" id="package-id" value="" />
-
+                                                <input type="hidden" name="trx_id" id="trx_id" value="{{ $trx_id }}" />
                                                 <div class="card__details">
                                                     <div class="form__wrapper">
                                                         <div class="flex__input">
@@ -155,39 +149,27 @@
                                                                 <input autocomplete='off' class='form-control card-cvc' placeholder='ex. 311' size='4' type='text' required>
                                                             </div>
                                                         </div>
-														<div class="flex__input">
-															<div class='form-group expiration required'>
-																<label class='control-label'>Expiration Month</label>
-																<input class='form-control card-expiry-month' placeholder='MM' size='2' type='text' required>
-															</div>
-															<div class='form-group expiration required'>
-																<label class='control-label'>Expiration Year</label>
-																<input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text' required>
-															</div>
-														</div>
-														<!-- <div class='form-row row'>
-															<div class='col-md-12 error form-group hide'>
-																<div class='alert-danger alert'>Please correct the errors and try again.</div>
-															</div>
-														</div>
-
-														<div class="upload__btn text-end">
-															<button type="submit" class="btn btn-gray btn-sm">Subscribe Now</button>
-														</div> -->
-
-														<div class='form-row row'>
-																	<div class='col-md-12 error form-group hide'>
-																		<div class='alert-danger alert'>Please correct the errors and try
-																			again.</div>
-																	</div>
-																</div>
-											
-																<div class="row">
-																	<div class="col-xs-12">
-																		<button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
-																	</div>
-																</div>
-													</div>
+                                                        <div class="flex__input">
+                                                            <div class='form-group expiration required'>
+                                                                <label class='control-label'>Expiration Month</label>
+                                                                <input class='form-control card-expiry-month' placeholder='MM' size='2' type='text' required>
+                                                            </div>
+                                                            <div class='form-group expiration required'>
+                                                                <label class='control-label'>Expiration Year</label>
+                                                                <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text' required>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-row row'>
+                                                            <div class='col-md-12 error form-group hide'>
+                                                                <div class='alert-danger alert'>Please correct the errors and try again.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12">
+                                                                <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -226,135 +208,66 @@
 @endsection
 
 @push('js')
-	<script src="https://js.stripe.com/v2/"></script>
-	<script type="text/javascript">
-		$(function() {
+<script src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+    $(function() {
+        var $form = $(".require-validation");
 
-		/*------------------------------------------
+        // Handle form submission
+        $form.on('submit', function(e) {
+            var $form = $(this);
+            var $inputs = $form.find('input[type=text], input[type=password], input[type=email], textarea');
+            var $errorMessage = $form.find('div.error');
+            var valid = true;
 
-		--------------------------------------------
+            $errorMessage.addClass('hide');
+            $('.has-error').removeClass('has-error');
 
-		Stripe Payment Code
+            // Validate required fields
+            $inputs.each(function() {
+                var $input = $(this);
+                if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorMessage.removeClass('hide');
+                    valid = false;
+                }
+            });
 
-		--------------------------------------------
+            if (!valid) {
+                e.preventDefault();
+                return;
+            }
 
-		--------------------------------------------*/
+            if (!$form.data('cc-on-file')) {
+                e.preventDefault();
 
-		var $form = $(".require-validation");
+                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
 
-		$('form.require-validation').bind('submit', function(e) {
+                Stripe.createToken({
+                    number: $form.find('.card-number').val(),
+                    cvc: $form.find('.card-cvc').val(),
+                    exp_month: $form.find('.card-expiry-month').val(),
+                    exp_year: $form.find('.card-expiry-year').val()
+                }, function(status, response) {
+                    if (response.error) {
+                        // Show error in the form
+                        $form.find('.error').removeClass('hide').find('.alert').text(response.error.message);
+                    } else {
+                        // Get the token ID
+                        var token = response.id;
+                        $form.append($('<input type="hidden" name="stripeToken"/>').val(token));
+                        $form.get(0).submit();
+                    }
+                });
+            }
+        });
 
-			var $form = $(".require-validation"),
-
-			inputSelector = ['input[type=email]', 'input[type=password]',
-
-							'input[type=text]', 'input[type=file]',
-
-							'textarea'].join(', '),
-
-			$inputs = $form.find('.required').find(inputSelector),
-
-			$errorMessage = $form.find('div.error'),
-
-			valid = true;
-
-			$errorMessage.addClass('hide');
-
-		
-
-			$('.has-error').removeClass('has-error');
-
-			$inputs.each(function(i, el) {
-
-			var $input = $(el);
-
-			if ($input.val() === '') {
-
-				$input.parent().addClass('has-error');
-
-				$errorMessage.removeClass('hide');
-
-				e.preventDefault();
-
-			}
-
-			});
-
-		
-
-			if (!$form.data('cc-on-file')) {
-
-			e.preventDefault();
-
-			Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-
-			Stripe.createToken({
-
-				number: $('.card-number').val(),
-
-				cvc: $('.card-cvc').val(),
-
-				exp_month: $('.card-expiry-month').val(),
-
-				exp_year: $('.card-expiry-year').val()
-
-			}, stripeResponseHandler);
-
-			}
-
-		
-
-		});
-
-		
-
-		/*------------------------------------------
-
-		--------------------------------------------
-
-		Stripe Response Handler
-
-		--------------------------------------------
-
-		--------------------------------------------*/
-
-		function stripeResponseHandler(status, response) {
-
-			if (response.error) {
-
-				$('.error')
-
-					.removeClass('hide')
-
-					.find('.alert')
-
-					.text(response.error.message);
-
-			} else {
-
-				/* token contains id, last4, and card type */
-
-				var token = response['id'];
-
-
-					
-
-				$form.find('input[type=text]').empty();
-
-				$form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-
-				$form.get(0).submit();
-
-			}
-
-		}
-
-		// Handle package selection
-		$('button[data-package-id]').click(function() {
-			var packageId = $(this).data('package-id');
-			$('#package-id').val(packageId);
-		});
-	});
+        // Update package ID on tab click
+        $('#pills-tab button').on('click', function() {
+            var packageId = $(this).data('package-id');
+            $('#package-id').val(packageId);
+        });
+    });
 
 </script>
 @endpush

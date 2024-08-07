@@ -18,33 +18,45 @@
                         <div class="bgPattern__leftBottom MoveLeftRight">
                             <img src="{{ asset('website') }}/assets/images/bg-pattern-01.png" alt="pattern" />
                         </div>
-                        @php
-                            $now                    = now();
-                            $formatted_present_time = $now->format('Y-m-d H:i:s');
-                        @endphp
-                        @if($user->token_expired_at>=$formatted_present_time)
+                        <div class="form">
+                            @php
+                                $now                    = now();
+                                $formatted_present_time = $now->format('Y-m-d H:i:s');
+                            @endphp
+                            @if($user->token_expired_at>=$formatted_present_time)
+                                <div class="form-group">
+                                    <label for="email">Email Verification</label>
+                                    <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('your_email_has_been_varified') }}</div>
+                                </div>
+                            @endif
                             <div class="form-group">
-                                <label for="email">Email Verification</label>
-                                <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('your_email_has_been_varified') }}</div>
+                                <label for="phone">Verify WhatsApp to Get Started</label>
+                                <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
+                                <div class="alert__txt invalid-feedback"></div>
+                                <!-- <button type="button" class="otp__btn">{{ __('sent_otp') }}</button> -->
+                                <a href="javascript:void(0)" class="otp__btn resend">Sent OTP</a>
+                                <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
+                                <div class="send d-none">OTP Sent !</div>
                             </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="phone">Verify WhatsApp to Get Started</label>
-                            <input type="number" class="form-control domain" id="phone" placeholder="Enter Your WhatsApp Number" />
-                            <div class="alert__txt invalid-feedback"></div>
-                            <!-- <button type="button" class="otp__btn">{{ __('sent_otp') }}</button> -->
-                            <a href="javascript:void(0)" class="otp__btn">Sent OTP</a>
-						    <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
-                            <div class="send d-none">OTP Sent !</div>
-                        </div>
-                        <div class="form-group otp-group" style="display: none;">
-                            <label for="otp">Enter OTP</label>
-                            <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
-                            <div class="alert__txt invalid-feedback"></div>
-                        </div>
-                        <div class="btn__submit">
-                            <button type="submit" class="btn btn-primary disable sent_otp">Get Started</button>
-                            <!-- <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div> -->
+
+                            {{-- <div class="form-group">
+                                <label for="number">Verify WhatsApp to Get Started</label>
+                                <input type="number" class="form-control verfication domain" id="phone" placeholder="Enter Your WhatsApp Number">
+                                <div class="alert__txt invalid-feedback"></div>
+
+                                <button type="button" class="otp__btn resend">Resent OTP</button>
+                                <div class="loading btn otp__btn d-none"><span class="spinner-border"></span>Loading...</div>
+                                <div class="send">OTP Sent !</div>
+                            </div> --}}
+                            <div class="form-group otp-group" style="display: none;">
+                                <label for="otp">Enter OTP</label>
+                                <input type="number" class="form-control" id="otp" placeholder="Enter Your OTP Number" />
+                                <div class="alert__txt invalid-feedback"></div>
+                            </div>
+                            <div class="btn__submit">
+                                <button type="submit" class="btn btn-primary disable sent_otp">Get Started</button>
+                                <div class="loading btn btn-primary d-none"><span class="spinner-border"></span>Loading...</div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,23 +69,24 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            checkOtpExpiration();
-            function checkOtpExpiration() {
-                var expire_time = "{{ $user->whatsapp_otp_expired_at }}";
-                var now         = new Date();
-                var expireDate  = new Date(expire_time.replace(/ /g, 'T'));
-                console.log(expire_time, expireDate);
+            // checkOtpExpiration();
+            // function checkOtpExpiration() {
+            //     var expire_time = "{{ $user->whatsapp_otp_expired_at }}";
+            //     var now         = new Date();
+            //     var expireDate  = new Date(expire_time.replace(/ /g, 'T'));
+            //     console.log(expire_time, expireDate);
 
-                if (now > expireDate) {
-                    $('.otp__btn').text('Resend OTP');
-                    $('.sent_otp').addClass('disable');
-                }
-            }
+            //     if (now > expireDate) {
+            //         // $('.otp__btn').text('Resend OTP');
+            //         $('.sent_otp').addClass('disable');
+            //     }
+            // }
 
-            $('.otp__btn').on('click', function(event) {
+            $('.resend').on('click', function(event) {
                 event.preventDefault();
                 $('.alert__txt').hide();
                 $('.form-control').removeClass('is-invalid');
+                $('.otp__btn.btn').removeClass('d-none');
 
                 var phone = $('#phone').val();
                 var token = $('.token').val();
@@ -91,7 +104,7 @@
                         toastr.success(response.message);
                         $('.otp-group').show();
                         $('.sent_otp').removeClass('disable');
-                        $('.send').removeClass('d-none');
+                        $('.otp__btn.btn').addClass('d-none');
                     },
                     error: function(xhr) {
                         $('.form-control').removeClass('is-invalid');
@@ -115,6 +128,12 @@
                     }
                 });
             });
+
+
+
+
+
+
 
             $('.sent_otp').on('click', function(event) {
                 event.preventDefault();

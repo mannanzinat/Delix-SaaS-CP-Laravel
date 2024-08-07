@@ -7,7 +7,9 @@ use App\Models\Contact;
 use Illuminate\Support\Str;
 use App\Traits\RepoResponse;
 use Illuminate\Http\Request;
-use App\Models\StripeSession;
+// use App\Models\StripeSession;
+use Stripe\Checkout\Session as StripeSession;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Contracts\View\View;
@@ -20,6 +22,10 @@ use Illuminate\Support\Facades\Session;
 use App\Models\SubscriptionTransactionLog;
 use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\Client\SubscriptionRepository;
+use Stripe\StripeClient;
+use Stripe\Stripe;
+
+use Stripe\Exception\ApiErrorException;
 
 class SubscriptionController extends Controller
 {
@@ -73,6 +79,8 @@ class SubscriptionController extends Controller
                 'packages'            => $this->planRepository->activePlans(),
                 'client'              => $client,
                 'active_subscription' => $client->activeSubscription,
+                'trx_id'              => Str::random(),
+
             ];
 
             return view('website.client.subscription.upgrade_plan', $data);
@@ -120,21 +128,6 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function createStripeCustomer($client)
-    {
-        $data     = [
-            'name'     => $client->name,
-            'email'    => $client->email,
-            'metadata' => $client,
-        ];
-        $headers  = [
-            'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
-            'Content-Type'  => 'application/x-www-form-urlencoded',
-        ];
-        $response = httpRequest('https://api.stripe.com/v1/customers', $data, $headers, true);
-
-        return $client->update(['stripe_customer_id' => $response['id']]);
-    }
 
     public function upgradeFreePlan(Request $request)
     {
@@ -147,349 +140,631 @@ class SubscriptionController extends Controller
         return back();
     }
 
-    public function stripeRedirect(Request $request): RedirectResponse
-    {
-        try {
+    // public function stripeRedirect(Request $request): RedirectResponse
+    // {
 
-            $package        = $this->planRepository->find(2);
-            $client         = auth()->user()->client;
-            if (!$client->stripe_customer_id) {
-                $this->createStripeCustomer($client);
-            }
-            $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
+    //     try {
 
-            if (!$plan_id) {
-                Toastr::error('stripe_plan_not_found');
+    //         $package        = $this->planRepository->find(2);
+    //         $client         = auth()->user()->client;
+    //         if (!$client->stripe_customer_id) {
+    //             $this->createStripeCustomer($client, $request->stripeToken);
+    //         }
+    //         $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
 
-                return redirect()->route('client.available.plans');
-            }
+    //         if (!$plan_id) {
+    //             Toastr::error('stripe_plan_not_found');
 
-            $stripe_session = StripeSession::create([
-                'plan_id'   => $package->id,
-                'client_id' => $client->id,
-            ]);
+    //             return redirect()->route('client.available.plans');
+    //         }
 
-            $billingInfo    = [
-                'billing_name'          => $request->billing_name,
-                'billing_email'         => $request->billing_email,
-                'billing_address'       => $request->billing_address,
-                'billing_city'          => $request->billing_city,
-                'billing_state'         => $request->billing_state,
-                'billing_zipcode'       => $request->billing_zipcode,
-                'billing_country'       => $request->billing_country,
-                'country_selector_code' => $request->country_selector_code,
-                'billing_phone'         => $request->billing_phone,
-                'full_number'           => $request->full_number,
-                'plan_id'               => $request->plan_id,
-                'trx_id'                => $request->trx_id,
-            ];
-            Session::put('billing_info', $billingInfo);
+    //         $stripe_session = StripeSession::create([
+    //             'plan_id'   => $package->id,
+    //             'client_id' => $client->id,
+    //         ]);
 
-            $session        = [
-                'customer'             => $client->stripe_customer_id,
-                'payment_method_types' => ['card'],
-                'line_items'           => [
-                    [
-                        'price'    => $plan_id,
-                        'quantity' => 1,
-                    ],
-                ],
-                'mode'                 => 'subscription',
-                'success_url'          => route('client.stripe.payment.success', ['session_id' => $stripe_session->id, 'trx_id' => $request->trx_id]),
-                'cancel_url'           => url()->previous(),
-            ];
-            dd($session);
+    //         $billingInfo    = [
+    //             'billing_name'          => $request->billing_name,
+    //             'billing_email'         => $request->billing_email,
+    //             'billing_address'       => $request->billing_address,
+    //             'billing_city'          => $request->billing_city,
+    //             'billing_state'         => $request->billing_state,
+    //             'billing_zipcode'       => $request->billing_zipcode,
+    //             'billing_country'       => $request->billing_country,
+    //             'country_selector_code' => $request->country_selector_code,
+    //             'billing_phone'         => $request->billing_phone,
+    //             'full_number'           => $request->full_number,
+    //             'plan_id'               => $request->plan_id,
+    //             'trx_id'                => $request->trx_id,
+    //         ];
+    //         Session::put('billing_info', $billingInfo);
 
-            $headers        = [
-                'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
-                'Content-Type'  => 'application/x-www-form-urlencoded',
-            ];
-            $response       = httpRequest('https://api.stripe.com/v1/checkout/sessions', $session, $headers, true);
+    //         $session        = [
+    //             'customer'             => $client->stripe_customer_id,
+    //             'payment_method_types' => ['card'],
+    //             'line_items'           => [
+    //                 [
+    //                     'price'    => $plan_id,
+    //                     'quantity' => 1,
+    //                 ],
+    //             ],
+    //             'mode'                 => 'subscription',
+    //             'success_url'          => route('client.stripe.payment.success', ['session_id' => $stripe_session->id, 'trx_id' => $request->trx_id]),
+    //             'cancel_url'           => url()->previous(),
+    //         ];
+    //         dd($session);
 
-            if (isset($response['error']) && isset($response['error']['message'])) {
-                Toastr::error($response['error']['message']);
 
-                return redirect()->back();
-            }
 
-            $stripe_session->update(['stripe_session_id' => $response['id']]);
+    //         if (isset($response['error']) && isset($response['error']['message'])) {
+    //             Toastr::error($response['error']['message']);
 
-            return redirect($response['url']);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+    //             return redirect()->back();
+    //         }
 
-            if ($e instanceof ApiErrorException && $e->getError()->code === 'resource_missing') {
-                Toastr::error('Customer not found. Please try again.');
-            } else {
-                Toastr::error('An error occurred. Please try again later.');
-            }
+    //         $stripe_session->update(['stripe_session_id' => $response['id']]);
 
-            // Handle other exceptions
-            Toastr::error('An error occurred. Please try again later.');
+    //         return redirect($response['url']);
+    //     } catch (\Exception $e) {
+    //         \Log::error($e->getMessage());
 
-            return redirect()->back(); // Redirect the user back to the previous page
+    //         if ($e instanceof ApiErrorException && $e->getError()->code === 'resource_missing') {
+    //             Toastr::error('Customer not found. Please try again.');
+    //         } else {
+    //             Toastr::error('An error occurred. Please try again later.');
+    //         }
+
+    //         // Handle other exceptions
+    //         Toastr::error('An error occurred. Please try again later.');
+
+    //         return redirect()->back(); // Redirect the user back to the previous page
+    //     }
+    // }
+
+
+    public function stripeRedirect(Request $request)
+        {
+            try {
+                $planId = $request->plan_id;
+                $package = $this->planRepository->find(2);
+                $client = auth()->user()->client;
+
+                $plan_id = $this->planRepository->getPGCredential(2, 'stripe');
+
+                if (!$plan_id) {
+                    Toastr::error('Stripe plan not found');
+                    return redirect()->route('client.available.plans');
+                }
+                $invoice_number = 1234;
+                $invoice_number = $invoice_number+1000;
+
+                // if($request->is_yearly==1){
+                //     // $plan_price = $plan_details->plan_price_yearly;
+                //     $stripe_plan_id = $plan_details->stripe_plan_id_yearly;
+                //     $validity_term = 366;
+                // }
+                // else{
+                //     // $plan_price = $plan_details->plan_price_monthly;
+                //     $stripe_plan_id = $plan_details->stripe_plan_id;
+                //     $validity_term = 31;
+                // }
+                $stripeSecret = setting('stripe_secret');
+
+                $stripe = new StripeClient($stripeSecret);
+                if(!empty($client->stripe_customer_id)){
+                    $customer_id = $client->stripe_customer_id;
+                }else{
+                    try {
+                        $customer = $stripe->customers->create([
+                            'name' => $client->name,
+                            'email' => $client->email,
+                            'source' => $request->stripeToken,
+                            // 'phone' => $request->billing_phone,
+                            // 'address' => [
+                            //     'line1' => $request->billing_address,
+                            //     'city' => $request->billing_city,
+                            //     'state' => $request->billing_state,
+                            //     'postal_code' => $request->billing_zipcode,
+                            //     'country' => $request->billing_country,
+                            // ],
+                        ]);
+                    }catch (\Exception $ex) {
+                        Toastr::error(trans('"Something went wrong please try again.'), 'Error', ["positionClass" => "toast-top-right"]);
+                        return redirect()->back();
+                    }
+                    $customer_id = $customer->id;
+                    }
+                    // $plan = $stripe->plans->retrieve($stripe_plan_id);
+                    try {
+                        $subscription = $stripe->subscriptions->create([
+                            'customer' => $customer_id,
+                            'items' => [[
+                                'price' => $plan_id,
+                            ]],
+                            'metadata' => [
+                                'order_id' => $invoice_number
+                            ]
+                        ]);
+
+                        $invoice = $stripe->invoices->retrieve(
+                            $subscription->latest_invoice,
+                            []
+                        );
+
+                        dd($subscription);
+
+
+                    }catch (\Exception $ex) {
+                        Toastr::error(trans('"Something went wrong please try again.'), 'Error', ["positionClass" => "toast-top-right"]);
+                        return redirect()->back();
+                    }
+
+                    //update user
+                    // DB::table('users')->where('id',$userData->id)->update([
+                    //     'plan_id'               => $plan_details->id,
+                    //     'subscription_data'     => json_encode($subscription),
+                    //     'subscription_customer_id'   => $customer_id,
+                    //     'plan_details'          => json_encode($plan_details),
+                    //     'plan_activation_date'  => date("Y-m-d",$subscription->current_period_start),
+                    //     'plan_validity'         => date("Y-m-d", $subscription->current_period_end),
+                    //     'billing_name'          => $request->billing_name,
+                    //     'billing_address'       => $request->billing_address,
+                    //     'billing_city'          => $request->billing_city,
+                    //     'billing_state'         => $request->billing_state,
+                    //     'billing_zipcode'       => $request->billing_zipcode,
+                    //     'billing_country'       => $request->billing_country,
+                    //     'billing_phone'         => $request->billing_phone,
+                    //     'billing_email'         => $request->billing_email,
+                    //     'vat_number'            => $request->vat_number,
+                    //     'term'                  => $validity_term,
+                    //     'subscription_with'     => 2,
+                    // ]);
+                } catch (\Exception $e) {
+                    Toastr::error(trans('"Something went wrong please try again.'), 'Error', ["positionClass" => "toast-top-right"]);
+                    return redirect()->back();
+                }
+                // Mail::to($request->billing_email)->send(new SendEmailInvoice($transaction));
+                Toastr::success(trans('Plan subscription successfully done!'), 'Success', ["positionClass" => "toast-top-right"]);
+                return redirect()->route('user.plans');
+                // return redirect()->route('user.invoice',$transaction->gobiz_transaction_id);
         }
-    }
+
+
+
+
+    // public function createStripeCustomer($client, $token)
+    // {
+    //     $data = [
+    //         'name'     => $client->name,
+    //         'email'    => $client->email,
+    //         'metadata' => $client,
+    //     ];
+    
+    //     $headers = [
+    //         'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
+    //         'Content-Type'  => 'application/x-www-form-urlencoded',
+    //     ];
+    
+    //     $response = httpRequest('https://api.stripe.com/v1/customers', $data, $headers, true);
+
+    //     return $response;
+    // }
+
+
+    // public function attachPaymentMethod($customerId, $token)
+    // {
+    //     $data = [
+    //         'customer' => $customerId,
+    //         'source'   => $token,
+    //     ];
+    
+    //     $headers = [
+    //         'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
+    //         'Content-Type'  => 'application/x-www-form-urlencoded',
+    //     ];
+
+    //     // Attach the token to the customer
+    //     httpRequest('https://api.stripe.com/v1/customers/' . $customerId . '/sources', $data, $headers, true);
+    // }
+
 
     // public function stripeRedirect(Request $request): RedirectResponse
     // {
-    //     $package        = $this->planRepository->find(2);
+    //     try {
+    //         $package = $this->planRepository->find(2);
+    //         $client = auth()->user()->client;
 
-    //     $client         = auth()->user()->client;
-    //     if (! $client->stripe_customer_id) {
-    //         $this->createStripeCustomer($client);
+    //         if (!$client->stripe_customer_id) {
+    //             $this->createStripeCustomer($client, $request->stripeToken);
+    //         }
+
+    //         $plan_id = $this->planRepository->getPGCredential(2, 'stripe');
+
+    //         if (!$plan_id) {
+    //             Toastr::error('Stripe plan not found');
+    //             return redirect()->route('client.available.plans');
+    //         }
+
+    //         $stripe = new \Stripe\StripeClient(setting('stripe_secret'));
+
+    //         $sessionData = [
+    //             'customer'             => $client->stripe_customer_id,
+    //             'payment_method_types' => ['card'],
+    //             'line_items'           => [
+    //                 [
+    //                     'price'    => $plan_id,
+    //                     'quantity' => 1,
+    //                 ],
+    //             ],
+    //             'mode'                 => 'subscription',
+    //             // 'success_url'          => route('client.stripe.payment.success', ['session_id' => '{CHECKOUT_SESSION_ID}', 'trx_id' => $request->trx_id]),
+    //             // 'cancel_url'           => url()->previous(),
+    //         ];
+
+    //         $session = $stripe->checkout->sessions->create($sessionData);
+
+    //         // Store billing info in session
+    //         $billingInfo = [
+    //             'plan_id' => 2,
+    //             'trx_id'  => $request->trx_id,
+    //         ];
+    //         Session::put('billing_info', $billingInfo);
+
+    //         try {
+    //             $sessions = $stripe->checkout->sessions->retrieve($session->id);
+
+
+    //             if (!$sessions) {
+    //                 Toastr::error('invalid_request');
+
+    //                 return redirect()->route('client.available.plans');
+    //             }
+    //             $headers        = [
+    //                 'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
+    //                 'Content-Type'  => 'application/x-www-form-urlencoded',
+    //             ];
+    //             $stripe_session = httpRequest('https://api.stripe.com/v1/checkout/sessions/' . $sessions->stripe_session_id, [], $headers, false, 'GET');
+    //             dd($stripe_session);
+
+    //             if (!$stripe_session) {
+    //                 Toastr::error('invalid_request');
+
+    //                 return redirect()->route('client.available.plans');
+    //             }
+    //             if ($stripe_session['payment_status'] != 'paid') {
+    //                 Toastr::error('invalid_request');
+
+    //                 return redirect()->route('client.available.plans');
+    //             }
+    //             $billingInfo    = session('billing_info');
+    //             $package        = $session->plan;
+    //             $this->subscriptionRepository->create($package, $request->trx_id, $stripe_session, $billingInfo);
+    //             Toastr::success('purchased_successfully');
+
+    //             return redirect()->route('client.dashboard');
+    //         } catch (\Exception $e) {
+    //             Toastr::error($e->getMessage());
+    //             if (config('app.debug')) {
+    //                 dd($e->getMessage());            
+    //             }
+    //             return redirect()->route('client.available.plans');
+    //         }
+
+    //     } catch (ApiErrorException $e) {
+    //         \Log::error($e->getMessage());
+
+    //         dd($e->getMessage());
+
+    //         // if ($e->getError()->code === 'resource_missing') {
+    //         //     Toastr::error('Customer not found. Please try again.');
+    //         // } else {
+    //         //     Toastr::error('An error occurred. Please try again later.');
+    //         // }
+
+    //         return redirect()->back();
     //     }
-    //     $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
-    //     if (! $plan_id) {
-    //         Toastr::error('stripe_plan_not_found');
+    // }
+
+
+    // public function stripeSuccess(Request $request): Redirector|RedirectResponse|Application
+    // {
+    //     try {
+    //         $session        = StripeSession::find($request->session_id);
+    //         if (!$session) {
+    //             Toastr::error('invalid_request');
+
+    //             return redirect()->route('client.available.plans');
+    //         }
+    //         $headers        = [
+    //             'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
+    //             'Content-Type'  => 'application/x-www-form-urlencoded',
+    //         ];
+    //         $stripe_session = httpRequest('https://api.stripe.com/v1/checkout/sessions/' . $session->stripe_session_id, [], $headers, false, 'GET');
+    //         if (!$stripe_session) {
+    //             Toastr::error('invalid_request');
+
+    //             return redirect()->route('client.available.plans');
+    //         }
+    //         if ($stripe_session['payment_status'] != 'paid') {
+    //             Toastr::error('invalid_request');
+
+    //             return redirect()->route('client.available.plans');
+    //         }
+    //         $billingInfo    = session('billing_info');
+    //         $package        = $session->plan;
+    //         $this->subscriptionRepository->create($package, $request->trx_id, $stripe_session, $billingInfo);
+    //         Toastr::success('purchased_successfully');
+
+    //         return redirect()->route('client.dashboard');
+    //     } catch (\Exception $e) {
+    //         Toastr::error($e->getMessage());
+    //         if (config('app.debug')) {
+    //             dd($e->getMessage());            
+    //         }
+    //         return redirect()->route('client.available.plans');
+    //     }
+    // }
+
+
+    // // public function stripeRedirect(Request $request): RedirectResponse
+    // // {
+    // //     $package        = $this->planRepository->find(2);
+
+    // //     $client         = auth()->user()->client;
+    // //     if (! $client->stripe_customer_id) {
+    // //         $this->createStripeCustomer($client);
+    // //     }
+    // //     $plan_id        = $this->planRepository->getPGCredential(2, 'stripe');
+    // //     if (! $plan_id) {
+    // //         Toastr::error('stripe_plan_not_found');
+
+    // //         return redirect()->route('client.available.plans');
+    // //     }
+
+    // //     $stripe_session = StripeSession::create([
+    // //         'plan_id'   => $package->id,
+    // //         'client_id' => $client->id,
+    // //     ]);
+
+    // //     $session        = [
+    // //         'customer'             => $client->stripe_customer_id, // ID of the Stripe customer
+    // //         'payment_method_types' => ['card'], // Payment method types accepted
+    // //         'line_items'           => [
+    // //             [
+    // //                 'price'    => $plan_id, // ID of the Stripe price
+    // //                 'quantity' => 1,
+    // //             ],
+    // //         ],
+    // //         'mode'                 => 'subscription', // SubscriptionMiddleWare mode
+    // //         'success_url'          => route('client.stripe.payment.success', ['session_id' => $stripe_session->id, 'trx_id' => $request->trx_id]),
+    // //         'cancel_url'           => url()->previous(),
+    // //     ];
+    // //     $headers        = [
+    // //         'Authorization' => 'Basic '.base64_encode(setting('stripe_secret').':'),
+    // //         'Content-Type'  => 'application/x-www-form-urlencoded',
+    // //     ];
+    // //     $response       = httpRequest('https://api.stripe.com/v1/checkout/sessions', $session, $headers, true);
+    // //     $stripe_session->update(['stripe_session_id' => $response['id']]);
+
+    // //     return redirect($response['url']);
+    // // }
+
+    // // public function stripeSuccess(Request $request): Redirector|RedirectResponse|Application
+    // // {
+    // //     try {
+    // //         $session        = StripeSession::find($request->session_id);
+    // //         if (!$session) {
+    // //             Toastr::error('invalid_request');
+
+    // //             return redirect()->route('client.available.plans');
+    // //         }
+    // //         $headers        = [
+    // //             'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
+    // //             'Content-Type'  => 'application/x-www-form-urlencoded',
+    // //         ];
+    // //         $stripe_session = httpRequest('https://api.stripe.com/v1/checkout/sessions/' . $session->stripe_session_id, [], $headers, false, 'GET');
+    // //         if (!$stripe_session) {
+    // //             Toastr::error('invalid_request');
+
+    // //             return redirect()->route('client.available.plans');
+    // //         }
+    // //         if ($stripe_session['payment_status'] != 'paid') {
+    // //             Toastr::error('invalid_request');
+
+    // //             return redirect()->route('client.available.plans');
+    // //         }
+    // //         $billingInfo    = session('billing_info');
+    // //         $package        = $session->plan;
+    // //         $this->subscriptionRepository->create($package, $request->trx_id, $stripe_session, $billingInfo);
+    // //         Toastr::success('purchased_successfully');
+
+    // //         return redirect()->route('client.dashboard');
+    // //     } catch (\Exception $e) {
+    // //         Toastr::error($e->getMessage());
+    // //         if (config('app.debug')) {
+    // //             dd($e->getMessage());            
+    // //         }
+    // //         return redirect()->route('client.available.plans');
+    // //     }
+    // // }
+
+    // public function paypalTokenGenerator($base_url): string
+    // {
+    //     //generate access token
+    //     $headers  = [
+    //         'Content-Type'  => 'application/x-www-form-urlencoded',
+    //         'Authorization' => 'Basic ' . base64_encode(setting('paypal_client_id') . ':' . setting('paypal_client_secret')),
+    //     ];
+    //     $data     = [
+    //         'grant_type' => 'client_credentials',
+    //     ];
+    //     $response = httpRequest($base_url . '/v1/oauth2/token', $data, $headers, true);
+
+    //     return $response['token_type'] . ' ' . $response['access_token'];
+    // }
+
+    // public function paypalRedirect(Request $request): Redirector|RedirectResponse|Application
+    // {
+    //     if (setting('is_paypal_sandbox_mode_activated')) {
+    //         $base_url = 'https://api-m.sandbox.paypal.com';
+    //     } else {
+    //         $base_url = 'https://api-m.paypal.com';
+    //     }
+    //     $plan_id           = $this->planRepository->getPGCredential(2, 'paypal');
+
+    //     if (!$plan_id) {
+    //         Toastr::error('paypal_plan_not_found');
 
     //         return redirect()->route('client.available.plans');
     //     }
 
-    //     $stripe_session = StripeSession::create([
-    //         'plan_id'   => $package->id,
-    //         'client_id' => $client->id,
-    //     ]);
+    //     $headers           = [
+    //         'Content-Type'  => 'application/json',
+    //         'Authorization' => $this->paypalTokenGenerator($base_url),
+    //     ];
+    //     $billingInfo       = [
+    //         'billing_name'          => $request->billing_name,
+    //         'billing_email'         => $request->billing_email,
+    //         'billing_address'       => $request->billing_address,
+    //         'billing_city'          => $request->billing_city,
+    //         'billing_state'         => $request->billing_state,
+    //         'billing_zipcode'       => $request->billing_zipcode,
+    //         'billing_country'       => $request->billing_country,
+    //         'country_selector_code' => $request->country_selector_code,
+    //         'billing_phone'         => $request->billing_phone,
+    //         'full_number'           => $request->full_number,
+    //         'plan_id'               => $request->plan_id,
+    //         'trx_id'                => $request->trx_id,
+    //     ];
+    //     Session::put('billing_info', $billingInfo);
 
-    //     $session        = [
-    //         'customer'             => $client->stripe_customer_id, // ID of the Stripe customer
-    //         'payment_method_types' => ['card'], // Payment method types accepted
-    //         'line_items'           => [
-    //             [
-    //                 'price'    => $plan_id, // ID of the Stripe price
-    //                 'quantity' => 1,
+    //     $subscription_data = [
+    //         'plan_id'             => $plan_id,
+    //         'custom_id'           => 2,
+    //         'application_context' => [
+    //             'brand_name'          => setting('system_name'),
+    //             'locale'              => 'en-US',
+    //             'shipping_preference' => 'SET_PROVIDED_ADDRESS',
+    //             'user_action'         => 'SUBSCRIBE_NOW',
+    //             'payment_method'      => [
+    //                 'payer_selected'  => 'PAYPAL',
+    //                 'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',
     //             ],
+    //             'return_url'          => route('client.paypal.payment.success', ['trx_id' => $request->trx_id]),
+    //             'cancel_url'          => url()->previous(),
     //         ],
-    //         'mode'                 => 'subscription', // SubscriptionMiddleWare mode
-    //         'success_url'          => route('client.stripe.payment.success', ['session_id' => $stripe_session->id, 'trx_id' => $request->trx_id]),
-    //         'cancel_url'           => url()->previous(),
     //     ];
-    //     $headers        = [
-    //         'Authorization' => 'Basic '.base64_encode(setting('stripe_secret').':'),
-    //         'Content-Type'  => 'application/x-www-form-urlencoded',
-    //     ];
-    //     $response       = httpRequest('https://api.stripe.com/v1/checkout/sessions', $session, $headers, true);
-    //     $stripe_session->update(['stripe_session_id' => $response['id']]);
 
-    //     return redirect($response['url']);
+    //     $response          = httpRequest($base_url . '/v1/billing/subscriptions', $subscription_data, $headers);
+
+    //     return redirect($response['links'][0]['href']);
     // }
 
-    public function stripeSuccess(Request $request): Redirector|RedirectResponse|Application
-    {
-        try {
-            $session        = StripeSession::find($request->session_id);
-            if (!$session) {
-                Toastr::error('invalid_request');
+    // public function paypalSuccess(Request $request): RedirectResponse
+    // {
+    //     try {
+    //         if (setting('is_paypal_sandbox_mode_activated')) {
+    //             $base_url = 'https://api-m.sandbox.paypal.com';
+    //         } else {
+    //             $base_url = 'https://api-m.paypal.com';
+    //         }
+    //         $headers     = [
+    //             'Content-Type'  => 'application/json',
+    //             'Authorization' => $this->paypalTokenGenerator($base_url),
+    //         ];
+    //         $response    = httpRequest($base_url . '/v1/billing/subscriptions/' . $request->subscription_id, [], $headers, false, 'GET');
+    //         $package     = $this->planRepository->find(getArrayValue('custom_id', $response));
+    //         if (!$package) {
+    //             Toastr::error('invalid_request');
 
-                return redirect()->route('client.available.plans');
-            }
-            $headers        = [
-                'Authorization' => 'Basic ' . base64_encode(setting('stripe_secret') . ':'),
-                'Content-Type'  => 'application/x-www-form-urlencoded',
-            ];
-            $stripe_session = httpRequest('https://api.stripe.com/v1/checkout/sessions/' . $session->stripe_session_id, [], $headers, false, 'GET');
-            if (!$stripe_session) {
-                Toastr::error('invalid_request');
+    //             return redirect()->route('client.available.plans');
+    //         }
+    //         $billingInfo = session('billing_info');
+    //         $this->subscriptionRepository->create($billingInfo, $package, $request->trx_id, $response, false, 'paypal');
+    //         Toastr::success('purchased_successfully');
 
-                return redirect()->route('client.available.plans');
-            }
-            if ($stripe_session['payment_status'] != 'paid') {
-                Toastr::error('invalid_request');
+    //         return redirect()->route('client.dashboard');
+    //     } catch (\Exception $e) {
+    //         Toastr::error('something_went_wrong_please_try_again');
+    //         if (config('app.debug')) {
+    //             dd($e->getMessage());            
+    //         }
+    //         return redirect()->route('client.available.plans');
+    //     }
+    // }
 
-                return redirect()->route('client.available.plans');
-            }
-            $billingInfo    = session('billing_info');
-            $package        = $session->plan;
-            $this->subscriptionRepository->create($package, $request->trx_id, $stripe_session, $billingInfo);
-            Toastr::success('purchased_successfully');
+    // public function paddleRedirect(Request $request): View|Factory|Application|RedirectResponse
+    // {
+    //     try {
+    //         $billingInfo = [
+    //             'billing_name'          => $request->billing_name,
+    //             'billing_email'         => $request->billing_email,
+    //             'billing_address'       => $request->billing_address,
+    //             'billing_city'          => $request->billing_city,
+    //             'billing_state'         => $request->billing_state,
+    //             'billing_zipcode'       => $request->billing_zipcode,
+    //             'billing_country'       => $request->billing_country,
+    //             'country_selector_code' => $request->country_selector_code,
+    //             'billing_phone'         => $request->billing_phone,
+    //             'full_number'           => $request->full_number,
+    //             'plan_id'               => $request->plan_id,
+    //             'trx_id'                => $request->trx_id,
+    //         ];
+    //         Session::put('billing_info', $billingInfo);
 
-            return redirect()->route('client.dashboard');
-        } catch (\Exception $e) {
-            Toastr::error($e->getMessage());
-            if (config('app.debug')) {
-                dd($e->getMessage());            
-            }
-            return redirect()->route('client.available.plans');
-        }
-    }
+    //         $data        = [
+    //             'plan'     => $this->planRepository->find(2),
+    //             'price_id' => $this->planRepository->getPGCredential(2, 'paddle'),
+    //             'trx_id'   => $request->trx_id,
+    //             'client'   => auth()->user()->client,
+    //         ];
 
-    public function paypalTokenGenerator($base_url): string
-    {
-        //generate access token
-        $headers  = [
-            'Content-Type'  => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Basic ' . base64_encode(setting('paypal_client_id') . ':' . setting('paypal_client_secret')),
-        ];
-        $data     = [
-            'grant_type' => 'client_credentials',
-        ];
-        $response = httpRequest($base_url . '/v1/oauth2/token', $data, $headers, true);
+    //         return view('website.client.subscription.paddle', $data);
+    //     } catch (\Exception $e) {
+    //         Toastr::error('something_went_wrong_please_try_again');
 
-        return $response['token_type'] . ' ' . $response['access_token'];
-    }
+    //         return redirect()->route('client.available.plans');
+    //     }
+    // }
 
-    public function paypalRedirect(Request $request): Redirector|RedirectResponse|Application
-    {
-        if (setting('is_paypal_sandbox_mode_activated')) {
-            $base_url = 'https://api-m.sandbox.paypal.com';
-        } else {
-            $base_url = 'https://api-m.paypal.com';
-        }
-        $plan_id           = $this->planRepository->getPGCredential(2, 'paypal');
+    // public function paddleSuccess(Request $request): JsonResponse
+    // {
+    //     try {
+    //         $payment_details                = $request->data;
+    //         $package                        = $this->planRepository->find($request->plan_id);
+    //         if (getArrayValue('status', $payment_details) != 'completed') {
+    //             Toastr::error('invalid_request');
 
-        if (!$plan_id) {
-            Toastr::error('paypal_plan_not_found');
+    //             return response()->json([
+    //                 'error' => 'invalid_request',
+    //                 'route' => route('client.available.plans'),
+    //             ]);
+    //         }
+    //         $client                         = auth()->user()->client;
 
-            return redirect()->route('client.available.plans');
-        }
+    //         if (getArrayValue('id', $payment_details['customer']) && !$client->paddle_customer_id) {
+    //             $client->update(['paddle_customer_id' => getArrayValue('id', $payment_details['customer'])]);
+    //         }
 
-        $headers           = [
-            'Content-Type'  => 'application/json',
-            'Authorization' => $this->paypalTokenGenerator($base_url),
-        ];
-        $billingInfo       = [
-            'billing_name'          => $request->billing_name,
-            'billing_email'         => $request->billing_email,
-            'billing_address'       => $request->billing_address,
-            'billing_city'          => $request->billing_city,
-            'billing_state'         => $request->billing_state,
-            'billing_zipcode'       => $request->billing_zipcode,
-            'billing_country'       => $request->billing_country,
-            'country_selector_code' => $request->country_selector_code,
-            'billing_phone'         => $request->billing_phone,
-            'full_number'           => $request->full_number,
-            'plan_id'               => $request->plan_id,
-            'trx_id'                => $request->trx_id,
-        ];
-        Session::put('billing_info', $billingInfo);
+    //         $payment_data['id']             = getArrayValue('id', $payment_details);
+    //         $payment_data['transaction_id'] = getArrayValue('transaction_id', $payment_details);
+    //         $billingInfo                    = session('billing_info');
+    //         $this->subscriptionRepository->create($billingInfo, $package, $request->trx_id, $payment_data, false, 'paddle');
+    //         Toastr::success('purchased_successfully');
 
-        $subscription_data = [
-            'plan_id'             => $plan_id,
-            'custom_id'           => 2,
-            'application_context' => [
-                'brand_name'          => setting('system_name'),
-                'locale'              => 'en-US',
-                'shipping_preference' => 'SET_PROVIDED_ADDRESS',
-                'user_action'         => 'SUBSCRIBE_NOW',
-                'payment_method'      => [
-                    'payer_selected'  => 'PAYPAL',
-                    'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',
-                ],
-                'return_url'          => route('client.paypal.payment.success', ['trx_id' => $request->trx_id]),
-                'cancel_url'          => url()->previous(),
-            ],
-        ];
+    //         return response()->json([
+    //             'error' => 'invalid_request',
+    //             'route' => route('client.dashboard'),
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Toastr::error('something_went_wrong_please_try_again');
 
-        $response          = httpRequest($base_url . '/v1/billing/subscriptions', $subscription_data, $headers);
-
-        return redirect($response['links'][0]['href']);
-    }
-
-    public function paypalSuccess(Request $request): RedirectResponse
-    {
-        try {
-            if (setting('is_paypal_sandbox_mode_activated')) {
-                $base_url = 'https://api-m.sandbox.paypal.com';
-            } else {
-                $base_url = 'https://api-m.paypal.com';
-            }
-            $headers     = [
-                'Content-Type'  => 'application/json',
-                'Authorization' => $this->paypalTokenGenerator($base_url),
-            ];
-            $response    = httpRequest($base_url . '/v1/billing/subscriptions/' . $request->subscription_id, [], $headers, false, 'GET');
-            $package     = $this->planRepository->find(getArrayValue('custom_id', $response));
-            if (!$package) {
-                Toastr::error('invalid_request');
-
-                return redirect()->route('client.available.plans');
-            }
-            $billingInfo = session('billing_info');
-            $this->subscriptionRepository->create($billingInfo, $package, $request->trx_id, $response, false, 'paypal');
-            Toastr::success('purchased_successfully');
-
-            return redirect()->route('client.dashboard');
-        } catch (\Exception $e) {
-            Toastr::error('something_went_wrong_please_try_again');
-            if (config('app.debug')) {
-                dd($e->getMessage());            
-            }
-            return redirect()->route('client.available.plans');
-        }
-    }
-
-    public function paddleRedirect(Request $request): View|Factory|Application|RedirectResponse
-    {
-        try {
-            $billingInfo = [
-                'billing_name'          => $request->billing_name,
-                'billing_email'         => $request->billing_email,
-                'billing_address'       => $request->billing_address,
-                'billing_city'          => $request->billing_city,
-                'billing_state'         => $request->billing_state,
-                'billing_zipcode'       => $request->billing_zipcode,
-                'billing_country'       => $request->billing_country,
-                'country_selector_code' => $request->country_selector_code,
-                'billing_phone'         => $request->billing_phone,
-                'full_number'           => $request->full_number,
-                'plan_id'               => $request->plan_id,
-                'trx_id'                => $request->trx_id,
-            ];
-            Session::put('billing_info', $billingInfo);
-
-            $data        = [
-                'plan'     => $this->planRepository->find(2),
-                'price_id' => $this->planRepository->getPGCredential(2, 'paddle'),
-                'trx_id'   => $request->trx_id,
-                'client'   => auth()->user()->client,
-            ];
-
-            return view('website.client.subscription.paddle', $data);
-        } catch (\Exception $e) {
-            Toastr::error('something_went_wrong_please_try_again');
-
-            return redirect()->route('client.available.plans');
-        }
-    }
-
-    public function paddleSuccess(Request $request): JsonResponse
-    {
-        try {
-            $payment_details                = $request->data;
-            $package                        = $this->planRepository->find($request->plan_id);
-            if (getArrayValue('status', $payment_details) != 'completed') {
-                Toastr::error('invalid_request');
-
-                return response()->json([
-                    'error' => 'invalid_request',
-                    'route' => route('client.available.plans'),
-                ]);
-            }
-            $client                         = auth()->user()->client;
-
-            if (getArrayValue('id', $payment_details['customer']) && !$client->paddle_customer_id) {
-                $client->update(['paddle_customer_id' => getArrayValue('id', $payment_details['customer'])]);
-            }
-
-            $payment_data['id']             = getArrayValue('id', $payment_details);
-            $payment_data['transaction_id'] = getArrayValue('transaction_id', $payment_details);
-            $billingInfo                    = session('billing_info');
-            $this->subscriptionRepository->create($billingInfo, $package, $request->trx_id, $payment_data, false, 'paddle');
-            Toastr::success('purchased_successfully');
-
-            return response()->json([
-                'error' => 'invalid_request',
-                'route' => route('client.dashboard'),
-            ]);
-        } catch (\Exception $e) {
-            Toastr::error('something_went_wrong_please_try_again');
-
-            return response()->json([
-                'error' => 'invalid_request',
-                'route' => route('client.available.plans'),
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'error' => 'invalid_request',
+    //             'route' => route('client.available.plans'),
+    //         ]);
+    //     }
+    // }
 
     public function stopRecurring($id): JsonResponse
     {
