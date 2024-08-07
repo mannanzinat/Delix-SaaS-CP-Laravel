@@ -11,6 +11,7 @@ use App\Traits\SendMailTrait;
 use App\Providers\RouteServiceProvider;
 use App\Traits\DnsTrait;
 use App\Traits\ServerTrait;
+use App\Traits\WhatsAppTrait;
 use Illuminate\Support\Str;
 use App\Models\Domain;
 use App\Models\Server;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserRepository
 {
-    use ImageTrait, SendMailTrait, DnsTrait, ServerTrait;
+    use ImageTrait, SendMailTrait, DnsTrait, ServerTrait, WhatsAppTrait;
 
     protected $emailTemplate;
 
@@ -263,6 +264,11 @@ class UserRepository
         try {
             $otp = rand(100000, 999999);
             $user = User::where('token', $request->token)->first();
+            $response = $this->sendWAOtp(
+                $request->phone,
+                $otp
+            );
+
             // $template = Template::where('name', 'authentication_template')->first();
             // $phoneNumberId = setting('phone_number_id');
 
@@ -340,7 +346,7 @@ class UserRepository
                 return ['success' => false, 'message' => __('user_not_found')];
             }
         } catch (\Exception $e) {
-            return ['success' => false, 'message' => __('something_went_wrong_please_try_again')];
+            return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 
