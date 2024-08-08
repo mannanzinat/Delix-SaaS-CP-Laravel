@@ -55,6 +55,7 @@
                 var form = $(this);
                 var formData = form.serialize();
                 $('.btn__submit .loading').removeClass('d-none');
+                $('.btn__submit button').prop('disabled', true);
 
                 $.ajax({
                     url: form.attr('action'),
@@ -64,6 +65,7 @@
                         toastr.success(response.success);
                         form[0].reset();
                         $('.btn__submit .loading').addClass('d-none');
+                        $('.btn__submit button').prop('disabled', false);
                         window.location.href = '/login';
                     },
                     error: function(xhr) {
@@ -82,6 +84,7 @@
                         } else if (xhr.status === 500) {
                             toastr.error(xhr.responseJSON.message || 'An error occurred while processing your request.');
                         }
+                        $('.btn__submit button').prop('disabled', false);
                     }
                 });
             });

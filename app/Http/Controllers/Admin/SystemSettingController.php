@@ -761,7 +761,6 @@ class SystemSettingController extends Controller
 
 
             foreach ($allData as $templateObject) {
-
                 $template = Template::firstOrNew(['template_id' => $templateObject['id']]);
                 $template->fill([
                     'name'          => $templateObject['name'],

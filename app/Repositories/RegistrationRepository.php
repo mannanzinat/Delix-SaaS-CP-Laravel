@@ -33,6 +33,7 @@ class RegistrationRepository
 
             $client                         = new Client();
             $client->first_name             = $request->first_name;
+            $client->last_name              = $request->last_name ?? '';
             $client->company_name           = $request->company_name;
             $client->domain                 = $request->domain;
             $client->timezone               = $timeZoneService['timezone'] ?? setting('time_zone');
@@ -42,13 +43,18 @@ class RegistrationRepository
             $client->save();
 
             $user                           = User::firstOrNew(['email' => $request->email]);
+            if($request->password):
+                $user->password                 = Hash::make($request->password);
+            endif;
             $user->first_name               = $request->first_name;
+            $user->last_name                = $request->last_name ?? '';
             $user->role_id                  = $role->id;
             $user->email                    = $request->email;
             $user->user_type                = 'client-staff';
             $user->client_id                = $client->id;
             $user->permissions              = $permissions;
             $user->status                   = 1;
+            $user->hear_about_delix         = $request->hear_about_delix ?? '';
             $user->token                    = Str::random(40);
             $user->token_expired_at         = \Carbon\Carbon::now()->addHours(1);
             $user->save();
@@ -64,7 +70,7 @@ class RegistrationRepository
             return ['success' => true, 'user' => $user];
         } catch (\Exception $e) {
             DB::rollback();
-            return ['success' => false, 'message' => $e->getMessage()];
+            return ['success' => false, 'message' => 'something_went_wrong_please_try_again'];
         }
     }
 

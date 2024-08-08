@@ -206,14 +206,14 @@
 
 				@can('pusher.notification' || 'onesignal.notification','general.setting' || 'preference' || 'currencies.index' || 'languages.index' || 'admin.cache' || 'admin.panel-setting' || 'admin.firebase' ||'storage.setting'|| 'chat.messenger'
 							|| 'miscellaneous.setting' || 'cron.setting' || 'countries.index' )
-					<li class="{{ menuActivation(['admin/pusher-notification', 'admin/one-signal-notification','admin/currencies', 'admin/countries', 'admin/states', 'admin/cities', 'admin/languages', 'admin/language/*', 'admin/system-setting', 'admin/cache', 'admin/firebase', 'admin/preference', 'admin/storage-setting', 'admin/chat-messenger', 'admin/panel-setting', 'admin/miscellaneous-setting','admin/cron-setting', 'admin/refund-setting'], 'active') }}">
+					<li class="{{ menuActivation(['admin/pusher-notification', 'admin/whatsapp-settings', 'admin/one-signal-notification','admin/currencies', 'admin/countries', 'admin/states', 'admin/cities', 'admin/languages', 'admin/language/*', 'admin/system-setting', 'admin/cache', 'admin/firebase', 'admin/preference', 'admin/storage-setting', 'admin/chat-messenger', 'admin/panel-setting', 'admin/miscellaneous-setting','admin/cron-setting', 'admin/refund-setting'], 'active') }}">
 						<a href="#settingTools" class="dropdown-icon" data-bs-toggle="collapse"
 						   aria-expanded="{{ menuActivation(['admin/pusher-notification', 'admin/one-signal-notification','admin/currencies', 'admin/countries', 'admin/states', 'admin/cities', 'admin/languages', 'admin/language/*', 'admin/gsystem-setting', 'admin/cache', 'admin/firebase', 'admin/preference', 'admin/storage-setting', 'admin/chat-messenger', 'admin/panel-setting', 'admin/miscellaneous-setting','admin/cron-setting', 'admin/refund-setting'], 'true', 'false') }}"
 						   aria-controls="settingTools">
 							<i class="las la-cog"></i>
 							<span>{{ __('system_setting') }}</span>
 						</a>
-						<ul class="sub-menu collapse {{ menuActivation(['admin/pusher-notification', 'admin/one-signal-notification','admin/currencies', 'admin/countries', 'admin/states', 'admin/cities', 'admin/languages', 'admin/language/*', 'admin/system-setting', 'admin/cache', 'admin/firebase', 'admin/preference', 'admin/storage-setting', 'admin/chat-messenger', 'admin/panel-setting', 'admin/miscellaneous-setting', 'admin/cron-setting','admin/refund-setting'], 'show') }}"
+						<ul class="sub-menu collapse {{ menuActivation(['admin/pusher-notification', 'admin/whatsapp-settings', 'admin/one-signal-notification','admin/currencies', 'admin/countries', 'admin/states', 'admin/cities', 'admin/languages', 'admin/language/*', 'admin/system-setting', 'admin/cache', 'admin/firebase', 'admin/preference', 'admin/storage-setting', 'admin/chat-messenger', 'admin/panel-setting', 'admin/miscellaneous-setting', 'admin/cron-setting','admin/refund-setting'], 'show') }}"
 						    id="settingTools" data-bs-parent="#accordionSidebar">
 							@can('general.setting')
 								<li><a class="{{ menuActivation('admin/system-setting', 'active') }}"

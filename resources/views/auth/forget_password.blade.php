@@ -46,7 +46,7 @@
                 var url           = form.attr('action');
                 var formData      = form.serialize();
                 $('.btn__submit .loading').removeClass('d-none');
-
+                $('.btn__submit button').prop('disabled', true);
                 $('#emailError').html('');
     
                 $.ajax({
@@ -57,6 +57,8 @@
                         toastr.success(response.message);
                         $('#forgotPasswordForm')[0].reset();
                         $('.btn__submit .loading').addClass('d-none');
+                        $('.btn__submit button').prop('disabled', false);
+
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
@@ -72,6 +74,8 @@
                             toastr.error('An unexpected error occurred.');
                         }
                         $('.btn__submit .loading').addClass('d-none');
+                        $('.btn__submit button').prop('disabled', false);
+
                     }
                 });
             });

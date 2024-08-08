@@ -65,7 +65,8 @@
                 $('.alert__txt').hide();
                 $('.form-control').removeClass('is-invalid');
                 $('.otp__btn.btn').removeClass('d-none');
-                // $('.otp__btn.btn').addClass('disable');
+                $('.otp__btn.btn').prop('disabled', true);
+
                 var phone = $('#phone').val();
                 var token = $('.token').val();
                 var route = "{{ route('whatsapp.otp.send') }}";
@@ -83,6 +84,7 @@
                         $('.otp-group').show();
                         $('.sent_otp').removeClass('disable');
                         $('.otp__btn.btn').addClass('d-none');
+                        $('.otp__btn.btn').prop('disabled', false);
                     },
                     error: function(xhr) {
                         $('.form-control').removeClass('is-invalid');
@@ -104,6 +106,9 @@
                         } else {
                             toastr.error('An unexpected error occurred. Please try again.');
                         }
+
+                        $('.otp__btn.btn').prop('disabled', false);
+
                     }
                 });
             });
@@ -114,8 +119,7 @@
                 var otp     = $('#otp').val();
                 var route   = "{{ route('whatsapp.otp.confirm') }}";
                 var $button = $(this);
-
-                $button.prop('disabled', true); // Disable the button
+                $('.sent_otp').prop('disabled', true );
                 $('.btn__submit .loading').removeClass('d-none');
 
                 $.ajax({
@@ -138,7 +142,8 @@
                         $('.btn__submit .loading').addClass('d-none');
                         $('#phone').val('');
                         $('#otp').val('');
-                        $button.prop('disabled', false); // Re-enable the button
+                        $('.sent_otp').prop('disabled', false);
+
                     },
                     error: function(xhr) {
                         console.log(xhr.responseJSON.errors);
@@ -159,7 +164,7 @@
                             toastr.error(xhr.responseJSON.message || 'something_went_wrong_please_try_again.');
                         }
                         $('.btn__submit .loading').addClass('d-none');
-                        $button.prop('disabled', false); // Re-enable the button
+                        $('.sent_otp').prop('disabled', false );
                     }
                 });
             });

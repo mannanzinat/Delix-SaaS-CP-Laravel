@@ -31,7 +31,7 @@ class SocialiteSignUpRequest extends FormRequest
             'last_name'        => ['nullable'],
             'company_name'     => ['required', 'string', 'max:255', 'unique:clients,company_name'],
             'password'         => ['nullable', 'string', 'min:6'],
-            'domain'           => ['required', 'unique:clients,company_name', 'max:8'],
+            'domain'           => ['required', 'unique:clients,company_name', 'max:16'],
             'hear_about_delix' => ['nullable'],
             'policy_check'     => ['required'],
 
@@ -44,13 +44,10 @@ class SocialiteSignUpRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'recaptcha.gte' => __('please_verify_that_you_are_not_a_robot'),
-            'last_name.required'    => 'Last name is required.',
+            'recaptcha.gte'         => __('please_verify_that_you_are_not_a_robot'),
             'company_name.required' => 'Company name is required.',
             'company_name.unique'   => 'Company name has already been taken.',
-            'password.required'     => 'Password is required.',
-            'password.min'          => 'Password must be at least 6 characters.',
-            'domain.min'            => 'Domain must be less than 8 characters.',
+            'domain.min'            => 'Domain must be less than 16 characters.',
             'policy_check.required' => 'Privacy Policy is required.',
 
 

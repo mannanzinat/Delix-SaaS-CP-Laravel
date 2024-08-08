@@ -135,6 +135,7 @@
             $('.form-control').removeClass('is-invalid');
             $('.form-check-input').removeClass('is-invalid');
             $('.btn__submit .loading').removeClass('d-none');
+            $('.btn__submit').prop('disabled', true );
 
             $.ajax({
                 url: $(this).attr('action'),
@@ -144,6 +145,7 @@
                     toastr.success(response.message);
                     $('#signupForm')[0].reset();
                     $('.btn__submit .loading').addClass('d-none');
+                    $('.btn__submit').prop('disabled', false );
                     window.location.href = response.route;
                 },
                 error: function(error) {
@@ -164,6 +166,7 @@
                         }
                     });
                     $('.btn__submit .loading').addClass('d-none');
+                    $('.btn__submit').prop('disabled', false );
                 }
             });
         });

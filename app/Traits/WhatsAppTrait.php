@@ -21,8 +21,8 @@ trait WhatsAppTrait
     {
         try{
             $facebook_api       = 'https://graph.facebook.com/v19.0/';
-            $response           = Http::withToken('EAAPrw09tYZAMBO59e2jtgNQj307ZBS4QOTX0HNVHd2CpinjZA844rZCdyOeL16p5ZCgdMc5XRKvU63gZCclooNMPybtUPaziaImoPbR10fj2bizANFxjjqF2UBHjlR8NWBZAD8iyiGxTcykVAismAPIBqflhux6iZBQ04tdiEFxyUXsvZBWDcYK1iAr7Ylzc8T5d9uMbJ8ZBkYvyU9GMGZA')
-                                    ->post($facebook_api . "247525548448218" . "/messages", [
+            $response           = Http::withToken(setting('access_token'))
+                                    ->post($facebook_api . setting('phone_number_id') . "/messages", [
                                     'messaging_product' => 'whatsapp',
                                     'to'                => $to,
                                     'type'              => 'template',

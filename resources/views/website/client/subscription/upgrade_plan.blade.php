@@ -174,26 +174,35 @@
                                             </form>
                                         </div>
                                         <div class="tab-pane fade" id="banks" role="tabpanel" aria-labelledby="banks-tab">
-                                            <div class="bank__details">
-                                                <ul class="list__item">
-                                                    <li><span>Bank Name</span>Islamia Bank Bangladesh Limited</li>
-                                                    <li><span>Branch Name</span>Mirpur</li>
-                                                    <li><span>Bank A/C Owner Name</span>Foyshal Ahmed</li>
-                                                    <li><span>Bank A/C Number</span>31478547889</li>
-                                                    <li><span>Routing Number</span>31478547889</li>
-                                                </ul>
-                                                <div class="upload__input">
-                                                    <span>Payment Slip/Proof</span>
-                                                    <div class="avatar-upload form-control">
-                                                        <label for="fileUpload">No file uploaded</label>
-                                                        <input type="file" class="fileUpload" id="fileUpload" />
-                                                        <div class="btn"><i class="fa-solid fa-upload fa-fw"></i>Upload</div>
+                                            <form action="{{ route('client.offline.claim') }}" class="form-validate offline_form"
+                                              method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                                <input type="hidden" name="plan_id" value="{{ $package->id }}">
+                                                <div class="bank__details">
+                                                    {{-- <ul class="list__item">
+                                                        <li><span>Bank Name</span>Islamia Bank Bangladesh Limited</li>
+                                                        <li><span>Branch Name</span>Mirpur</li>
+                                                        <li><span>Bank A/C Owner Name</span>Foyshal Ahmed</li>
+                                                        <li><span>Bank A/C Number</span>31478547889</li>
+                                                        <li><span>Routing Number</span>31478547889</li>
+                                                    </ul> --}}
+
+                                                    {!! setting('offline_payment_instruction') !!}
+
+
+                                                    <div class="upload__input">
+                                                        <span>Payment Slip/Proof</span>
+                                                        <div class="avatar-upload form-control">
+                                                            <label for="fileUpload">No file uploaded</label>
+                                                            <input type="file" class="fileUpload" id="fileUpload" />
+                                                            <div class="btn"><i class="fa-solid fa-upload fa-fw"></i>Upload</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="upload__btn text-end mt-15">
+                                                        <a href="#" class="btn btn-gray btn-sm">Submit For Approval</a>
                                                     </div>
                                                 </div>
-                                                <div class="upload__btn text-end mt-15">
-                                                    <a href="#" class="btn btn-gray btn-sm">Submit For Approval</a>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -268,6 +277,49 @@
             $('#package-id').val(packageId);
         });
     });
+
+    $(document).ready(function(){
+        // Form submission handler for the offline form
+        $('form.offline_form').submit(function (e) {
+            e.preventDefault();
+            var button                  = $(this).find('button[type="submit"]');
+            button.addClass('loading_button');
+
+            var formData                = $(this).serializeFormJSON();
+
+            formData['billing_name']    = $('input[name="billing_name"]').val();
+            formData['billing_email']   = $('input[name="billing_email"]').val();
+            formData['billing_address'] = $('input[name="billing_address"]').val();
+            formData['billing_city']    = $('input[name="billing_city"]').val();
+            formData['billing_state']   = $('input[name="billing_state"]').val();
+            formData['billing_zipcode'] = $('input[name="billing_zipcode"]').val();
+            formData['billing_country'] = $('input[name="billing_country"]').val();
+            formData['billing_phone']   = $('input[name="billing_phone"]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                beforeSend: function () {
+                    $('.loading-btn').addClass('loading');
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.status === true) {
+
+                        window.location.href = response.redirect_to;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                },
+                complete: function () {
+                    button.removeClass('loading_button');
+                    $('.loading-btn').removeClass('loading');
+                }
+            });
+        });
+    })
 
 </script>
 @endpush
