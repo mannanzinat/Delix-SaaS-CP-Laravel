@@ -48,7 +48,7 @@ Route::group(['prefix' => localeRoutePrefix().'/client'], function () {
         Route::get('rider-app-details', [RiderController::class, 'details'])->name('rider-app.details');
         //merchant app route
         Route::get('merchant-app', [MerchantController::class, 'index'])->name('merchant-app');
-        Route::get('merchant-app-details', [MerchantController::class, 'course-details-info'])->name('merchant-app.details');
+        Route::get('merchant-app-details', [MerchantController::class, 'details'])->name('merchant-app.details');
         //address route
         Route::get('address', [AddressController::class, 'index'])->name('address');
         //ticket route

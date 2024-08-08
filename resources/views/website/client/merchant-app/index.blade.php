@@ -26,7 +26,7 @@
                                 <div class="verify__success"><i class="fa-solid fa-circle-info"></i>You are allow for order Marchant App</div>
                                 <p class="desc">For Marchant App need to order here.</p>
                                 <div class="app__btn">
-                                    <a href="marchant-app-details.html" class="btn btn-gray btn-sm">Order Now</a>
+                                    <a href="{{ route('client.merchant-app.details') }}" class="btn btn-gray btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
