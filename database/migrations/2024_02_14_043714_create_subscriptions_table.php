@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('trx_id');
             $table->string('payment_method');
             $table->text('payment_details');
+            $table->text('document')->nullable();
             $table->timestamps();
         });
     }

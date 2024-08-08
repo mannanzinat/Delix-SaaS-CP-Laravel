@@ -41,10 +41,14 @@ class Subscription extends Model
         'billing_zip_code',
         'billing_country',
         'billing_phone',
+        'document',
+
     ];
 
     protected $casts    = [
         'payment_details' => 'array',
+        'document'        => 'array',
+
     ];
 
     public function plan(): BelongsTo

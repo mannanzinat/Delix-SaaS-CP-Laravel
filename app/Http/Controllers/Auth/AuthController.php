@@ -109,7 +109,7 @@ class AuthController extends Controller
 
         } catch (Exception $e) {
             if ($request->ajax()) {
-                return response()->json(['message' => __('An error occurred while processing your request.')], 500);
+                return response()->json(['message' => $e->getMessage()], 500);
             }
 
             Toastr::warning(__('An error occurred while processing your request.'));

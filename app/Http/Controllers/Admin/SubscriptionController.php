@@ -75,7 +75,7 @@ class SubscriptionController extends Controller
         } catch (\Exception $e) {
             $data = [
                 'status'  => 'danger',
-                'message' => __('something_went_wrong_please_try_again'),
+                'message' => $e->getMessage(),
                 'title'   => __('error'),
             ];
 

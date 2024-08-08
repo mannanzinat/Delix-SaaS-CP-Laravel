@@ -2,124 +2,245 @@
 /*  Alert Css Start
 *********************************/
 .alert {
-    position: fixed;
-    // position: relative;
-    top: 6px;
-    right: 6px;
-    overflow: hidden;
-    padding: 15px 15px 15px 50px;
-    width: 300px;
-    border-radius: 10px;
-    background-position: 15px center;
-    background-repeat: no-repeat;
-    box-shadow: none;
-    border: 1px solid #41CC68;
-    color: #556068;
-    opacity: 1;
-    font-size: 15px;
-    line-height: 1.5;
-    font-weight: 500;
-    z-index: 999;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 3px;
+	position: fixed;
+	// position: relative;
+	top: 6px;
+	right: 6px;
+	overflow: hidden;
+	padding: 15px 15px 15px 50px;
+	width: 300px;
+	border-radius: 10px;
+	background-position: 15px center;
+	background-repeat: no-repeat;
+	box-shadow: none;
+	border: 1px solid #41cc68;
+	color: #556068;
+	opacity: 1;
+	font-size: 15px;
+	line-height: 1.5;
+	font-weight: 500;
+	z-index: 999;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 3px;
 
-    &-message {
-        word-wrap: break-word;
-        padding-left: 12px;
-        text-transform: capitalize;
-    }
-    &-success {
-        background-color: #EAF7EE !important;
-        border-color: #C0E5C9 !important;
+	&-message {
+		word-wrap: break-word;
+		padding-left: 12px;
+		text-transform: capitalize;
+	}
+	&-success {
+		background-color: #eaf7ee !important;
+		border-color: #c0e5c9 !important;
 
-        &::after {
-            content: "\f00c";
-            background: #41CC68;
-        }
-    }
-    
-    &-warning {
-        background-color: #FEF7EA !important;
-        border: 1px solid #FAE5C3 !important;
+		&::after {
+			content: "\f00c";
+			background: #41cc68;
+		}
+	}
 
-        &::after {
-            content: "\f071";
-            background: #EE9500;
-        }
-    }
-    &-danger {
-        background-color: #FCEDE9 !important;
-        border: 1px solid #F4CDC3 !important;
+	&-warning {
+		background-color: #fef7ea !important;
+		border: 1px solid #fae5c3 !important;
 
-        &::after {
-            content: "\f071";
-            background: #EC4E2A;
-        }
-    }
-    &-error {
-        background-color: #FCEDE9 !important;
-        border: 1px solid #F4CDC3 !important;
+		&::after {
+			content: "\f071";
+			background: #ee9500;
+		}
+	}
+	&-danger {
+		background-color: #fcede9 !important;
+		border: 1px solid #f4cdc3 !important;
 
-        &::after {
-            content: "\f071";
-            background: #EC4E2A;
-        }
-    }
-    &-info {
-        background-color: #E5EFFA !important;
-        border: 1px solid #C3DCF2 !important;
+		&::after {
+			content: "\f071";
+			background: #ec4e2a;
+		}
+	}
+	&-error {
+		background-color: #fcede9 !important;
+		border: 1px solid #f4cdc3 !important;
 
-        &::after {
-            content: "\f129";
-            background: #0268DC;
-        }
-    }
-    &-success::after,
-    &-warning::after,
-    &-danger::after,
-    &-error::after,
-    &-info::after {
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      height: 40px;
-      width: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      border-radius: 10px;
-      font-size: 20px;
-      line-height: 10px;
-      transform: translateY(-50%);
-    }
+		&::after {
+			content: "\f071";
+			background: #ec4e2a;
+		}
+	}
+	&-info {
+		background-color: #e5effa !important;
+		border: 1px solid #c3dcf2 !important;
 
-    &:hover {
-        box-shadow: none;
-        opacity: 1;
-        filter: alpha(opacity=100);
-        cursor: pointer;
-      }
-    
+		&::after {
+			content: "\f129";
+			background: #0268dc;
+		}
+	}
+	&-success::after,
+	&-warning::after,
+	&-danger::after,
+	&-error::after,
+	&-info::after {
+		position: absolute;
+		top: 50%;
+		left: 10px;
+		font-family: "Font Awesome 5 Free";
+		font-weight: 900;
+		height: 40px;
+		width: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		border-radius: 10px;
+		font-size: 20px;
+		line-height: 10px;
+		transform: translateY(-50%);
+	}
 
-    .btn-close {
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
-        padding: 0;
-        color: #000;
+	&:hover {
+		box-shadow: none;
+		opacity: 1;
+		filter: alpha(opacity=100);
+		cursor: pointer;
+	}
 
-        &:focus {
-            box-shadow: none;
-        }
-    }
+	.btn-close {
+		width: 20px;
+		height: 20px;
+		min-width: 20px;
+		padding: 0;
+		color: #000;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
 }
-  
 
 /*********************************
 /*  Alert Css End
 *********************************/
+
+/*********************************
+/*  Toast Css Start
+*********************************/
+#toast-container .toast {
+	position: relative;
+	overflow: hidden;
+	margin: 0 0 6px;
+	padding: 15px 15px 15px 50px;
+	width: 300px;
+	border-radius: 10px;
+	background-position: 15px center;
+	background-repeat: no-repeat;
+	box-shadow: none;
+	border: 1px solid #41cc68;
+	color: #556068;
+	opacity: 1;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+#toast-container .toast::before {
+	content: "\58";
+	position: absolute;
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	right: 15px;
+	color: #556068;
+	font-size: 12px;
+}
+
+.toast-message {
+	word-wrap: break-word;
+	padding-left: 15px;
+	text-transform: capitalize;
+}
+
+.toast-success {
+	background-color: #eaf7ee !important;
+	border-color: #c0e5c9 !important;
+}
+
+.toast-warning {
+	background-color: #fef7ea !important;
+	border: 1px solid #fae5c3 !important;
+}
+.toast-danger {
+	background-color: #fcede9 !important;
+	border: 1px solid #f4cdc3 !important;
+}
+.toast-error {
+	background-color: #fcede9 !important;
+	border: 1px solid #f4cdc3 !important;
+}
+.toast-info {
+	background-color: #e5effa !important;
+	border: 1px solid #c3dcf2 !important;
+}
+
+//   #toast-container > .toast-success,
+//   #toast-container > .toast-warning,
+//   #toast-container > .toast-danger,
+//   #toast-container > .toast-error,
+//   #toast-container > .toast-info {
+//     background-image: none;
+//      background-color: red;
+//   }
+
+#toast-container > .toast-success::after,
+.toast.toast-warning::after,
+.toast.toast-danger::after,
+.toast.toast-error::after,
+.toast.toast-info::after {
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	height: 40px;
+	width: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	border-radius: 12px;
+	font-size: 20px;
+	line-height: 10px;
+}
+
+#toast-container > .toast-success::after {
+	content: "\f00c";
+	background: #41cc68;
+}
+
+.toast.toast-warning::after {
+	content: "\f071";
+	background: #ee9500;
+}
+
+.toast.toast-danger::after {
+	content: "\f071";
+	background: #ec4e2a;
+}
+
+.toast.toast-error::after {
+	content: "\f071";
+	background: #ec4e2a;
+}
+
+.toast.toast-info::after {
+	content: "\f129";
+	background: #0268dc;
+}
+
+#toast-container .toast:hover {
+	box-shadow: none;
+	opacity: 1;
+	filter: alpha(opacity=100);
+	cursor: pointer;
+}
+/*********************************
+  /*  Toast Css End
+  *********************************/

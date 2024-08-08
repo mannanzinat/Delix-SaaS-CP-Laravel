@@ -1,1 +1,0 @@
-<td>{{ $reply->reply_type }}</td>

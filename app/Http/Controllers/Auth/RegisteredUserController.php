@@ -81,13 +81,17 @@ class RegisteredUserController extends Controller
             }
 
             $message                = __('registration_successful_please_check_your_email');
+            $route                  = route('login', ['registration_success' => true]);
 
-            return response()->json(['success' => true, 'message' => $message], 200);
+
+            return response()->json(['success' => true, 'message' => $message, 'route' => $route], 200);
 
         else:
+            $route          = route('login', ['registration_error' => true]);
             return response()->json([
-                'error' => true,
-                'message' => __('something_went_wrong_please_try_again')
+                'error'     => true,
+                'message'   => __('something_went_wrong_please_try_again'),
+                'route'     => $route
             ], 500);
         endif;
     }

@@ -168,6 +168,8 @@
                         $('#signupForm')[0].reset();
                         $('.btn__submit .loading').addClass('d-none');
                         $('.btn__submit').prop('disabled', false);
+                        window.location.href = response.route;
+
                     },
                     error: function(xhr) {
                         const errors = xhr.responseJSON.errors || {};

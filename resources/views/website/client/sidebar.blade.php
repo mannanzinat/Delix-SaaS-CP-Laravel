@@ -1,17 +1,19 @@
 <div class="sideBar">
-	<a href="#" class="user__profile">
+	<a href="{{ route('client.dashboard') }}" class="user__profile">
 		<div class="profile__avatar">
-			<img src="{{ static_asset('website') }}/assets/images/avatar/profile-avatar.png" alt="avatar" />
+			{{-- <img src="{{ static_asset('website') }}/assets/images/avatar/profile-avatar.png" alt="avatar" /> --}}
+			<img src="{{ getFileLink('40x40', Auth::user()->images) }}" alt=""
+			 class="user-avater">
 		</div>
 		<div class="profile__content">
-			<h4 class="name">Foyshal Ahmed</h4>
-			<p class="txt">info@spagreen.net</p>
+			<h4 class="name">{{ auth()->user()->first_name. ' ' .auth()->user()->last_name }}</h4>
+			<p class="txt">{{ auth()->user()->email }}</p>
 		</div>
 	</a>
 	<ul class="nav__item">
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="dashboard.html">
+		<li class="nav__list {{ request()->routeIs('client.dashboard') ? 'active' : '' }}">
+			<a href="{{ route('client.dashboard') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -32,8 +34,8 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="account.html">
+		<li class="nav__list {{ request()->routeIs('client.account') ? 'active' : '' }}">
+			<a href="{{ route('client.account') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -54,8 +56,8 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="order.html">
+		<li class="nav__list {{ request()->routeIs('client.order') || request()->routeIs('client.order.details') ? 'active' : '' }}">
+			<a href="{{ route('client.order') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -84,8 +86,8 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="domain.html">
+		<li class="nav__list {{ request()->routeIs('client.domain') ? 'active' : '' }}">
+			<a href="{{ route('client.domain') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -106,7 +108,7 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list active">
+		<li class="nav__list">
 			<a href="subscription.html">
 				<div class="icon">
 					<svg
@@ -128,8 +130,8 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="rider.html">
+		<li class="nav__list {{ request()->routeIs('client.rider-app') || request()->routeIs('client.rider-app.details') ? 'active' : '' }}">
+			<a href="{{ route('client.rider-app') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -162,8 +164,8 @@
 			</a>
 		</li>
 		<!-- Navlist Start -->
-		<li class="nav__list">
-			<a href="marchant.html">
+		<li class="nav__list {{ request()->routeIs('client.merchant-app') || request()->routeIs('client.merchant-app.details') ? 'active' : '' }}">
+			<a href="{{ route('client.merchant-app') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -197,7 +199,7 @@
 		</li>
 		<!-- Navlist End -->
 		<li class="nav__list">
-			<a href="team.html">
+			<a href="{{ route('client.team.index') }}">
 				<div class="icon">
 					<svg
 						width="20"
@@ -219,7 +221,7 @@
 		</li>
 		<!-- Navlist End -->
 		<li class="nav__list">
-			<a href="ticket.html">
+			<a href="#">
 				<div class="icon">
 					<svg
 						width="20"
@@ -241,7 +243,7 @@
 		</li>
 		<!-- Navlist End -->
 		<li class="nav__list">
-			<a href="address.html">
+			<a href="{{ route('client.address') }}">
 				<div class="icon">
 					<svg
 						width="20"

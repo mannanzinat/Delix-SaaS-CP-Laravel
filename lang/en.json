@@ -2672,5 +2672,7 @@
     "your_otp_is_incorrect": "Your OTP is incorrect",
     "registration_successfuly": "Registration Successfuly",
     "your_session_is_expired": "Your session is expired",
+    "please_check_your_mail_to_recovery_password": "Please Check Your Mail To Recovery Password",
+    "registration_successfully_please_check_your_mail_to_verify": "Registration Successfully Please Check Your Mail To Verify",
     "registration_successful_please_check_your_email": "Registration Successful Please Check Your Email"
 }

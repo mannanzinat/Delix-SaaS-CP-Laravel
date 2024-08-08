@@ -87,6 +87,35 @@ trait ImageTrait
                     'image_80x80'    => $image_80x80_url,
                 ];
             } 
+            elseif ($for == 'document') { 
+                $directory         = 'images/';
+                File::ensureDirectoryExists('public/'.$directory, 0777, true);
+
+                $originalImage     = date('YmdHis').'_original_'.$for.rand(1, 500).'.'.$extension;
+                $originalImageUrl  = $directory.$originalImage;
+                $movable_image     = $requestImage;
+                $image_714x300     = date('YmdHis').'image_714x300'.$for.rand(1, 500).'.'.$extension;
+                $image_714x300_url = $directory.$image_714x300;
+                $image_80x80       = date('YmdHis').'image_80x80'.$for.rand(1, 500).'.'.$extension;
+                $image_80x80_url   = $directory.$image_80x80;
+
+                Image::make($requestImage)->resize(714, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_714x300_url, $encode_percentage);
+
+                Image::make($requestImage)->resize(80, 80, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(isLocalhost().$image_80x80_url, $encode_percentage);
+
+                $movable_image->move(isLocalhost().'images/', $originalImage);
+
+                $images            = [
+                    'storage'        => $storage,
+                    'original_image' => $originalImageUrl,
+                    'image_714x300'  => $image_714x300_url,
+                    'image_80x80'    => $image_80x80_url,
+                ];
+            }
              elseif ($for == 'header1_hero_image2') {
                 $directory         = 'images/';
                 File::ensureDirectoryExists('public/'.$directory, 0777, true);

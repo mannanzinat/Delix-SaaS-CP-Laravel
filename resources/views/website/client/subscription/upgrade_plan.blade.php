@@ -1,5 +1,4 @@
 @extends('website.layouts.master')
-
 @section('content')
 <section class="user__dashboard">
     <div class="container">
@@ -12,55 +11,57 @@
                             <div class="dashboard__header">
                                 <h4 class="title">Subscription Package</h4>
                             </div>
+                            @php
+                                $packagesByPeriod = $packages->groupBy('billing_period');
+                            @endphp
+
                             <div class="card">
-                                @php
-                                    $uniquePackages = $packages->unique('billing_period');
-                                @endphp
                                 <div class="custom__tabs text-center">
                                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                                        @foreach($uniquePackages as $package)
+                                        @foreach($packagesByPeriod as $billingPeriod => $packages)
                                             <li class="nav-item" role="presentation">
                                                 <button
                                                     class="nav-link @if($loop->first) active @endif"
-                                                    id="{{ $package->billing_period }}-tab"
+                                                    id="{{ $billingPeriod }}-tab"
                                                     data-bs-toggle="pill"
-                                                    data-bs-target="#{{ $package->billing_period }}"
+                                                    data-bs-target="#{{ $billingPeriod }}"
                                                     type="button"
                                                     role="tab"
-                                                    aria-controls="{{ $package->billing_period }}"
+                                                    aria-controls="{{ $billingPeriod }}"
                                                     aria-selected="@if($loop->first) true @else false @endif"
-                                                    data-package-id="{{ $package->id }}"
                                                 >
-                                                    {{ __($package->billing_period) }}
+                                                    {{ __($billingPeriod) }}
                                                 </button>
                                             </li>
                                         @endforeach
                                     </ul>
                                     <div class="tab-content">
-                                        @foreach($uniquePackages as $package)
+                                        @foreach($packagesByPeriod as $billingPeriod => $packages)
                                             <div
                                                 class="tab-pane fade @if($loop->first) active show @endif"
-                                                id="{{ $package->billing_period }}"
+                                                id="{{ $billingPeriod }}"
                                                 role="tabpanel"
-                                                aria-labelledby="{{ $package->billing_period }}-tab"
+                                                aria-labelledby="{{ $billingPeriod }}-tab"
                                             >
-                                                <div class="package__category">
-                                                    <div class="custom__radio">
-                                                        <input type="radio" id="starter-{{ $package->id }}" name="radio-group" value="{{ $package->id }}" />
-                                                        <label for="starter-{{ $package->id }}">
-                                                            <div class="package__left">
-                                                                <span class="titles">{{ __($package->name) }}</span>
-                                                                <span class="discount">Get 20% Off</span>
-                                                            </div>
-                                                            <div class="package__right">
-                                                                <span class="price">
-                                                                    <del>{{ setting('default_currency') }} 70</del>{{ setting('default_currency') }} {{ $package->price }}
-                                                                </span>
-                                                                <span class="duration">/{{ $package->name }}</span>
-                                                            </div>
-                                                        </label>
+                                                @foreach($packages as $package)
+                                                    <div class="package__category">
+                                                        <div class="custom__radio">
+                                                            <input type="radio" id="starter-{{ $package->id }}" data-package-id="{{ $package->id }}" class="package" name="radio-group" value="{{ $package->id }}" />
+                                                            <label for="starter-{{ $package->id }}">
+                                                                <div class="package__left">
+                                                                    <span class="titles">{{ __($package->name) }}</span>
+                                                                    <span class="discount">Get 20% Off</span>
+                                                                </div>
+                                                                <div class="package__right">
+                                                                    <span class="price">
+                                                                        <del>{{ setting('default_currency') }} 70</del>{{ setting('default_currency') }} {{ $package->price }}
+                                                                    </span>
+                                                                    <span class="duration">/{{ $package->name }}</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endforeach
 
                                                 <div class="free__plan">
                                                     <div class="plan__left">
@@ -176,32 +177,26 @@
                                         <div class="tab-pane fade" id="banks" role="tabpanel" aria-labelledby="banks-tab">
                                             <form action="{{ route('client.offline.claim') }}" class="form-validate offline_form"
                                               method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                                <input type="hidden" name="plan_id" value="{{ $package->id }}">
-                                                <div class="bank__details">
-                                                    {{-- <ul class="list__item">
-                                                        <li><span>Bank Name</span>Islamia Bank Bangladesh Limited</li>
-                                                        <li><span>Branch Name</span>Mirpur</li>
-                                                        <li><span>Bank A/C Owner Name</span>Foyshal Ahmed</li>
-                                                        <li><span>Bank A/C Number</span>31478547889</li>
-                                                        <li><span>Routing Number</span>31478547889</li>
-                                                    </ul> --}}
+                                                @csrf
+                                                    <input type="hidden" name="plan_id" value="">
+                                                    <input type="hidden" name="trx_id" id="trx_id" value="{{ $trx_id }}" />
+                                                    <div class="bank__details">
+                                                        <div class="list__item wrapper">
+                                                            {!! setting('offline_payment_instruction') !!}
+                                                        </div>
 
-                                                    {!! setting('offline_payment_instruction') !!}
-
-
-                                                    <div class="upload__input">
-                                                        <span>Payment Slip/Proof</span>
-                                                        <div class="avatar-upload form-control">
-                                                            <label for="fileUpload">No file uploaded</label>
-                                                            <input type="file" class="fileUpload" id="fileUpload" />
-                                                            <div class="btn"><i class="fa-solid fa-upload fa-fw"></i>Upload</div>
+                                                        <div class="upload__input">
+                                                            <div class="text-start mb-2">Payment Slip/Proof</div>
+                                                            <div class="avatar-upload form-control">
+                                                                <label for="fileUpload">No file uploaded</label>
+                                                                <input type="file" class="fileUpload" name="document" id="fileUpload" />
+                                                                <div class="btn"><i class="fa-solid fa-upload fa-fw"></i>Upload</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="upload__btn text-end mt-15">
+                                                            <button type="submit" class="btn btn-gray btn-sm">Submit For Approval</button>
                                                         </div>
                                                     </div>
-                                                    <div class="upload__btn text-end mt-15">
-                                                        <a href="#" class="btn btn-gray btn-sm">Submit For Approval</a>
-                                                    </div>
-                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -219,94 +214,118 @@
 @push('js')
 <script src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
-    $(function() {
-        var $form = $(".require-validation");
+    // $(function() {
+    //     var $form = $(".require-validation");
 
-        // Handle form submission
-        $form.on('submit', function(e) {
-            var $form = $(this);
-            var $inputs = $form.find('input[type=text], input[type=password], input[type=email], textarea');
-            var $errorMessage = $form.find('div.error');
-            var valid = true;
+    //     // Handle form submission
+    //     $form.on('submit', function(e) {
+    //         var $form = $(this);
+    //         var $inputs = $form.find('input[type=text], input[type=password], input[type=email], textarea');
+    //         var $errorMessage = $form.find('div.error');
+    //         var valid = true;
 
-            $errorMessage.addClass('hide');
-            $('.has-error').removeClass('has-error');
+    //         $errorMessage.addClass('hide');
+    //         $('.has-error').removeClass('has-error');
 
-            // Validate required fields
-            $inputs.each(function() {
-                var $input = $(this);
-                if ($input.val() === '') {
-                    $input.parent().addClass('has-error');
-                    $errorMessage.removeClass('hide');
-                    valid = false;
-                }
-            });
+    //         // Validate required fields
+    //         $inputs.each(function() {
+    //             var $input = $(this);
+    //             if ($input.val() === '') {
+    //                 $input.parent().addClass('has-error');
+    //                 $errorMessage.removeClass('hide');
+    //                 valid = false;
+    //             }
+    //         });
 
-            if (!valid) {
-                e.preventDefault();
-                return;
-            }
+    //         if (!valid) {
+    //             e.preventDefault();
+    //             return;
+    //         }
 
-            if (!$form.data('cc-on-file')) {
-                e.preventDefault();
+    //         if (!$form.data('cc-on-file')) {
+    //             e.preventDefault();
 
-                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+    //             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
 
-                Stripe.createToken({
-                    number: $form.find('.card-number').val(),
-                    cvc: $form.find('.card-cvc').val(),
-                    exp_month: $form.find('.card-expiry-month').val(),
-                    exp_year: $form.find('.card-expiry-year').val()
-                }, function(status, response) {
-                    if (response.error) {
-                        // Show error in the form
-                        $form.find('.error').removeClass('hide').find('.alert').text(response.error.message);
-                    } else {
-                        // Get the token ID
-                        var token = response.id;
-                        $form.append($('<input type="hidden" name="stripeToken"/>').val(token));
-                        $form.get(0).submit();
-                    }
-                });
-            }
-        });
+    //             Stripe.createToken({
+    //                 number: $form.find('.card-number').val(),
+    //                 cvc: $form.find('.card-cvc').val(),
+    //                 exp_month: $form.find('.card-expiry-month').val(),
+    //                 exp_year: $form.find('.card-expiry-year').val()
+    //             }, function(status, response) {
+    //                 if (response.error) {
+    //                     // Show error in the form
+    //                     $form.find('.error').removeClass('hide').find('.alert').text(response.error.message);
+    //                 } else {
+    //                     // Get the token ID
+    //                     var token = response.id;
+    //                     $form.append($('<input type="hidden" name="stripeToken"/>').val(token));
+    //                     $form.get(0).submit();
+    //                 }
+    //             });
+    //         }
+    //     });
 
-        // Update package ID on tab click
-        $('#pills-tab button').on('click', function() {
-            var packageId = $(this).data('package-id');
-            $('#package-id').val(packageId);
-        });
-    });
+    //     // Update package ID on tab click
+    //     $('#pills-tab button').on('click', function() {
+    //         var packageId = $(this).data('package-id');
+    //         $('#package-id').val(packageId);
+    //     });
+    // });
 
     $(document).ready(function(){
-        // Form submission handler for the offline form
-        $('form.offline_form').submit(function (e) {
+        $.fn.serializeFormJSON = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        // Click event handler for radio buttons
+        $('input[type="radio"][name="radio-group"]').on('change', function() {
+            var selectedPlanId = $(this).data('package-id');
+            $('input[name="plan_id"]').val(selectedPlanId);
+        });
+
+        $('form.offline_form').on('submit', function (e) {
             e.preventDefault();
-            var button                  = $(this).find('button[type="submit"]');
+            var button = $(this).find('button[type="submit"]');
+        
+            // Prevent multiple submissions
+            if (button.hasClass('loading_button')) {
+                return;
+            }
+        
             button.addClass('loading_button');
-
-            var formData                = $(this).serializeFormJSON();
-
-            formData['billing_name']    = $('input[name="billing_name"]').val();
-            formData['billing_email']   = $('input[name="billing_email"]').val();
-            formData['billing_address'] = $('input[name="billing_address"]').val();
-            formData['billing_city']    = $('input[name="billing_city"]').val();
-            formData['billing_state']   = $('input[name="billing_state"]').val();
-            formData['billing_zipcode'] = $('input[name="billing_zipcode"]').val();
-            formData['billing_country'] = $('input[name="billing_country"]').val();
-            formData['billing_phone']   = $('input[name="billing_phone"]').val();
+        
+            var formData = new FormData(this); // Create FormData object
+        
+            // Debugging: Log FormData content
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]);
+            }
 
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
                 data: formData,
+                contentType: false, // Important: set contentType to false
+                processData: false, // Important: set processData to false
                 beforeSend: function () {
                     $('.loading-btn').addClass('loading');
                 },
                 success: function (response) {
                     console.log(response);
                     if (response.status === true) {
-
                         window.location.href = response.redirect_to;
                     }
                 },
@@ -319,7 +338,8 @@
                 }
             });
         });
-    })
+    });
+
 
 </script>
 @endpush

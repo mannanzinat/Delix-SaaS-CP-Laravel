@@ -1,26 +1,21 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Client\AiWriterController;
-use App\Http\Controllers\Client\BotReplyController;
+use App\Http\Controllers\Client\AccountController;
 use App\Http\Controllers\Client\ClientDashboardController;
-use App\Http\Controllers\Client\ContactController;
-use App\Http\Controllers\Client\ContactNoteController;
-use App\Http\Controllers\Client\ContactsListController;
-use App\Http\Controllers\Client\ContactTagController;
-use App\Http\Controllers\Client\FlowBuilderController;
-use App\Http\Controllers\Client\MessageController;
-use App\Http\Controllers\Client\SegmentController;
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\RiderController;
+use App\Http\Controllers\Client\MerchantController;
+use App\Http\Controllers\Client\DomainController;
+use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\SettingController;
 use App\Http\Controllers\Client\SubscriptionController;
 use App\Http\Controllers\Client\TeamController;
-use App\Http\Controllers\Client\TelegramCampaignController;
 use App\Http\Controllers\Client\TemplateController;
 use App\Http\Controllers\Client\TicketController;
 use App\Http\Controllers\Client\UserController;
-use App\Http\Controllers\Client\WhatsappCampaignController;
 use Illuminate\Support\Facades\Route;
-
+use Razorpay\Api\Account;
 
 Route::middleware(['authCheck'])->group(function () {
     Route::get('available-plans', [SubscriptionController::class, 'availablePlans'])->name('available.plans');
@@ -41,6 +36,35 @@ Route::group(['prefix' => localeRoutePrefix().'/client'], function () {
 
     Route::middleware(['authCheck', 'subscriptionCheck'])->group(function () {
         Route::get('dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+        //account route
+        Route::get('account', [AccountController::class, 'index'])->name('account');
+        //order route
+        Route::get('order', [OrderController::class, 'index'])->name('order');
+        Route::get('order-details', [OrderController::class, 'details'])->name('order.details');
+        //domain route
+        Route::get('domain', [DomainController::class, 'index'])->name('domain');
+        //rider add
+        Route::get('rider-app', [RiderController::class, 'index'])->name('rider-app');
+        Route::get('rider-app-details', [RiderController::class, 'details'])->name('rider-app.details');
+        //merchant app route
+        Route::get('merchant-app', [MerchantController::class, 'index'])->name('merchant-app');
+        Route::get('merchant-app-details', [MerchantController::class, 'course-details-info'])->name('merchant-app.details');
+        //address route
+        Route::get('address', [AddressController::class, 'index'])->name('address');
+        //ticket route
+        Route::resource('tickets', TicketController::class)->except(['edit', 'destroy']);
+        Route::get('ticket/update/{id}', [TicketController::class, 'update'])->name('ticket.update');
+        Route::post('ticket-reply', [TicketController::class, 'reply'])->name('ticket.reply');
+        Route::get('ticket-reply-edit/{id}', [TicketController::class, 'replyEdit'])->name('ticket.reply.edit');
+        Route::post('ticket-reply-update/{id}', [TicketController::class, 'replyUpdate'])->name('ticket.reply.update');
+        Route::delete('ticket-reply-delete/{id}', [TicketController::class, 'replyDelete'])->name('ticket.reply.delete');
+        //team route
+        Route::get('team-list', [TeamController::class, 'index'])->name('team.index');
+        Route::get('team/create', [TeamController::class, 'create'])->name('team.create');
+        Route::post('team/store', [TeamController::class, 'store'])->name('team.store');
+        Route::get('team/edit/{id}', [TeamController::class, 'edit'])->name('team.edit');
+        Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.update');
+
     });
 });
 

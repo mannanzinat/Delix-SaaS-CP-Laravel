@@ -70,7 +70,7 @@ class RegistrationRepository
             return ['success' => true, 'user' => $user];
         } catch (\Exception $e) {
             DB::rollback();
-            return ['success' => false, 'message' => 'something_went_wrong_please_try_again'];
+            return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 

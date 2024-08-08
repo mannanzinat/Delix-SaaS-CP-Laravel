@@ -19,6 +19,21 @@
             <div class="login__content text-center">
               <h2 class="title"><span>Login </span> & Started</h2>
               <p class="desc">Create an account and experience how Delix works.</p>
+              @if(request()->has('registration_success'))
+                  <div class="form-group mt-5">
+                      <div class="verify__alert">
+                          <i class="fa-solid fa-circle-info"></i>
+                          {{ __('registration_successfully_please_check_your_mail_to_verify') }}
+                      </div>
+                  </div>
+              @elseif(request()->has('registration_error'))
+                  <div class="form-group mt-5">
+                      <div class="verify__alert">
+                          <i class="fa-solid fa-circle-info"></i>
+                          {{ __('something_went_wrong_please_try_again') }}
+                      </div>
+                  </div>
+              @endif
             </div>
             <div class="form__wrapper">
               <div class="bgPattern__right MoveTopBottom">

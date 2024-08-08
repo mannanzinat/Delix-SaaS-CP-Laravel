@@ -72,6 +72,26 @@
 
 
     /*********************************
+    /* Dashboard Sidebar Flyout Menu
+    *********************************/
+    $("#toggler__btn").on("click", function (event) {
+        event.preventDefault();
+        $(this).toggleClass("active"); 
+        $(".flyOut__sidebar").toggleClass("active"); 
+    });
+    // $(".closest__btn").on("click", function (event) {
+    //     event.preventDefault();
+    //     $(".flyoutMenu").toggleClass("active");
+    // });
+
+    $(document).on("click", function (e) {
+        if ($(e.target).closest(".header__wrapper").length === 0 && $(e.target).closest("#toggler__btn").length === 0) {
+            $(".flyOut__sidebar").removeClass("active");
+        }
+    });
+
+
+    /*********************************
     /*  Typed Js Here
     *********************************/
 
@@ -93,58 +113,66 @@
     }
 
     /*********************************
-    /*  Pricing Slider Carousel
-    *********************************/
-    if ($(".pricing__slider").length > 0) {
-        var swiper = new Swiper(".pricing__slider", {
-            direction: "horizontal",
-            loop: true,
-            grabCursor: true,
-            slidesPerView: 3,
-            spaceBetween: 24,
-            speed: 500,
-            centeredSlides: false,
-            freeMode: false,
-            autoplay: {
-                enabled: true,
-            },
-            navigation: {
-                nextEl: ".project-swipe-next",
-                prevEl: ".project-swipe-prev",
-            },
-            
-            breakpoints: {
-                300: {
-                    slidesPerView: 1,
-                },
-                479: {
-                    slidesPerView: 1.5,
-                },
-                575: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                767: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 20,
-                },
-                1199: {
-                    slidesPerView: 3,
-                },
-            },
-        });
-    }
-
-    /*********************************
     /*   Select Start
     *********************************/
     if ($(".form__dropdown").length > 0) {
         $(".form__dropdown").select2();
     }
+
+    /*********************************
+    /* Flatpickr Conviguration Start
+    *********************************/
+    if ($("#dateAction").length > 0) {
+        $("#dateExpire, #dateAction").flatpickr({
+            enableTime: false,
+            disableMobile: true,
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            time_24hr: true,
+            locale: "id",
+            inline: false,
+        });
+    }
+
+    /**********************************
+    /*  Telephone Select
+     **********************************/
+    // if ($("#mobile-number").length > 0) {
+    //     $("#mobile-number").intlTelInput();
+    // }
+
+    // Vanilla Javascript
+    if ($("#telephone").length > 0) {
+        var input = document.querySelector("#telephone");
+        window.intlTelInput(input,({
+        // options here
+        }));
+    }
+
+    /*********************************
+    /* Image Upload Start
+    *********************************/
+    function readURL2(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#imagePreview").css("background-image", "url(" + e.target.result + ")");
+                $("#imagePreview").hide();
+                $("#imagePreview").fadeIn(650);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        // console.log(input);
+    }
+    $("#fileUpload").change(function () {
+        readURL2(this);
+        var i = $(this).prev('label').clone();
+        var file = $('#fileUpload')[0].files[0].name;
+        $(this).prev('label').text(file);
+    });
+
 
     
     /**********************************

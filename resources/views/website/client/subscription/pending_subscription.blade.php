@@ -1,30 +1,40 @@
-@extends('backend.layouts.master')
+@extends('website.layouts.master')
 @section('title', __('my_subscription'))
 @section('content')
-	<section class="oftions">
-		<div class="container-fluid">
-			<div class="row justify-content-center">
-				<div class="col col-lg-6 col-md-6">
-					<div class="bg-white redious-border mb-4 p-20 p-sm-30">
-						<div class="row">
-							<div class="col-md-12 mb-3 justify-content-center">
-								<div class="analytics clr-1 ">
-									<div class="analytics-icon">
-										<i class="las la-sync"></i>
+<section class="user__dashboard">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="dashboard__container">
+					@include('website.client.sidebar')
+					<div class="main__containter">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<div class="col col-lg-12 col-md-12 card">
+									<div class="bg-white redious-border mb-4 p-20 p-sm-30 ">
+										<div class="row">
+											<div class="col-md-12 mb-3 justify-content-center">
+												<div class="analytics clr-1 ">
+													<div class="analytics-icon">
+														<i class="las la-sync"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="analytics clr-1">
+													<div class="analytics-content">
+														<h4>{{__('offline_payment_pending_title')}}</h4>
+														<p class="">{{__('offline_payment_pending_description')}}</p>
+													</div>
+												</div>
+												<div class="text-center">
+													<a href="{{ route('client.dashboard') }}" class="btn btn-sm btn-primary gap-2  mt-20 mb-20">
+														<span>{{__('refresh_transaction_status')}}</span>
+													</a>
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="analytics clr-1">
-									<div class="analytics-content">
-										<h4>{{__('offline_payment_pending_title')}}</h4>
-										<p class="">{{__('offline_payment_pending_description')}}</p>
-									</div>
-								</div>
-								<div class="text-center">
-									<a href="{{ route('client.dashboard') }}" class="btn btn-sm btn-primary gap-2  mt-20 mb-20">
-										<span>{{__('refresh_transaction_status')}}</span>
-									</a>
 								</div>
 							</div>
 						</div>
@@ -32,7 +42,9 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
+
 	<div class="modal fade" id="department" tabindex="-1" aria-labelledby="department" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-md">
 			<div class="modal-content">

@@ -99,6 +99,13 @@
 		color: $white;
 		border-color: $primary;
 	}
+	&-sm {
+		font-size: 14px;
+		line-height: 14px;
+		font-weight: $semibold;
+		padding: 12px 40px;
+		border-radius: 8px;
+	}
 }
 
 .solid__btn {

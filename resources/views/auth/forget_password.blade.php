@@ -7,6 +7,9 @@
                 <div class="login__content text-center">
                     <h2 class="title"><span>Forget </span> Password</h2>
                     <p class="desc">You can reset your password here</p>
+                    <div class="form-group check-mail mt-5 d-none">
+                        <div class="verify__alert"><i class="fa-solid fa-circle-info"></i>{{ __('please_check_your_mail_to_recovery_password') }}</div>
+                    </div>
                 </div>
                 <div class="form__wrapper">
                     <div class="bgPattern__right MoveTopBottom">
@@ -58,7 +61,7 @@
                         $('#forgotPasswordForm')[0].reset();
                         $('.btn__submit .loading').addClass('d-none');
                         $('.btn__submit button').prop('disabled', false);
-
+                        $('.check-mail').removeClass('d-none');
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {

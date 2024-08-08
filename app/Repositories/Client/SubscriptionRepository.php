@@ -11,6 +11,7 @@ use App\Repositories\PlanRepository;
 use App\Traits\SendMailTrait;
 use App\Traits\SendNotification;
 use App\Traits\ServerTrait;
+use App\Traits\ImageTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,7 @@ class SubscriptionRepository
     use SendMailTrait;
     use SendNotification;
     use ServerTrait;
+    use ImageTrait;
 
     protected $emailTemplate;
 
@@ -34,6 +36,7 @@ class SubscriptionRepository
     //client
     public function create($plan, $trx_id, $payment_details, $billingInfo, $offline = false, $payment_method = 'stripe')
     {
+
         $status       = 1;
         if ($offline) {
             $payment_method  = 'offline';
@@ -79,13 +82,23 @@ class SubscriptionRepository
             'url'     => route('packages.subscribe-list'),
         ]);
 
-        if ($offline) {
+        if ($offline):
             $this->sendAdminNotifications([
                 'message' => __('offline_payment_waiting_for_approval'),
                 'heading' => $client->name,
                 'url'     => route('packages.subscribe-list'),
             ]);
-        }
+            $response = [];
+            if ($billingInfo['document']):
+                $requestImage                       = $billingInfo['document'];
+                $response                           = $this->saveImage($requestImage, '_offline_document_');
+            endif;
+            $document                               = $response['images'] ?? null;
+        endif;
+
+
+
+
         $data         = [
             'client_id'              => $client->id,
             'plan_id'                => $plan->id,
@@ -114,6 +127,7 @@ class SubscriptionRepository
             'billing_zip_code'       => $billingInfo['billing_zipcode'],
             'billing_country'        => $billingInfo['billing_country'],
             'billing_phone'          => $billingInfo['billing_phone'],
+            'document'               => $document ?? null,
             'subject'                => __('package_subscription_confirmation'),
         ];
         if (isMailSetupValid()) {

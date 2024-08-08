@@ -55,14 +55,14 @@
 
 
 
-.subscription__wrapper {
-	column-count: 2;
-	gap: 24px;
+// .subscription__wrapper {
+// 	column-count: 2;
+// 	gap: 24px;
 
-	@include respond(tabland) {
-		column-count: 1;
-	}
-}
+// 	@include respond(tabland) {
+// 		column-count: 1;
+// 	}
+// }
 
 
 .information {
@@ -90,123 +90,3 @@
 /* Subscription Section End
 *********************************/
 
-/*********************************
-/* Bank Details Start
-*********************************/
-.bank__details {
-	.list__item {
-		border-bottom: 1px solid rgba($heading2, 0.06);
-		padding-bottom: 16px;
-		// margin-bottom: 24px;
-		li {
-			list-style: none;
-			font-family: $inter;
-			font-size: 16px;
-			font-weight: $regular;
-			line-height: 18px;
-			color: $content;
-			padding: 18px 0;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 10px;
-
-			@include respond(phone-mid) {
-				flex-direction: column;
-				align-items: flex-start;
-			}
-
-			span {
-				font-family: $default;
-				font-size: 20px;
-				font-weight: $medium;
-				line-height: 14px;
-				color: $heading2;
-
-				@include respond(medium) {
-					font-size: 18px;
-				}
-			}
-		}
-	}
-}
-
-.upload__btn {
-	margin-top: 24px;
-}
-
-.upload__input {
-	position: relative;
-	margin-top: 24px;
-	label {
-		font-family: $default;
-		font-size: 20px;
-		font-weight: $semibold;
-		line-height: 24px;
-		color: $black;
-		margin-bottom: 16px;
-
-		@include respond(phone-sm) {
-			font-size: 18px;
-		}
-	}
-	.form-control {
-		border: 1px solid rgba($heading2, 0.06);
-		border-radius: 8px;
-		padding: 18px 30px 18px 0;
-		font-family: $inter;
-		font-size: 16px;
-		font-weight: $regular;
-		line-height: 14px;
-		color: $content;
-
-		&:focus {
-			box-shadow: none;
-		}
-	}
-
-	&::after {
-		content: "Upload";
-		position: absolute;
-		left: 0;
-		width: 100px;
-		height: 52px;
-		font-family: $inter;
-		font-size: 16px;
-		font-weight: $regular;
-		line-height: 14px;
-		color: $heading2;
-		top: 40px;
-		background: #f5f5f5;
-		border: 1px solid #eeeeee;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 8px 0 0px 8px;
-		pointer-events: none;
-	}
-}
-
-.card__details {
-	.form__wrapper {
-		padding: 0;
-		background: transparent;
-		border: none;
-
-		label {
-			font-family: $default;
-			font-size: 20px;
-			font-weight: $semibold;
-			line-height: 24px;
-			color: $black;
-			margin-bottom: 16px;
-
-			@include respond(phone-sm) {
-				font-size: 18px;
-			}
-		}
-	}
-}
-/*********************************
-/* Bank Details End
-*********************************/

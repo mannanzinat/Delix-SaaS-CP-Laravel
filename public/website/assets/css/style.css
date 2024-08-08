@@ -1574,19 +1574,17 @@ input[type=date]::-webkit-calendar-picker-indicator {
 /*  Custom Scroll Bar Css
 *********************************/
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
   height: 4px;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
   background-color: #ddd;
-  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #FF204E;
-  border-radius: 10px;
+  background-color: rgba(255, 32, 78, 0.8);
 }
 
 /*********************************
@@ -2431,7 +2429,8 @@ p {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  border: 1px solid #00224D;
+  border: 1px solid rgba(255, 32, 78, 0.2);
+  background: #FFF8F9;
   color: #00224D;
   font-size: 26px;
   border-radius: 4px;
@@ -2447,10 +2446,37 @@ p {
     display: flex;
   }
 }
+.header__meta .header__toggle .bar {
+  width: 28px;
+  height: 2px;
+  background: #FF204E;
+  position: relative;
+}
+.header__meta .header__toggle .bar::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 100%;
+  height: 2px;
+  background: #FF204E;
+}
+.header__meta .header__toggle .bar::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 100%;
+  height: 2px;
+  background: #FF204E;
+}
 .header__meta .header__toggle:hover {
   background: #FF204E;
   border-color: #FF204E;
-  color: #fff;
+}
+.header__meta .header__toggle:hover .bar {
+  background: #fff;
+}
+.header__meta .header__toggle:hover .bar::before, .header__meta .header__toggle:hover .bar::after {
+  background: #fff;
 }
 
 .nav-bg {
@@ -5545,15 +5571,62 @@ form .btn__submit .loading .spinner-border {
   }
 }
 
+@media screen and (max-width: 575px) {
+  .flyOut__sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+    z-index: 999;
+  }
+  .flyOut__sidebar.active {
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: 1;
+    visibility: visible;
+    right: 0;
+  }
+  .flyOut__sidebar.active .sideBar {
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .sideBar {
   border: 1px solid rgba(255, 32, 78, 0.2);
   border-radius: 8px;
   padding: 24px 12px;
   height: 100%;
   min-width: 258px;
+  width: 258px;
   background: #FFF8F9;
+  position: relative;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+  overflow: auto;
 }
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 575px) {
+  .sideBar {
+    height: calc(100% - 62px);
+    top: 62px;
+    left: -200px;
+    opacity: 0;
+    visibility: hidden;
+    border-radius: 0;
+  }
+}
+@media screen and (max-width: 575px) {
+  .sideBar {
+    top: 59px;
+  }
+}
+@media (min-width: 576px) and (max-width: 991px) {
   .sideBar {
     min-width: 80px;
     width: 80px;
@@ -5598,7 +5671,7 @@ form .btn__submit .loading .spinner-border {
   -webkit-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
 }
-@media screen and (max-width: 991px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .sideBar ul li a,
   .sideBar ul .nav__list a,
   .sideBar .nav__item li a,
@@ -5616,7 +5689,7 @@ form .btn__submit .loading .spinner-border {
   -webkit-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
 }
-@media screen and (max-width: 991px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .sideBar ul li a span,
   .sideBar ul .nav__list a span,
   .sideBar .nav__item li a span,
@@ -5676,14 +5749,14 @@ form .btn__submit .loading .spinner-border {
   -webkit-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
 }
-@media screen and (max-width: 991px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .sideBar .sidebar__bottom a {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
   }
 }
-@media screen and (max-width: 991px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .sideBar .sidebar__bottom a span {
     display: none;
   }
@@ -5716,7 +5789,7 @@ form .btn__submit .loading .spinner-border {
   aspect-ratio: 1/1;
   border-radius: 50%;
 }
-@media screen and (max-width: 991px) {
+@media (min-width: 576px) and (max-width: 991px) {
   .user__profile .profile__content {
     display: none;
   }
@@ -5736,6 +5809,48 @@ form .btn__submit .loading .spinner-border {
   line-height: 28px;
   color: #666666;
   margin-bottom: 0;
+}
+
+#toggler__btn {
+  background: #FFF8F9;
+  height: 39px;
+  width: 50px;
+  border-radius: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border: 1px solid rgba(255, 32, 78, 0.2);
+  pointer-events: auto;
+  z-index: 99;
+  display: none;
+  cursor: pointer;
+}
+#toggler__btn svg {
+  width: 30px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+#toggler__btn svg path {
+  stroke: #FF204E;
+}
+#toggler__btn.active svg {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+}
+@media screen and (max-width: 575px) {
+  #toggler__btn {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }
 
 /*********************************
@@ -6764,10 +6879,13 @@ form .btn__submit .loading .spinner-border {
   border-radius: 8px;
   padding: 16px;
 }
+
 .bank__details .list__item {
   border-bottom: 1px solid rgba(17, 24, 39, 0.06);
   padding-bottom: 16px;
 }
+
+.bank__details .list__item p,
 .bank__details .list__item li {
   list-style: none;
   font-family: "Inter", sans-serif;
@@ -6785,18 +6903,21 @@ form .btn__submit .loading .spinner-border {
       -ms-flex-pack: justify;
           justify-content: space-between;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: end;
 }
+.bank__details .list__item p:last-of-type,
 .bank__details .list__item li:last-of-type {
   margin-bottom: 0;
 }
 @media screen and (max-width: 575px) {
+  .bank__details .list__item p,
   .bank__details .list__item li {
     margin-bottom: 24px;
   }
 }
 @media screen and (max-width: 400px) {
+  .bank__details .list__item p,
   .bank__details .list__item li {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -6884,7 +7005,7 @@ form .btn__submit .loading .spinner-border {
   gap: 4px;
   color: #111827;
   background: #f5f5f5;
-  padding: 12px 25px;
+  padding: 12px 17px;
   position: absolute;
   right: 0;
   top: 0;

@@ -87,6 +87,7 @@ return [
         'invoice_logo',
         'preloader_logo',
         'qr_image',
+        'document',
         'unique_feature_image',
         'header1_hero_image1',
         'header1_hero_image2',

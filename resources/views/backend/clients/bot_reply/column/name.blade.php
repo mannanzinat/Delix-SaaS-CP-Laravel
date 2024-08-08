@@ -1,1 +1,0 @@
-<td>{{ $reply->name }}</td>

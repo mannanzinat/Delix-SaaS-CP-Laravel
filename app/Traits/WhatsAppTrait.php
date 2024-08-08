@@ -22,7 +22,7 @@ trait WhatsAppTrait
         try{
             $facebook_api       = 'https://graph.facebook.com/v19.0/';
             $response           = Http::withToken(setting('access_token'))
-                                    ->post($facebook_api . setting('phone_number_id') . "/messages", [
+                                  ->post($facebook_api . setting('phone_number_id') . "/messages", [
                                     'messaging_product' => 'whatsapp',
                                     'to'                => $to,
                                     'type'              => 'template',
